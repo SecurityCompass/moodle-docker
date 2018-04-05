@@ -1,0 +1,16 @@
+---
+
+version: '2'
+
+services:
+  nginx:
+    build: .
+    ports:
+      - "80:80"
+    links:
+      - fpm
+  fpm:
+    image: php:fpm
+    volumes:
+      - /opt/moodle:/opt/moodle
+      - /opt/moodledata:/opt/moodledata
