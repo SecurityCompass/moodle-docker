@@ -7,8 +7,11 @@ services:
     build: .
     ports:
       - "80:80"
+      - "443:443"
     links:
       - fpm
+    volumes:
+      - /opt/moodle/ssl:/etc/nginx/ssl
   fpm:
     image: php:fpm
     volumes:

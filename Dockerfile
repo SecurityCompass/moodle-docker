@@ -15,6 +15,7 @@ ADD moodle.conf /etc/nginx/conf.d/
 RUN chown nginx:nginx /etc/nginx/conf.d/moodle.conf
 
 VOLUME /opt/moodle
+VOLUME /etc/nginx/ssl
 
 EXPOSE 80 443
 
