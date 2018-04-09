@@ -4,7 +4,7 @@ version: '2'
 
 services:
   nginx:
-    build: .
+    image: moodle-nginx
     ports:
       - "80:80"
       - "443:443"
@@ -13,7 +13,22 @@ services:
     volumes:
       - /opt/moodle/ssl:/etc/nginx/ssl
   fpm:
-    image: php:fpm
+    image: moodle-fpm
     volumes:
       - /opt/moodle:/opt/moodle
       - /opt/moodledata:/opt/moodledata
+    links:
+      - db
+    environment:
+      - MOODLE_DOCKER_DBTYPE=pgsql
+      - MOODLE_DOCKER_DBNAME=moodle
+      - MOODLE_DOCKER_DBUSER=moodle
+      - MOODLE_DOCKER_DBPASS=password123
+  db:
+    image: moodle-postgres
+    volumes:
+      - /opt/moodle/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=password123
+      - POSTGRES_USER=moodle
+      - POSTGRES_DB=moodle
