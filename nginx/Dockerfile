@@ -16,9 +16,6 @@ RUN yum install -y php72u-fpm-nginx \
                    php72u-mbstring.x86_64 \
                    php72u-opcache.x86_64
 
-# Configure PHP
-ADD php.ini /etc/php.ini
-
 # Copy Moodle nginx config
 ADD nginx.conf /etc/nginx/nginx.conf
 ADD moodle.conf /etc/nginx/conf.d/
