@@ -11,6 +11,7 @@ services:
     links:
       - fpm
     volumes:
+      - /opt/moodle:/opt/moodle
       - /opt/moodle/ssl:/etc/nginx/ssl
   fpm:
     image: moodle-fpm
