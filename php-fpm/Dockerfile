@@ -40,3 +40,14 @@ RUN cp /usr/src/php/ext/zlib/config0.m4 /usr/src/php/ext/zlib/config.m4 && \
     docker-php-ext-install zlib iconv opcache xmlrpc openssl
 
 ADD php.ini /usr/local/etc/php/
+
+RUN apt-get remove -y \
+    postgresql-server-dev-9.6 \
+    zlib1g-dev \
+    libpng-dev \
+    libicu-dev \
+    libxml2-dev \
+    curl \
+    libssl-dev \
+    libcurl4-openssl-dev \
+    g++

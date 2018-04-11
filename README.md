@@ -46,7 +46,7 @@ $ cd moodle-docker && ./build.sh
 $ git clone git@agra.sdelements.com:deployment/docker-postgres.git && cd docker-postgres/9.6/alpine && docker build -t moodle-postgres .
 ```
 
-5. Start docker containers with the docker-compose file
+5. Configure and start the docker containers with the docker-compose file
 
 ```
 $ docker-compose up -d
