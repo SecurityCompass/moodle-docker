@@ -13,30 +13,30 @@ RUN apt-get update &&\
     libcurl4-openssl-dev \
     g++ \
     # Install PHP extensions
-    && docker-php-ext-install pgsql \
-                           zip \
-                           gd \
-                           intl \
-                           tokenizer \
-                           ctype \
-                           simplexml \
-                           xml \
-                           json \
-                           hash \
-                           curl \
-                           mbstring \
-                           soap \
-                           fileinfo \
+    && docker-php-ext-install \
+            ctype \
+            curl \
+            fileinfo \
+            gd \
+            hash \
+            iconv \
+            intl \
+            json \
+            mbstring \
+            pgsql \
+            simplexml \
+            soap \
+            tokenizer \
+            xml \
+            zip \
     # Need to set env var before installing xmlreader https://github.com/docker-library/php/issues/373
     && CFLAGS="-I/usr/src/php" docker-php-ext-install xmlreader \
+    && echo "Starting sketchy part" \
     # Fix error when compiling some extensions https://github.com/docker-library/php/issues/233
-#    && status=$(docker-php-ext-install zlib) \
-#    && status=$(docker-php-ext-install iconv) \
-#    && status=$(docker-php-ext-install openssl) \
-#    && cp /usr/src/php/ext/zlib/config0.m4 /usr/src/php/ext/zlib/config.m4 \
-#    && cp /usr/src/php/ext/openssl/config0.m4 /usr/src/php/ext/openssl/config.m4 \
-#    && docker-php-ext-install zlib iconv opcache xmlrpc openssl \
-    # Remove/purge unnecessary packages
+    && (docker-php-ext-install zlib || cp -v /usr/src/php/ext/zlib/config0.m4 /usr/src/php/ext/zlib/config.m4 && docker-php-ext-install zlib) \
+    && (docker-php-ext-install openssl || cp -v /usr/src/php/ext/openssl/config0.m4 /usr/src/php/ext/openssl/config.m4 && docker-php-ext-install openssl) \
+    && echo "Made it!" \
+    # Remove/purge dev packages
     && apt-get --purge -y remove \
     postgresql-server-dev-9.6 \
     zlib1g-dev \
