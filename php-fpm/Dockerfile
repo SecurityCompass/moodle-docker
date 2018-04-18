@@ -38,18 +38,18 @@ RUN apt-get update &&\
     && echo "Made it!" \
     # Remove/purge dev packages
     && apt-get --purge -y remove \
-    postgresql-server-dev-9.6 \
-    zlib1g-dev \
-    libpng-dev \
-    libicu-dev \
-    libxml2-dev \
-    curl \
-    libssl-dev \
-    libcurl4-openssl-dev \
-    g++ \
+            curl \
+            g++ \
+            libcurl4-openssl-dev \
+            libicu-dev \
+            libpng-dev \
+            libssl-dev \
+            libxml2-dev \
+            postgresql-server-dev-9.6 \
+            zlib1g-dev \
     && apt-get --purge -y autoremove \
     && apt-get -y clean \
-    && rm -rf /etc/apt/sources.list.d/temp.list
+    && rm -rfv /etc/apt/sources.list.d/temp.list
 
 # Configuration file
 ADD php.ini /usr/local/etc/php/
