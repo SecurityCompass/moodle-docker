@@ -25,12 +25,14 @@
     cd moodle-docker && ./build.sh
     ```
 
-3. Build postgres container from the Dockerfile
+3. Copy your SSL certificate and key into the `conf/etc/nginx/ssl/` dir. See below for instructions for generating a self-signed certificate pair for testing. 
+
+4. Build postgres container from the Dockerfile
     ```
     git clone git@agra.sdelements.com:deployment/docker-postgres.git && cd docker-postgres/9.6/alpine && docker build -t moodle-postgres .
     ```
 
-4. Configure and start the docker containers with the docker-compose file
+5. Configure and start the docker containers with the docker-compose file
     ```
     docker-compose up -d
     ```
