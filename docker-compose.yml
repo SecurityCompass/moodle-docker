@@ -1,36 +1,61 @@
 ---
 
-version: '2'
+version: '3.2'
 
 services:
   nginx:
-    image: moodle-nginx
+    image: nginx
+    depends_on:
+      - moodle-app
     ports:
       - "80:80"
       - "443:443"
     links:
-      - fpm
+      - php-fpm
     volumes:
-      - /opt/moodle:/opt/moodle
-      - /opt/moodle/ssl:/etc/nginx/ssl
-  fpm:
-    image: moodle-fpm
+      - type: volume
+        source: moodle_app
+        target: /opt/moodle/moodle-3.4.2
+        volume:
+          nocopy: true
+      - type: volume
+        source: moodle_ssl
+        target: /etc/nginx/ssl
+        volume:
+          nocopy: true
+      - type: bind
+        source: ./nginx/nginx.conf
+        target: /etc/nginx/nginx.conf
+      - type: bind
+        source: ./nginx/moodle.conf
+        target: /etc/nginx/conf.d/default.conf
+  moodle-app:
+    image: moodle-app-3.4.2
+    depends_on:
+      - php-fpm
+      - postgres
     volumes:
-      - /opt/moodle:/opt/moodle
-      - /opt/moodledata:/opt/moodledata
+      - "moodle_app:/opt/moodle/moodle-3.4.2"
+      - "moodle_data:/opt/moodledata"
+      - "moodle_ssl:/opt/moodle/ssl"
+  php-fpm:
+    image: moodle-php-fpm
     links:
-      - db
-    environment:
-      - MOODLE_DOCKER_DBTYPE=pgsql
-      - MOODLE_DOCKER_DBNAME=moodle
-      - MOODLE_DOCKER_DBUSER=moodle
-      - MOODLE_DOCKER_DBPASS=password123
-      - MOODLE_DOCKER_WEB_HOST=192.168.1.195
-  db:
-    image: moodle-postgres
+      - postgres
     volumes:
-      - /opt/moodle/db:/var/lib/postgresql/data
+      - type: volume
+        source: moodle_app
+        target: /opt/moodle/moodle-3.4.2
+        volume:
+          nocopy: true
+  postgres:
+    image: postgres:9.6
     environment:
       - POSTGRES_PASSWORD=password123
       - POSTGRES_USER=moodle
       - POSTGRES_DB=moodle
+
+volumes:
+  moodle_app:
+  moodle_data:
+  moodle_ssl:
