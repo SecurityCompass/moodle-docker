@@ -25,7 +25,7 @@ services:
         source: ./conf/etc/nginx/conf.d
         target: /etc/nginx/conf.d
       - type: bind
-        source: ./conf/opt/moodle/ssl
+        source: ./conf/etc/nginx/ssl
         target: /etc/nginx/ssl
   moodle-app:
     image: moodle-app-3.4.2
@@ -34,12 +34,14 @@ services:
       - postgres
     volumes:
       - "moodle_app:/opt/moodle/moodle-3.4.2"
-      - "moodle_data:/opt/moodledata"
   php-fpm:
     image: moodle-php-fpm
     links:
       - postgres
     volumes:
+      - type: bind
+        source: /opt/moodle/moodledata
+        target: /opt/moodle/moodledata
       - type: volume
         source: moodle_app
         target: /opt/moodle/moodle-3.4.2
@@ -54,4 +56,4 @@ services:
 
 volumes:
   moodle_app:
-  moodle_data:
+    driver: local
