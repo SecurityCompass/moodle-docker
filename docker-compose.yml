@@ -18,17 +18,15 @@ services:
         target: /opt/moodle/moodle-3.4.2
         volume:
           nocopy: true
-      - type: volume
-        source: moodle_ssl
-        target: /etc/nginx/ssl
-        volume:
-          nocopy: true
       - type: bind
-        source: ./nginx/nginx.conf
+        source: ./conf/etc/nginx/nginx.conf
         target: /etc/nginx/nginx.conf
       - type: bind
-        source: ./nginx/moodle.conf
-        target: /etc/nginx/conf.d/default.conf
+        source: ./conf/etc/nginx/conf.d
+        target: /etc/nginx/conf.d
+      - type: bind
+        source: ./conf/opt/moodle/ssl
+        target: /etc/nginx/ssl
   moodle-app:
     image: moodle-app-3.4.2
     depends_on:
@@ -37,7 +35,6 @@ services:
     volumes:
       - "moodle_app:/opt/moodle/moodle-3.4.2"
       - "moodle_data:/opt/moodledata"
-      - "moodle_ssl:/opt/moodle/ssl"
   php-fpm:
     image: moodle-php-fpm
     links:
@@ -49,7 +46,7 @@ services:
         volume:
           nocopy: true
   postgres:
-    image: postgres:9.6
+    image: moodle-postgres
     environment:
       - POSTGRES_PASSWORD=password123
       - POSTGRES_USER=moodle
@@ -58,4 +55,3 @@ services:
 volumes:
   moodle_app:
   moodle_data:
-  moodle_ssl:
