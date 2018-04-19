@@ -34,3 +34,11 @@
     ```
     docker-compose up -d
     ```
+
+## Misc.
+
+* Generate self-signed certificate (TESTING ONLY)
+
+    ```
+    openssl req -x509 -newkey rsa:4096 -keyout moodle.key -out moodle.crt -days 365 -nodes -subj "/C=CA/ST=ON/L=Toronto/O=SC/OU=Org/CN=www.example.com"
+    ```
