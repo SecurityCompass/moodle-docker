@@ -50,6 +50,3 @@ RUN apt-get update &&\
     && apt-get --purge -y autoremove \
     && apt-get -y clean \
     && rm -rfv /etc/apt/sources.list.d/temp.list
-
-# Configuration file
-ADD php.ini /usr/local/etc/php/

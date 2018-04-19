@@ -40,6 +40,9 @@ services:
       - postgres
     volumes:
       - type: bind
+        source: ./conf/etc/php/php.ini
+        target: /etc/php/php.ini
+      - type: bind
         source: /opt/moodle/moodledata
         target: /opt/moodle/moodledata
       - type: volume
