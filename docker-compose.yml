@@ -7,7 +7,7 @@ services:
     image: nginx
     depends_on:
       - moodle-app
-+      - php-fpm
+      - php-fpm
     ports:
       - "80:80"
       - "443:443"
@@ -29,7 +29,7 @@ services:
         source: ./conf/etc/nginx/ssl
         target: /etc/nginx/ssl
   moodle-app:
-    image: moodle-app-3.4.2
+    image: moodle-app:3.4.2
     depends_on:
       - php-fpm
     volumes:
