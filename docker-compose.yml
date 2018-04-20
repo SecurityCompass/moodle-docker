@@ -7,6 +7,7 @@ services:
     image: nginx
     depends_on:
       - moodle-app
++      - php-fpm
     ports:
       - "80:80"
       - "443:443"
@@ -31,17 +32,22 @@ services:
     image: moodle-app-3.4.2
     depends_on:
       - php-fpm
-      - postgres
     volumes:
       - "moodle_app:/opt/moodle/moodle-3.4.2"
   php-fpm:
-    image: moodle-php-fpm
+    image: moodle-php-fpm-centos
     links:
       - postgres
     volumes:
       - type: bind
-        source: ./conf/etc/php/php.ini
-        target: /etc/php/php.ini
+        source: ./conf/etc/php.ini
+        target: /etc/php.ini
+      - type: bind
+        source: ./conf/etc/php-fpm.conf
+        target: /etc/php-fpm.conf
+      - type: bind
+        source: ./conf/etc/php-fpm.d
+        target: /etc/php-fpm.d
       - type: bind
         source: /opt/moodle/moodledata
         target: /opt/moodle/moodledata
