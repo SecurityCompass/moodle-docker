@@ -31,6 +31,7 @@
     ```
     git clone git@agra.sdelements.com:deployment/docker-postgres.git && cd docker-postgres/9.6/alpine && docker build -t moodle-postgres .
     ```
+    NOTE: You may need to set the execute bit on `docker-entrypoint.sh` before building the container. E.g. `chmod +x docker-entrypoint.sh`
 
 5. Configure and start the docker containers with the docker-compose file
     ```
