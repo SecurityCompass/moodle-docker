@@ -8,13 +8,13 @@
     yum install -y yum-utils device-mapper-persistent-data lvm2
     
     yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-    yum install docker-ce
+    yum install -y docker-ce
     systemctl enable docker.service
     systemctl start docker.service
     systemctl status docker.service
     
     yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-    yum install python2-pip
+    yum install -y python2-pip
     pip install docker-compose
     ```
 
