@@ -13,7 +13,6 @@ RUN apt-get update \
     && wget https://download.moodle.org/download.php/direct/stable34/moodle-$moodle_ver.tgz -O /opt/moodle/moodle-$moodle_ver.tgz \
     && tar -xzvf /opt/moodle/moodle-$moodle_ver.tgz -C /opt/moodle \
     && mv -v /opt/moodle/moodle /opt/moodle/moodle-$moodle_ver \
-#    && chown -Rv 101:101 /opt/moodle \
     && rm -v /opt/moodle/moodle-$moodle_ver.tgz \
     # Remove/purge dev packages
     && apt-get --purge -y remove wget \
