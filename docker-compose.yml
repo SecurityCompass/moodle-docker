@@ -56,9 +56,14 @@ services:
     links:
       - postgres
     volumes:
+      # PHP configuration
       - type: bind
         source: ./conf/etc/php.ini
         target: /etc/php.ini
+      - type: bind
+        source: ./conf/etc/php.d/10-opcache.ini
+        target: /etc/php.d/10-opcache.ini
+      # PHP-FPM configuration
       - type: bind
         source: ./conf/etc/php-fpm.conf
         target: /etc/php-fpm.conf
