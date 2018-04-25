@@ -227,16 +227,16 @@ $CFG->admin = 'admin';
 // comment out one the following options to enable it in Moodle:
 //     $CFG->xsendfile = 'X-Sendfile';           // Apache {@see https://tn123.org/mod_xsendfile/}
 //     $CFG->xsendfile = 'X-LIGHTTPD-send-file'; // Lighttpd {@see http://redmine.lighttpd.net/projects/lighttpd/wiki/X-LIGHTTPD-send-file}
-//     $CFG->xsendfile = 'X-Accel-Redirect';     // Nginx {@see http://wiki.nginx.org/XSendfile}
+     $CFG->xsendfile = 'X-Accel-Redirect';     // Nginx {@see http://wiki.nginx.org/XSendfile}
 // If your X-Sendfile implementation (usually Nginx) uses directory aliases specify them
 // in the following array setting:
-//     $CFG->xsendfilealiases = array(
-//         '/dataroot/' => $CFG->dataroot,
+     $CFG->xsendfilealiases = array(
+         '/dataroot/' => $CFG->dataroot,
 //         '/cachedir/' => '/var/www/moodle/cache',    // for custom $CFG->cachedir locations
 //         '/localcachedir/' => '/var/local/cache',    // for custom $CFG->localcachedir locations
 //         '/tempdir/'  => '/var/www/moodle/temp',     // for custom $CFG->tempdir locations
 //         '/filedir'   => '/var/www/moodle/filedir',  // for custom $CFG->filedir locations
-//     );
+     );
 //
 // YUI caching may be sometimes improved by slasharguments:
 //     $CFG->yuislasharguments = 1;
