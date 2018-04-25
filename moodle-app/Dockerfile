@@ -21,7 +21,10 @@ RUN echo "Starting container build..." \
     && apt-get -y clean \
     && rm -rfv /etc/apt/sources.list.d/temp.list
 
-COPY config.php /opt/moodle/moodle-$moodle_ver/
+# Copy in the Moodle config and set permissions
+COPY ./config.php /opt/moodle/moodle-$moodle_ver/config.php
+RUN chown --reference=/opt/moodle/moodle-$moodle_ver/config-dist.php /opt/moodle/moodle-$moodle_ver/config.php \
+    && chmod --reference=/opt/moodle/moodle-$moodle_ver/config-dist.php /opt/moodle/moodle-$moodle_ver/config.php
 
 VOLUME ["/opt/moodle/moodle-$moodle_ver"]
 
