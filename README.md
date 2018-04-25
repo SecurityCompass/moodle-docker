@@ -5,6 +5,7 @@
 1. Install Docker on your system.
     ##### On CentOS 7
     ```
+    # Optional
     yum install -y yum-utils device-mapper-persistent-data lvm2
     
     yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -18,24 +19,20 @@
     pip install docker-compose
     ```
 
-2. Copy dockerfiles from the moodle-docker repository and build the containers
+2. Copy/clone dockerfiles from the `moodle-docker` and `docker-posgres` repository and build the containers
     ```
+    # Moodle repo
     git clone git@agra.sdelements.com:deployment/moodle-docker.git
     
-    cd moodle-docker && ./build.sh
+    # Postgres repo. The entrypoint has to be executable
+    git clone git@agra.sdelements.com:deployment/docker-postgres.git && cd docker-postgres/9.6/alpine && chmod +x docker-entrypoint.sh
     ```
 
-3. Copy your SSL certificate and key into the `conf/etc/nginx/ssl/` dir. See below for instructions for generating a self-signed certificate pair for testing. 
+3. Copy your SSL certificate and key into the `conf/etc/nginx/ssl/` dir as `moodle.crt` and `moodle.key`. See below for instructions for generating a self-signed certificate pair for testing. 
 
-4. Build postgres container from the Dockerfile
+4. Configure and start the docker containers with the docker-compose file
     ```
-    git clone git@agra.sdelements.com:deployment/docker-postgres.git && cd docker-postgres/9.6/alpine && docker build -t moodle-postgres .
-    ```
-    NOTE: You may need to set the execute bit on `docker-entrypoint.sh` before building the container. E.g. `chmod +x docker-entrypoint.sh`
-
-5. Configure and start the docker containers with the docker-compose file
-    ```
-    docker-compose up -d
+    cd moodle-docker && docker-compose up -d
     ```
 
 ## Misc.
