@@ -21,7 +21,8 @@ RUN apt-get update \
     && apt-get -y clean \
     && rm -rfv /etc/apt/sources.list.d/temp.list
 
+COPY config.php /opt/moodle/moodle-$moodle_ver/
+
 VOLUME ["/opt/moodle/moodle-$moodle_ver"]
 
-ENTRYPOINT ["ls", "-la"]
-CMD ["/opt/moodle"]
+CMD ["ls", "-la", "/opt/moodle"]
