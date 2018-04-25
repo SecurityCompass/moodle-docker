@@ -26,4 +26,4 @@ RUN echo "Starting container build..." \
 RUN ln -sf /dev/stdout /var/log/php/php_errors.log
 
 EXPOSE 9000
-CMD ["php-fpm"]
+CMD ["sh", "-c", "php-fpm"]
