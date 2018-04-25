@@ -16,7 +16,7 @@ services:
     volumes:
       - type: volume
         source: moodle_app
-        target: /opt/moodle/moodle-3.4.2
+        target: /opt/moodle/moodle-${MOODLE_VER}
         volume:
           nocopy: true
       - type: bind
@@ -29,13 +29,30 @@ services:
         source: ./conf/etc/nginx/ssl
         target: /etc/nginx/ssl
   moodle-app:
-    image: moodle-app:3.4.2
+    build:
+      args:
+        moodle_ver: "${MOODLE_VER}"
+      context: ./moodle-app
+    image: moodle-app:${MOODLE_VER}
     depends_on:
       - php-fpm
     volumes:
-      - "moodle_app:/opt/moodle/moodle-3.4.2"
+      - "moodle_app:/opt/moodle/moodle-${MOODLE_VER}"
+    entrypoint:
+      - tail
+      - -f
+      - /etc/hostname
   php-fpm:
-    image: moodle-php-fpm-centos
+    build:
+      context: ./php-fpm-centos
+    image: moodle-php-fpm-centos:0.0.1
+    environment:
+      MOODLE_URL: "${MOODLE_URL}"
+      PGSQL_HOSTNAME: "${PGSQL_HOSTNAME}"
+      PGSQL_PORT: "${PGSQL_PORT}"
+      POSTGRES_DB: "${PGSQL_DATABASE}"
+      POSTGRES_USER: "${PGSQL_USER}"
+      POSTGRES_PASSWORD: "${PGSQL_PASSWORD}"
     links:
       - postgres
     volumes:
@@ -49,19 +66,21 @@ services:
         source: ./conf/etc/php-fpm.d
         target: /etc/php-fpm.d
       - type: bind
-        source: /opt/moodle/moodledata
-        target: /opt/moodle/moodledata
+        source: ${MOODLE_DATADIR}
+        target: ${MOODLE_DATADIR}
       - type: volume
         source: moodle_app
-        target: /opt/moodle/moodle-3.4.2
+        target: /opt/moodle/moodle-${MOODLE_VER}
         volume:
           nocopy: true
   postgres:
+    build:
+      context: ../docker-postgres/9.6/alpine
     image: moodle-postgres
     environment:
-      - POSTGRES_PASSWORD=password123
-      - POSTGRES_USER=moodle
-      - POSTGRES_DB=moodle
+      POSTGRES_DB: "${PGSQL_DATABASE}"
+      POSTGRES_USER: "${PGSQL_USER}"
+      POSTGRES_PASSWORD: "${PGSQL_PASSWORD}"
 
 volumes:
   moodle_app:
