@@ -41,19 +41,18 @@ services:
       - php-fpm
     volumes:
       - "moodle_app:/opt/moodle/moodle-${MOODLE_VER}"
-    entrypoint:
-      - cat
   php-fpm:
     build:
       context: ./php-fpm-centos
     image: moodle-php-fpm-centos:0.0.1
     environment:
+      MOODLE_DATADIR: "${MOODLE_DATADIR}"
       MOODLE_URL: "${MOODLE_URL}"
       PGSQL_HOSTNAME: "${PGSQL_HOSTNAME}"
       PGSQL_PORT: "${PGSQL_PORT}"
-      POSTGRES_DB: "${PGSQL_DATABASE}"
-      POSTGRES_USER: "${PGSQL_USER}"
-      POSTGRES_PASSWORD: "${PGSQL_PASSWORD}"
+      PGSQL_DATABASE: "${PGSQL_DATABASE}"
+      PGSQL_USER: "${PGSQL_USER}"
+      PGSQL_PASSWORD: "${PGSQL_PASSWORD}"
     links:
       - postgres
     volumes:
