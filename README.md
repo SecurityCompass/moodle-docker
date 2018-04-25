@@ -19,7 +19,7 @@
     pip install docker-compose
     ```
 
-2. Copy/clone dockerfiles from the `moodle-docker` and `docker-posgres` repository and build the containers
+2. Copy/clone dockerfiles from the `moodle-docker` and `docker-posgres` repository and build the containers. Both folders/repos should be in the same parent folder. 
     ```
     # Moodle repo
     git clone git@agra.sdelements.com:deployment/moodle-docker.git
@@ -28,9 +28,9 @@
     git clone git@agra.sdelements.com:deployment/docker-postgres.git && cd docker-postgres/9.6/alpine && chmod +x docker-entrypoint.sh
     ```
 
-3. Copy your SSL certificate and key into the `conf/etc/nginx/ssl/` dir as `moodle.crt` and `moodle.key`. See below for instructions for generating a self-signed certificate pair for testing. 
+3. Copy your SSL certificate and key into the `conf/etc/nginx/ssl/` dir as `moodle.crt` and `moodle.key`. See below for instructions for generating a self-signed certificate pair (TESTING ONLY). 
 
-4. Configure and start the docker containers with the docker-compose file
+4. Build, configure and start the docker containers with docker-compose
     ```
     cd moodle-docker && docker-compose up -d
     ```
