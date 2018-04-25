@@ -28,6 +28,9 @@ services:
       - type: bind
         source: ./conf/etc/nginx/ssl
         target: /etc/nginx/ssl
+      - type: bind
+        source: ${MOODLE_DATADIR}
+        target: ${MOODLE_DATADIR}
   moodle-app:
     build:
       args:
@@ -39,9 +42,7 @@ services:
     volumes:
       - "moodle_app:/opt/moodle/moodle-${MOODLE_VER}"
     entrypoint:
-      - tail
-      - -f
-      - /etc/hostname
+      - cat
   php-fpm:
     build:
       context: ./php-fpm-centos
