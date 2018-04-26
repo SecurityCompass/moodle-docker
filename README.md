@@ -41,9 +41,15 @@
 5. Customize `.env` according to your environment. Most notably `MOODLE_VERSION` and `MOODLE_WWWROOT` (based on your instance IP/FQDN)
 
 6. Build, configure and start the docker containers with docker-compose
+    ##### To start from scratch
     ```bash
     cd moodle-docker
     docker-compose up -d --force-recreate -V --always-recreate-deps --build
+    ```
+    ##### Restart containers
+    ```
+    cd moodle-docker
+    docker-compose up -d
     ```
 
 ## Misc.
