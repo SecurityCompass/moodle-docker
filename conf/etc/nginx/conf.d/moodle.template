@@ -11,7 +11,7 @@ server {
     ssl_certificate_key ssl/moodle.key;
     ssl_protocols TLSv1.2;
 
-    root   /opt/moodle/moodle-3.4.2;
+    root   /opt/moodle/moodle-${MOODLE_VERSION};
 
     location / {
         index   index.php;
@@ -20,7 +20,7 @@ server {
     location /dataroot/ {
         internal;
         # ensure the path ends with /
-        alias /opt/moodle/moodledata/;
+        alias ${MOODLE_DATAROOT}/;
     }
 
     location ~ [^/]\.php(/|$) {
