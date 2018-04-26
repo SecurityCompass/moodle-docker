@@ -84,7 +84,7 @@ $CFG->dboptions = array(
 // If you need both intranet and Internet access please read
 // http://docs.moodle.org/en/masquerading
 
-$CFG->wwwroot   = getenv('MOODLE_URL');
+$CFG->wwwroot   = getenv('MOODLE_WWWROOT');
 
 
 //=========================================================================
@@ -100,7 +100,7 @@ $CFG->wwwroot   = getenv('MOODLE_URL');
 //
 // - On Windows systems you might specify something like 'c:\moodledata'
 
-$CFG->dataroot  = getenv('MOODLE_DATADIR');
+$CFG->dataroot  = getenv('MOODLE_DATAROOT');
 
 
 //=========================================================================

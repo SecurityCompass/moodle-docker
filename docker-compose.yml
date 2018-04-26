@@ -16,7 +16,7 @@ services:
     volumes:
       - type: volume
         source: moodle_app
-        target: /opt/moodle/moodle-${MOODLE_VER}
+        target: /opt/moodle/moodle-${MOODLE_VERSION}
         volume:
           nocopy: true
       - type: bind
@@ -29,25 +29,25 @@ services:
         source: ./conf/etc/nginx/ssl
         target: /etc/nginx/ssl
       - type: bind
-        source: ${MOODLE_DATADIR}
-        target: ${MOODLE_DATADIR}
+        source: ${MOODLE_DATAROOT}
+        target: ${MOODLE_DATAROOT}
   moodle-app:
     build:
       args:
-        moodle_ver: "${MOODLE_VER}"
+        moodle_ver: "${MOODLE_VERSION}"
       context: ./moodle-app
-    image: moodle-app:${MOODLE_VER}
+    image: moodle-app:${MOODLE_VERSION}
     depends_on:
       - php-fpm
     volumes:
-      - "moodle_app:/opt/moodle/moodle-${MOODLE_VER}"
+      - "moodle_app:/opt/moodle/moodle-${MOODLE_VERSION}"
   php-fpm:
     build:
       context: ./php-fpm-centos
     image: moodle-php-fpm-centos:0.0.1
     environment:
-      MOODLE_DATADIR: "${MOODLE_DATADIR}"
-      MOODLE_URL: "${MOODLE_URL}"
+      MOODLE_DATAROOT: "${MOODLE_DATAROOT}"
+      MOODLE_WWWROOT: "${MOODLE_WWWROOT}"
       PGSQL_HOSTNAME: "${PGSQL_HOSTNAME}"
       PGSQL_PORT: "${PGSQL_PORT}"
       PGSQL_DATABASE: "${PGSQL_DATABASE}"
@@ -71,11 +71,11 @@ services:
         source: ./conf/etc/php-fpm.d
         target: /etc/php-fpm.d
       - type: bind
-        source: ${MOODLE_DATADIR}
-        target: ${MOODLE_DATADIR}
+        source: ${MOODLE_DATAROOT}
+        target: ${MOODLE_DATAROOT}
       - type: volume
         source: moodle_app
-        target: /opt/moodle/moodle-${MOODLE_VER}
+        target: /opt/moodle/moodle-${MOODLE_VERSION}
         volume:
           nocopy: true
   postgres:
