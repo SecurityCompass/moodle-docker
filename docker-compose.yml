@@ -8,6 +8,9 @@ services:
     depends_on:
       - moodle-app
       - php-fpm
+    environment:
+      MOODLE_DATAROOT: "${MOODLE_DATAROOT}"
+      MOODLE_VERSION: "${MOODLE_VERSION}"
     ports:
       - "80:80"
       - "443:443"
@@ -31,6 +34,7 @@ services:
       - type: bind
         source: ${MOODLE_DATAROOT}
         target: ${MOODLE_DATAROOT}
+    command: /bin/bash -c "envsubst '$${MOODLE_DATAROOT} $${MOODLE_VERSION}' < /etc/nginx/conf.d/moodle.template > /etc/nginx/conf.d/moodle.conf && nginx -g 'daemon off;'"
   moodle-app:
     build:
       args:
