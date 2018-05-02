@@ -1,36 +1,96 @@
 ---
 
-version: '2'
+version: '3.2'
 
 services:
   nginx:
-    image: moodle-nginx
+    image: nginx
+    depends_on:
+      - moodle-app
+      - php-fpm
+    environment:
+      MOODLE_DATAROOT: "${MOODLE_DATAROOT}"
+      MOODLE_VERSION: "${MOODLE_VERSION}"
     ports:
       - "80:80"
       - "443:443"
     links:
-      - fpm
+      - php-fpm
     volumes:
-      - /opt/moodle:/opt/moodle
-      - /opt/moodle/ssl:/etc/nginx/ssl
-  fpm:
-    image: moodle-fpm
+      - type: volume
+        source: moodle_app
+        target: /opt/moodle/moodle-${MOODLE_VERSION}
+        volume:
+          nocopy: true
+      - type: bind
+        source: ./conf/etc/nginx/nginx.conf
+        target: /etc/nginx/nginx.conf
+      - type: bind
+        source: ./conf/etc/nginx/conf.d
+        target: /etc/nginx/conf.d
+      - type: bind
+        source: ./conf/etc/nginx/ssl
+        target: /etc/nginx/ssl
+      - type: bind
+        source: ${MOODLE_DATAROOT}
+        target: ${MOODLE_DATAROOT}
+    command: /bin/bash -c "envsubst '$${MOODLE_DATAROOT} $${MOODLE_VERSION}' < /etc/nginx/conf.d/moodle.template > /etc/nginx/conf.d/moodle.conf && nginx -g 'daemon off;'"
+  moodle-app:
+    build:
+      args:
+        moodle_ver: "${MOODLE_VERSION}"
+      context: ./moodle-app
+    image: moodle-app:${MOODLE_VERSION}
+    depends_on:
+      - php-fpm
     volumes:
-      - /opt/moodle:/opt/moodle
-      - /opt/moodledata:/opt/moodledata
+      - "moodle_app:/opt/moodle/moodle-${MOODLE_VERSION}"
+  php-fpm:
+    build:
+      context: ./php-fpm-centos
+    image: moodle-php-fpm-centos:0.0.1
+    environment:
+      MOODLE_DATAROOT: "${MOODLE_DATAROOT}"
+      MOODLE_WWWROOT: "${MOODLE_WWWROOT}"
+      PGSQL_HOSTNAME: "${PGSQL_HOSTNAME}"
+      PGSQL_PORT: "${PGSQL_PORT}"
+      PGSQL_DATABASE: "${PGSQL_DATABASE}"
+      PGSQL_USER: "${PGSQL_USER}"
+      PGSQL_PASSWORD: "${PGSQL_PASSWORD}"
     links:
-      - db
-    environment:
-      - MOODLE_DOCKER_DBTYPE=pgsql
-      - MOODLE_DOCKER_DBNAME=moodle
-      - MOODLE_DOCKER_DBUSER=moodle
-      - MOODLE_DOCKER_DBPASS=password123
-      - MOODLE_DOCKER_WEB_HOST=192.168.1.195
-  db:
-    image: moodle-postgres
+      - postgres
     volumes:
-      - /opt/moodle/db:/var/lib/postgresql/data
+      # PHP configuration
+      - type: bind
+        source: ./conf/etc/php.ini
+        target: /etc/php.ini
+      - type: bind
+        source: ./conf/etc/php.d/10-opcache.ini
+        target: /etc/php.d/10-opcache.ini
+      # PHP-FPM configuration
+      - type: bind
+        source: ./conf/etc/php-fpm.conf
+        target: /etc/php-fpm.conf
+      - type: bind
+        source: ./conf/etc/php-fpm.d
+        target: /etc/php-fpm.d
+      - type: bind
+        source: ${MOODLE_DATAROOT}
+        target: ${MOODLE_DATAROOT}
+      - type: volume
+        source: moodle_app
+        target: /opt/moodle/moodle-${MOODLE_VERSION}
+        volume:
+          nocopy: true
+  postgres:
+    build:
+      context: ../docker-postgres/9.6/alpine
+    image: moodle-postgres
     environment:
-      - POSTGRES_PASSWORD=password123
-      - POSTGRES_USER=moodle
-      - POSTGRES_DB=moodle
+      POSTGRES_DB: "${PGSQL_DATABASE}"
+      POSTGRES_USER: "${PGSQL_USER}"
+      POSTGRES_PASSWORD: "${PGSQL_PASSWORD}"
+
+volumes:
+  moodle_app:
+    driver: local
