@@ -4,6 +4,8 @@ version: '3.2'
 
 services:
   nginx:
+    networks:
+      all:
     image: nginx
     depends_on:
       - moodle-app
@@ -14,14 +16,15 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    links:
-      - php-fpm
     volumes:
       - type: volume
         source: moodle_app
         target: /opt/moodle/moodle-${MOODLE_VERSION}
         volume:
           nocopy: true
+      - type: bind
+        source: /var/run/php-fpm
+        target: /var/run/php-fpm
       - type: bind
         source: ./conf/etc/nginx/nginx.conf
         target: /etc/nginx/nginx.conf
@@ -46,6 +49,8 @@ services:
     volumes:
       - "moodle_app:/opt/moodle/moodle-${MOODLE_VERSION}"
   php-fpm:
+    networks:
+      all:
     build:
       context: ./php-fpm-centos
     image: moodle-php-fpm-centos:0.0.1
@@ -57,8 +62,6 @@ services:
       PGSQL_DATABASE: "${PGSQL_DATABASE}"
       PGSQL_USER: "${PGSQL_USER}"
       PGSQL_PASSWORD: "${PGSQL_PASSWORD}"
-    links:
-      - postgres
     volumes:
       # PHP configuration
       - type: bind
@@ -77,14 +80,19 @@ services:
       - type: bind
         source: ${MOODLE_DATAROOT}
         target: ${MOODLE_DATAROOT}
+      - type: bind
+        source: /var/run/php-fpm
+        target: /var/run/php-fpm
       - type: volume
         source: moodle_app
         target: /opt/moodle/moodle-${MOODLE_VERSION}
         volume:
           nocopy: true
   postgres:
+    networks:
+      all:
     build:
-      context: ../docker-postgres/9.6/alpine
+      context: ./docker-postgres/9.6/alpine
     image: moodle-postgres
     environment:
       POSTGRES_DB: "${PGSQL_DATABASE}"
@@ -94,3 +102,6 @@ services:
 volumes:
   moodle_app:
     driver: local
+
+networks:
+  all:
