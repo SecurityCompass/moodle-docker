@@ -3,11 +3,11 @@
 ## Setup
 
 1. Install Docker on your system.
-    ##### On CentOS 7
+    ##### CentOS 7
     ```bash
     # Optional
     yum install -y yum-utils device-mapper-persistent-data lvm2
-    
+
     yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
     yum install -y docker-ce
     systemctl enable docker.service
@@ -19,18 +19,43 @@
     pip install docker-compose
     ```
 
-2. Copy/clone dockerfiles from the `moodle-docker` and `docker-posgres` repository and build the containers. Both folders/repos should be in the same parent folder. 
+    ##### Ubuntu 16.04
+    ```bash
+    # Dependencies
+    apt-get update
+    apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+ 
+    # Apt key
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    apt-key fingerprint 0EBFCD88
+
+    # Remove legacy docker, add repo, install latest docker
+    apt-get remove -y docker docker-engine docker.io
+    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    apt-get update
+    apt-get install -y docker-ce
+    systemctl enable docker.service
+    systemctl start docker.service
+    systemctl status docker.service
+
+    # Docker compose
+    curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
+    docker-compose --version
+    ```
+
+2. Copy/clone dockerfiles from the `moodle-docker` repository and build the containers. Note: `docker-postgres` is a Git submodule in `moodle-docker`. 
     ```bash
     # Moodle repo
     git clone git@agra.sdelements.com:deployment/moodle-docker.git
     
-    # Postgres repo. The entrypoint has to be executable
-    git clone git@agra.sdelements.com:deployment/docker-postgres.git && chmod +x docker-postgres/9.6/alpine/docker-entrypoint.sh
+    # Postgres entrypoint has to be executable
+    chmod +x moodle-docker/docker-postgres/9.6/alpine/docker-entrypoint.sh
     ```
 
-3. Copy your SSL certificate and key into the `conf/etc/nginx/ssl/` dir as `moodle.crt` and `moodle.key`. The included pair are self-signed and can be used for testing. 
+3. Copy your SSL certificate and key into the `conf/etc/nginx/ssl/` dir as `moodle.crt` and `moodle.key`. The included pair are self-signed and can be used (TESTING ONLY). 
 
-    See below for instructions for generating a self-signed certificate pair (TESTING ONLY). 
+    Instructions below to generate your own self-signed certificate pair.
 
 4. Create data directory for Moodle
     ```bash
@@ -40,17 +65,21 @@
 
 5. Customize `.env` according to your environment. Most notably `MOODLE_VERSION` and `MOODLE_WWWROOT` (based on your instance IP/FQDN)
 
-6. Build, configure and start the docker containers with docker-compose
+6. Build, configure and start the docker containers with docker-compose. Note: `-d` toggles foreground/background and `-V` recreates docker volumes (DATA LOSS).
     ##### To start from scratch
     ```bash
     cd moodle-docker
-    docker-compose up -d --force-recreate -V --always-recreate-deps --build
+    docker-compose up --force-recreate --always-recreate-deps --build -d -V
     ```
-    ##### Restart containers
-    ```
+    
+    ##### Re-crate containers/Restart services
+    ```bash
     cd moodle-docker
-    docker-compose up -d
+    docker-compose up --force-recreate --always-recreate-deps --build -d
     ```
+
+7. Follow these instructions to setup the Moodle app:
+    https://securitycompass.atlassian.net/wiki/spaces/DEP/pages/204046339/Moodle+Docker+Deployment
 
 ## Misc.
 
