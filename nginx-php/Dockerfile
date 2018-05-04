@@ -37,7 +37,7 @@ RUN chmod 755 /etc/services.d/php_fpm/run
 
 # Add wait-for-it
 COPY ./wait-for-it.sh /bin/wait-for-it.sh
-RUN chmod +x /bin/wait-for-it.sh
+RUN chmod 755 /bin/wait-for-it.sh
 
 # Add S6 supervisor (for graceful stop)
 COPY ./s6-overlay-amd64.tar.gz /tmp/
