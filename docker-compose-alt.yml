@@ -10,8 +10,8 @@ services:
       context: ./nginx-php
     image: nginx-php:0.0.1
     depends_on:
-      - moodle-app2
-      - postgres2
+      - moodle-app
+      - postgres
     environment:
       MOODLE_DATAROOT: "${MOODLE_DATAROOT}"
       MOODLE_VERSION: "${MOODLE_VERSION}"
@@ -47,32 +47,32 @@ services:
         target: ${MOODLE_DATAROOT}
       # PHP configuration
       - type: bind
-        source: ./conf/etc/php.ini
+        source: ./conf/etc/php/7.2/cli/php.ini
         target: /etc/php/7.2/cli/php.ini
       - type: bind
-        source: ./conf/etc/php.d/10-opcache.ini
+        source: ./conf/etc/php/7.2/cli/conf.d/10-opcache.ini
         target: /etc/php/7.2/cli/conf.d/10-opcache.ini
       # PHP-FPM configuration
       - type: bind
-        source: ./conf/etc/php-fpm.conf
+        source: ./conf/etc/php/7.2/fpm/php-fpm.conf
         target: /etc/php/7.2/fpm/php-fpm.conf
       - type: bind
-        source: ./conf/etc/php-fpm.d/www.conf
+        source: ./conf/etc/php/7.2/fpm/pool.d/www.conf
         target: /etc/php/7.2/fpm/pool.d/www.conf
-  moodle-app2:
+  moodle-app:
     build:
       args:
         moodle_ver: "${MOODLE_VERSION}"
       context: ./moodle-app
-    image: moodle-app2:${MOODLE_VERSION}
+    image: moodle-app:${MOODLE_VERSION}
     volumes:
       - "moodle_app:/opt/moodle/moodle-${MOODLE_VERSION}"
-  postgres2:
+  postgres:
     networks:
       all:
     build:
-      context: ../docker-postgres/9.6/alpine
-    image: moodle-postgres2
+      context: ./docker-postgres/9.6/alpine
+    image: moodle-postgres
     environment:
       POSTGRES_DB: "${PGSQL_DATABASE}"
       POSTGRES_USER: "${PGSQL_USER}"
@@ -80,8 +80,6 @@ services:
 
 volumes:
   moodle_app:
-    driver: local
-  php_socket:
     driver: local
 
 networks:
