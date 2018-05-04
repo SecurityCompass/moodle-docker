@@ -17,6 +17,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
+      # Moodle app
       - type: volume
         source: moodle_app
         target: /opt/moodle/moodle-${MOODLE_VERSION}
@@ -25,6 +26,7 @@ services:
       - type: bind
         source: /var/run/php-fpm
         target: /var/run/php-fpm
+      # Nginx configuration
       - type: bind
         source: ./conf/etc/nginx/nginx.conf
         target: /etc/nginx/nginx.conf
@@ -34,6 +36,7 @@ services:
       - type: bind
         source: ./conf/etc/nginx/ssl
         target: /etc/nginx/ssl
+      # Moodle data dir
       - type: bind
         source: ${MOODLE_DATAROOT}
         target: ${MOODLE_DATAROOT}
