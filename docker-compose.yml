@@ -3,16 +3,24 @@
 version: '3.2'
 
 services:
-  nginx:
+  nginx-php:
     networks:
       all:
-    image: nginx
+    build:
+      context: ./nginx-php
+    image: nginx-php:0.0.1
     depends_on:
       - moodle-app
-      - php-fpm
+      - postgres
     environment:
       MOODLE_DATAROOT: "${MOODLE_DATAROOT}"
       MOODLE_VERSION: "${MOODLE_VERSION}"
+      MOODLE_WWWROOT: "${MOODLE_WWWROOT}"
+      PGSQL_HOSTNAME: "${PGSQL_HOSTNAME}"
+      PGSQL_PORT: "${PGSQL_PORT}"
+      PGSQL_DATABASE: "${PGSQL_DATABASE}"
+      PGSQL_USER: "${PGSQL_USER}"
+      PGSQL_PASSWORD: "${PGSQL_PASSWORD}"
     ports:
       - "80:80"
       - "443:443"
@@ -23,9 +31,6 @@ services:
         target: /opt/moodle/moodle-${MOODLE_VERSION}
         volume:
           nocopy: true
-      - type: bind
-        source: /var/run/php-fpm
-        target: /var/run/php-fpm
       # Nginx configuration
       - type: bind
         source: ./conf/etc/nginx/nginx.conf
@@ -40,57 +45,28 @@ services:
       - type: bind
         source: ${MOODLE_DATAROOT}
         target: ${MOODLE_DATAROOT}
-    command: /bin/bash -c "envsubst '$${MOODLE_DATAROOT} $${MOODLE_VERSION}' < /etc/nginx/conf.d/moodle.template > /etc/nginx/conf.d/moodle.conf && nginx -g 'daemon off;'"
+      # PHP configuration
+      - type: bind
+        source: ./conf/etc/php/7.2/cli/php.ini
+        target: /etc/php/7.2/cli/php.ini
+      - type: bind
+        source: ./conf/etc/php/7.2/cli/conf.d/10-opcache.ini
+        target: /etc/php/7.2/cli/conf.d/10-opcache.ini
+      # PHP-FPM configuration
+      - type: bind
+        source: ./conf/etc/php/7.2/fpm/php-fpm.conf
+        target: /etc/php/7.2/fpm/php-fpm.conf
+      - type: bind
+        source: ./conf/etc/php/7.2/fpm/pool.d/www.conf
+        target: /etc/php/7.2/fpm/pool.d/www.conf
   moodle-app:
     build:
       args:
         moodle_ver: "${MOODLE_VERSION}"
       context: ./moodle-app
     image: moodle-app:${MOODLE_VERSION}
-    depends_on:
-      - php-fpm
     volumes:
       - "moodle_app:/opt/moodle/moodle-${MOODLE_VERSION}"
-  php-fpm:
-    networks:
-      all:
-    build:
-      context: ./php-fpm-centos
-    image: moodle-php-fpm-centos:0.0.1
-    environment:
-      MOODLE_DATAROOT: "${MOODLE_DATAROOT}"
-      MOODLE_WWWROOT: "${MOODLE_WWWROOT}"
-      PGSQL_HOSTNAME: "${PGSQL_HOSTNAME}"
-      PGSQL_PORT: "${PGSQL_PORT}"
-      PGSQL_DATABASE: "${PGSQL_DATABASE}"
-      PGSQL_USER: "${PGSQL_USER}"
-      PGSQL_PASSWORD: "${PGSQL_PASSWORD}"
-    volumes:
-      # PHP configuration
-      - type: bind
-        source: ./conf/etc/php.ini
-        target: /etc/php.ini
-      - type: bind
-        source: ./conf/etc/php.d/10-opcache.ini
-        target: /etc/php.d/10-opcache.ini
-      # PHP-FPM configuration
-      - type: bind
-        source: ./conf/etc/php-fpm.conf
-        target: /etc/php-fpm.conf
-      - type: bind
-        source: ./conf/etc/php-fpm.d
-        target: /etc/php-fpm.d
-      - type: bind
-        source: ${MOODLE_DATAROOT}
-        target: ${MOODLE_DATAROOT}
-      - type: bind
-        source: /var/run/php-fpm
-        target: /var/run/php-fpm
-      - type: volume
-        source: moodle_app
-        target: /opt/moodle/moodle-${MOODLE_VERSION}
-        volume:
-          nocopy: true
   postgres:
     networks:
       all:
