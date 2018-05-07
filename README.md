@@ -21,6 +21,9 @@
 
     ##### Ubuntu 16.04
     ```bash
+    # Remove the Kubernetes Apt source file in `/etc/apt/sources.list.d` or add the Apt key if you require it
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6A030B21BA07F4FB
+
     # Dependencies
     apt-get update
     apt-get install -y apt-transport-https ca-certificates curl software-properties-common
