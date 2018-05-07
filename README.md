@@ -75,7 +75,7 @@
     docker-compose up --force-recreate --always-recreate-deps --build -d -V
     ```
     
-    ##### Re-crate containers/Restart services
+    ##### Re-create containers/Restart services
     ```bash
     cd moodle-docker
     docker-compose up --force-recreate --always-recreate-deps --build -d
