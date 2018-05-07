@@ -52,7 +52,7 @@
     # Moodle repo
     git clone git@agra.sdelements.com:deployment/moodle-docker.git
     
-    # Postgres entrypoint has to be executable
+    # Postgres entrypoint has to be executable. Git holds the executable bit but sometimes the file is not created with correct permissions.
     chmod +x moodle-docker/docker-postgres/9.6/alpine/docker-entrypoint.sh
     ```
 
@@ -60,7 +60,7 @@
 
     Instructions below to generate your own self-signed certificate pair.
 
-4. Create data directory for Moodle
+4. Create data directory for Moodle (on the host VM)
     ```bash
     mkdir -p /opt/moodle/moodledata
     chmod 777 /opt/moodle/moodledata
