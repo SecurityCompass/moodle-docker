@@ -3,8 +3,9 @@ FROM ubuntu:xenial
 # Disable frontend dialogs
 ENV DEBIAN_FRONTEND noninteractive
 ENV PHP_VERSION 7.2
+ENV MOOSH_PACKAGE moosh_moodle35_2018042500.zip
 # Add ppa, curl and syslogd
-RUN apt-get update && apt-get install -y software-properties-common curl inetutils-syslogd && \
+RUN apt-get update && apt-get install -y software-properties-common curl inetutils-syslogd unzip && \
     apt-add-repository ppa:nginx/stable -y && \
     LC_ALL=C.UTF-8 apt-add-repository ppa:ondrej/php -y && \
     apt-get update && apt-get install -y \
@@ -38,6 +39,11 @@ RUN chmod 755 /etc/services.d/php_fpm/run
 # Add S6 supervisor (for graceful stop)
 ADD https://github.com/just-containers/s6-overlay/releases/download/v1.21.4.0/s6-overlay-amd64.tar.gz /tmp/
 RUN tar -vxzf /tmp/s6-overlay-amd64.tar.gz -C /
+
+# Setup Moosh
+RUN curl https://moodle.org/plugins/download.php/16504/${MOOSH_PACKAGE} > /root/moosh_setup.zip && \
+    unzip /root/moosh_setup.zip -d /opt && \
+    ln -s /opt/moosh/moosh.php /usr/local/bin/moosh
 
 ENTRYPOINT ["/init"]
 CMD []
