@@ -3,7 +3,6 @@ FROM ubuntu:xenial
 # Disable frontend dialogs
 ENV DEBIAN_FRONTEND noninteractive
 ENV PHP_VERSION 7.2
-ENV MOOSH_PACKAGE moosh_moodle35_2018042500.zip
 # Add ppa, curl and syslogd
 RUN apt-get update && apt-get install -y software-properties-common curl inetutils-syslogd unzip && \
     apt-add-repository ppa:nginx/stable -y && \
