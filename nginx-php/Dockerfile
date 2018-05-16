@@ -24,7 +24,8 @@ RUN apt-get update && apt-get install -y software-properties-common curl inetuti
     php${PHP_VERSION}-xml \
     php${PHP_VERSION}-xmlrpc \
     php${PHP_VERSION}-zip \
-    vim && \
+    vim \
+    unzip && \
     apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Copy NGINX service script
@@ -38,6 +39,11 @@ RUN chmod 755 /etc/services.d/php_fpm/run
 # Add S6 supervisor (for graceful stop)
 ADD https://github.com/just-containers/s6-overlay/releases/download/v1.21.4.0/s6-overlay-amd64.tar.gz /tmp/
 RUN tar -vxzf /tmp/s6-overlay-amd64.tar.gz -C /
+
+# Setup Moosh
+RUN curl https://moodle.org/plugins/download.php/16504/${MOOSH_PACKAGE} -o /root/moosh_setup.zip && \
+    unzip /root/moosh_setup.zip -d /opt && \
+    ln -s /opt/moosh/moosh.php /usr/local/bin/moosh
 
 ENTRYPOINT ["/init"]
 CMD []
