@@ -4,7 +4,7 @@ FROM ubuntu:xenial
 ENV DEBIAN_FRONTEND noninteractive
 ENV PHP_VERSION 7.2
 # Add ppa, curl and syslogd
-RUN apt-get update && apt-get install -y software-properties-common curl inetutils-syslogd unzip && \
+RUN apt-get update && apt-get install -y software-properties-common curl inetutils-syslogd && \
     apt-add-repository ppa:nginx/stable -y && \
     LC_ALL=C.UTF-8 apt-add-repository ppa:ondrej/php -y && \
     apt-get update && apt-get install -y \
@@ -24,7 +24,8 @@ RUN apt-get update && apt-get install -y software-properties-common curl inetuti
     php${PHP_VERSION}-xml \
     php${PHP_VERSION}-xmlrpc \
     php${PHP_VERSION}-zip \
-    vim && \
+    vim \
+    unzip && \
     apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Copy NGINX service script
@@ -40,7 +41,7 @@ ADD https://github.com/just-containers/s6-overlay/releases/download/v1.21.4.0/s6
 RUN tar -vxzf /tmp/s6-overlay-amd64.tar.gz -C /
 
 # Setup Moosh
-RUN curl https://moodle.org/plugins/download.php/16504/${MOOSH_PACKAGE} > /root/moosh_setup.zip && \
+RUN curl https://moodle.org/plugins/download.php/16504/${MOOSH_PACKAGE} -o /root/moosh_setup.zip && \
     unzip /root/moosh_setup.zip -d /opt && \
     ln -s /opt/moosh/moosh.php /usr/local/bin/moosh
 
