@@ -29,12 +29,12 @@
     apt-get install -y apt-transport-https ca-certificates curl software-properties-common
  
     # Apt key
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
     apt-key fingerprint 0EBFCD88
 
     # Remove legacy docker, add repo, install latest docker
     apt-get remove -y docker docker-engine docker.io
-    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
     apt-get update
     apt-get install -y docker-ce
     systemctl enable docker.service
