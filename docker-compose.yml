@@ -47,11 +47,11 @@ services:
         target: ${MOODLE_DATAROOT}
       # PHP configuration
       - type: bind
-        source: ./conf/etc/php/7.2/cli/php.ini
-        target: /etc/php/7.2/cli/php.ini
+        source: ./conf/etc/php/7.2/fpm/php.ini
+        target: /etc/php/7.2/fpm/php.ini
       - type: bind
-        source: ./conf/etc/php/7.2/cli/conf.d/10-opcache.ini
-        target: /etc/php/7.2/cli/conf.d/10-opcache.ini
+        source: ./conf/etc/php/7.2/mods-available/opcache.ini
+        target: /etc/php/7.2/mods-available/opcache.ini
       # PHP-FPM configuration
       - type: bind
         source: ./conf/etc/php/7.2/fpm/php-fpm.conf
