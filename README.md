@@ -52,7 +52,7 @@
     # Moodle repo
     git clone git@agra.sdelements.com:deployment/moodle-docker.git
     
-    # Postgres entrypoint has to be executable. Git holds the executable bit but sometimes the file is not created with correct permissions.
+    # Postgres entrypoint has to be executable. Git holds the executable bit but sometimes the file is created with incorrect permissions.
     chmod +x moodle-docker/docker-postgres/9.6/alpine/docker-entrypoint.sh
     ```
 
