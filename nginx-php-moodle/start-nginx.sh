@@ -1,7 +1,13 @@
-#!/usr/bin/with-contenv sh
+#!/usr/bin/with-contenv bash
 set -e;
 
-# Wait 5s for PHP-FPM to come up
-sleep 5
+# Source shtdlib
+. /usr/local/bin/shtdlib.sh
 
-envsubst '${MOODLE_DATAROOT} ${MOODLE_VERSION}' < /etc/nginx/conf.d/moodle.template > /etc/nginx/conf.d/moodle.conf && nginx -g 'daemon off;'
+# Wait 10s for PHP-FPM to come up
+if wait_for_success "/etc/init.d/php7.2-fpm status"; then
+    envsubst '${MOODLE_DATAROOT} ${MOODLE_VERSION}' < /etc/nginx/conf.d/moodle.template > /etc/nginx/conf.d/moodle.conf && nginx -g 'daemon off;'
+else
+    echo "Error starting PHP-FPM."
+    exit 1
+fi
