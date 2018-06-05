@@ -3,17 +3,22 @@
 version: '3.2'
 
 services:
-  nginx-php:
+  nginx-php-moodle:
     networks:
       all:
     build:
-      context: ./nginx-php
-    image: nginx-php:0.0.1
+      args:
+        MOODLE_TRACK: "${MOODLE_TRACK}"
+        MOODLE_VERSION: "${MOODLE_VERSION}"
+        MOOSH_PACKAGE: "${MOOSH_PACKAGE}"
+        PHP_VERSION: "${PHP_VERSION}"
+      context: ./nginx-php-moodle
+    image: nginx-php-moodle:${PHP_VERSION}-${MOODLE_VERSION}
     depends_on:
-      - moodle-app
       - postgres
     environment:
       MOODLE_DATAROOT: "${MOODLE_DATAROOT}"
+      MOODLE_THEMEDIR: "${MOODLE_THEMEDIR}"
       MOODLE_VERSION: "${MOODLE_VERSION}"
       MOODLE_WWWROOT: "${MOODLE_WWWROOT}"
       PGSQL_HOSTNAME: "${PGSQL_HOSTNAME}"
@@ -21,16 +26,11 @@ services:
       PGSQL_DATABASE: "${PGSQL_DATABASE}"
       PGSQL_USER: "${PGSQL_USER}"
       PGSQL_PASSWORD: "${PGSQL_PASSWORD}"
+      PHP_VERSION: "${PHP_VERSION}"
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      # Moodle app
-      - type: volume
-        source: moodle_app
-        target: /opt/moodle/moodle-${MOODLE_VERSION}
-        volume:
-          nocopy: true
       # Nginx configuration
       - type: bind
         source: ./conf/etc/nginx/nginx.conf
@@ -45,13 +45,17 @@ services:
       - type: bind
         source: ${MOODLE_DATAROOT}
         target: ${MOODLE_DATAROOT}
+      # Moodle theme dir
+      - type: bind
+        source: ${MOODLE_THEMEDIR}
+        target: ${MOODLE_THEMEDIR}
       # PHP configuration
       - type: bind
-        source: ./conf/etc/php/7.2/cli/php.ini
-        target: /etc/php/7.2/cli/php.ini
+        source: ./conf/etc/php/7.2/fpm/php.ini
+        target: /etc/php/7.2/fpm/php.ini
       - type: bind
-        source: ./conf/etc/php/7.2/cli/conf.d/10-opcache.ini
-        target: /etc/php/7.2/cli/conf.d/10-opcache.ini
+        source: ./conf/etc/php/7.2/mods-available/opcache.ini
+        target: /etc/php/7.2/mods-available/opcache.ini
       # PHP-FPM configuration
       - type: bind
         source: ./conf/etc/php/7.2/fpm/php-fpm.conf
@@ -59,14 +63,6 @@ services:
       - type: bind
         source: ./conf/etc/php/7.2/fpm/pool.d/www.conf
         target: /etc/php/7.2/fpm/pool.d/www.conf
-  moodle-app:
-    build:
-      args:
-        moodle_ver: "${MOODLE_VERSION}"
-      context: ./moodle-app
-    image: moodle-app:${MOODLE_VERSION}
-    volumes:
-      - "moodle_app:/opt/moodle/moodle-${MOODLE_VERSION}"
   postgres:
     networks:
       all:
@@ -77,10 +73,6 @@ services:
       POSTGRES_DB: "${PGSQL_DATABASE}"
       POSTGRES_USER: "${PGSQL_USER}"
       POSTGRES_PASSWORD: "${PGSQL_PASSWORD}"
-
-volumes:
-  moodle_app:
-    driver: local
 
 networks:
   all:

@@ -417,6 +417,7 @@ $CFG->admin = 'admin';
 // This local directory does not have to be accessible from internet.
 //
 //     $CFG->themedir = '/location/of/extra/themes';
+     $CFG->themedir = getenv('MOODLE_THEMEDIR');
 //
 // It is possible to specify different cache and temp directories, use local fast filesystem
 // for normal web servers. Server clusters MUST use shared filesystem for cachedir!
