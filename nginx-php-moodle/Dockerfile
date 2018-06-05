@@ -4,10 +4,10 @@ ARG MOODLE_TRACK
 ARG MOODLE_VERSION
 ARG MOOSH_PACKAGE
 ARG PHP_VERSION
-RUN echo "Moodle track: $MOODLE_TRACK"
-RUN echo "Moodle version: ${MOODLE_VERSION}"
-RUN echo "Moosh package: ${MOOSH_PACKAGE}"
-RUN echo "PHP version: ${PHP_VERSION}"
+RUN echo "Moodle track:     $MOODLE_TRACK" && \
+    echo "Moodle version:   ${MOODLE_VERSION}" && \
+    echo "Moosh package:    ${MOOSH_PACKAGE}" && \
+    echo "PHP version:      ${PHP_VERSION}"
 
 # Disable frontend dialogs
 ENV DEBIAN_FRONTEND noninteractive
@@ -70,6 +70,9 @@ RUN chmod 755 /etc/services.d/php_fpm/run
 # Add S6 supervisor (for graceful stop)
 ADD https://github.com/just-containers/s6-overlay/releases/download/v1.21.4.0/s6-overlay-amd64.tar.gz /tmp/
 RUN tar -vxzf /tmp/s6-overlay-amd64.tar.gz -C /
+
+# Copy Shell Standard Library into the container
+ADD https://github.com/sdelements/shtdlib/raw/master/shtdlib.sh /usr/local/bin/shtdlib.sh
 
 # Setup Moosh
 RUN curl https://moodle.org/plugins/download.php/16504/${MOOSH_PACKAGE} -o /root/moosh_setup.zip && \
