@@ -1,11 +1,13 @@
 FROM ubuntu:xenial
 
+ARG MOODLE_THEMEDIR
 ARG MOODLE_TRACK
 ARG MOODLE_VERSION
 ARG MOOSH_PACKAGE
 ARG NGINX_VERSION
 ARG PHP_VERSION
-RUN echo "Moodle track:     $MOODLE_TRACK" && \
+RUN echo "Moodle theme dir: $MOODLE_THEMEDIR" && \
+    echo "Moodle track:     $MOODLE_TRACK" && \
     echo "Moodle version:   ${MOODLE_VERSION}" && \
     echo "Moosh package:    ${MOOSH_PACKAGE}" && \
     echo "Nginx version:    ${NGINX_VERSION}" && \
@@ -47,7 +49,7 @@ RUN apt-get update && apt-get install -y software-properties-common && \
     apt-get purge -y software-properties-common && \
     apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Get/extract Moodle
+# Install Moodle App
 RUN echo "Starting container build..." \
     # Install repo and packages
     && apt-get update \
@@ -68,6 +70,23 @@ RUN echo "Starting container build..." \
 COPY ./config.php /opt/moodle/moodle-${MOODLE_VERSION}/config.php
 RUN chown --reference=/opt/moodle/moodle-${MOODLE_VERSION}/config-dist.php /opt/moodle/moodle-${MOODLE_VERSION}/config.php \
     && chmod --reference=/opt/moodle/moodle-${MOODLE_VERSION}/config-dist.php /opt/moodle/moodle-${MOODLE_VERSION}/config.php
+
+# Install Moodle theme
+RUN echo "Starting container build..." \
+    # Install git
+    && apt-get update \
+    && apt-get install -y git \
+    # Create Moodle directories
+    && mkdir -v ${MOODLE_THEMEDIR} \
+    && cd ${MOODLE_THEMEDIR} \
+    && git clone https://github.com/SecurityCompass/moodle-theme_moove.git moove \
+    && find ${MOODLE_THEMEDIR} -type d -exec chmod 755 {} \; \
+    && find ${MOODLE_THEMEDIR} -type f -exec chmod 644 {} \; \
+    # Remove/purge dev packages
+    && apt-get --purge -y remove git \
+    && apt-get --purge -y autoremove \
+    && apt-get -y clean \
+    && rm -rfv /etc/apt/sources.list.d/temp.list
 
 # Copy NGINX service script
 COPY start-nginx.sh /etc/services.d/nginx/run
