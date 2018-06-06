@@ -8,6 +8,7 @@ services:
       all:
     build:
       args:
+        MOODLE_THEMEDIR: "${MOODLE_THEMEDIR}"
         MOODLE_TRACK: "${MOODLE_TRACK}"
         MOODLE_VERSION: "${MOODLE_VERSION}"
         MOOSH_PACKAGE: "${MOOSH_PACKAGE}"
@@ -46,10 +47,6 @@ services:
       - type: bind
         source: ${MOODLE_DATAROOT}
         target: ${MOODLE_DATAROOT}
-      # Moodle theme dir
-      - type: bind
-        source: ${MOODLE_THEMEDIR}
-        target: ${MOODLE_THEMEDIR}
       # PHP configuration
       - type: bind
         source: ./conf/etc/php/7.2/fpm/php.ini
