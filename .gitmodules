@@ -1,6 +1,6 @@
 [submodule "docker-postgres"]
     path = docker-postgres
     url = git@agra.sdelements.com:deployment/docker-postgres.git
-[submodule "shtdlib"]
+[submodule "lib/shtdlib"]
     path = lib/shtdlib
     url = git@github.com:sdelements/shtdlib.git

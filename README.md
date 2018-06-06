@@ -13,7 +13,7 @@
     systemctl enable docker.service
     systemctl start docker.service
     systemctl status docker.service
-    
+
     yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
     yum install -y python2-pip
     pip install docker-compose
@@ -27,7 +27,7 @@
     # Dependencies
     apt-get update
     apt-get install -y apt-transport-https ca-certificates curl software-properties-common
- 
+
     # Apt key
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
     apt-key fingerprint 0EBFCD88
@@ -47,16 +47,19 @@
     docker-compose --version
     ```
 
-2. Copy/clone dockerfiles from the `moodle-docker` repository and build the containers. Note: `docker-postgres` is a Git submodule in `moodle-docker`. 
+2. Copy/clone dockerfiles from the `moodle-docker` repository and build the containers. Note: `docker-postgres` is a Git submodule in `moodle-docker`.
     ```bash
     # Moodle repo
     git clone git@agra.sdelements.com:deployment/moodle-docker.git
-    
+
+    # Pull submodules into local repo
+    git submodule update --init
+
     # Postgres entrypoint has to be executable. Git holds the executable bit but sometimes the file is created with incorrect permissions.
     chmod +x moodle-docker/docker-postgres/9.6/alpine/docker-entrypoint.sh
     ```
 
-3. Copy your SSL certificate and key into the `conf/etc/nginx/ssl/` dir as `moodle.crt` and `moodle.key`. The included pair are self-signed and can be used (TESTING ONLY). 
+3. Copy your SSL certificate and key into the `conf/etc/nginx/ssl/` dir as `moodle.crt` and `moodle.key`. The included pair are self-signed and can be used (TESTING ONLY).
 
     Instructions below to generate your own self-signed certificate pair.
 
@@ -64,7 +67,7 @@
     ```bash
     mkdir -p /opt/moodle/moodledata
     chmod 777 /opt/moodle/moodledata
-    ``` 
+    ```
 
 5. Customize `.env` according to your environment. Most notably `MOODLE_VERSION` and `MOODLE_WWWROOT` (based on your instance IP/FQDN)
 
@@ -74,7 +77,7 @@
     cd moodle-docker
     docker-compose up --force-recreate --always-recreate-deps --build -d -V
     ```
-    
+
     ##### Re-create containers/Restart services
     ```bash
     cd moodle-docker
