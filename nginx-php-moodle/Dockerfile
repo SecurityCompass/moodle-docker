@@ -127,7 +127,6 @@ ADD https://github.com/sdelements/shtdlib/raw/master/shtdlib.sh /usr/local/bin/s
 
 # Setup Moosh
 RUN echo "Starting Moosh install..." \
-    # Install repo and packages
     && curl -q https://moodle.org/plugins/download.php/16504/${MOOSH_PACKAGE} -o /root/moosh_setup.zip && \
     unzip -q /root/moosh_setup.zip -d /opt && \
     ln -s /opt/moosh/moosh.php /usr/local/bin/moosh
