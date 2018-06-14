@@ -1,42 +1,47 @@
 FROM ubuntu:xenial
 
+# Disable frontend dialogs
+ENV DEBIAN_FRONTEND noninteractive
+
 ARG MOODLE_THEMEDIR
 ARG MOODLE_TRACK
 ARG MOODLE_VERSION
 ARG MOOSH_PACKAGE
 ARG NGINX_VERSION
 ARG PHP_VERSION
-RUN echo "Moodle theme dir: $MOODLE_THEMEDIR" && \
-    echo "Moodle track:     $MOODLE_TRACK" && \
-    echo "Moodle version:   ${MOODLE_VERSION}" && \
-    echo "Moosh package:    ${MOOSH_PACKAGE}" && \
-    echo "Nginx version:    ${NGINX_VERSION}" && \
-    echo "PHP version:      ${PHP_VERSION}"
-
-# Disable frontend dialogs
-ENV DEBIAN_FRONTEND noninteractive
-
-# Install utility packages
-RUN echo "Starting util packages install..." \
-    # Install repo and packages
-    && apt-get update && apt-get install -y vim unzip curl netbase && \
-    apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
+# Print ARGs and install utility packages
+RUN echo "Moodle theme dir: $MOODLE_THEMEDIR" \
+    && echo "Moodle track:     $MOODLE_TRACK" \
+    && echo "Moodle version:   ${MOODLE_VERSION}" \
+    && echo "Moosh package:    ${MOOSH_PACKAGE}" \
+    && echo "Nginx version:    ${NGINX_VERSION}" \
+    && echo "PHP version:      ${PHP_VERSION}" \
+    && echo "Starting util packages install..." \
+    && apt-get update\
+    && apt-get install -y vim unzip curl netbase \
+    && apt-get --purge -y autoremove \
+    && apt-get -y clean \
+    && rm -rf /etc/apt/sources.list.d/temp.list /var/lib/apt/lists/*
 
 # Install Nginx
 RUN echo "Starting Nginx install..." \
-    # Install repo and packages
-    && apt-get update && apt-get install -y software-properties-common && \
-    apt-add-repository ppa:nginx/stable -y && \
-    apt-get update && apt-get install -y nginx=${NGINX_VERSION} && \
-    apt-get purge -y software-properties-common && \
-    apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
+    && apt-get update \
+    && apt-get install -y software-properties-common \
+    && apt-add-repository ppa:nginx/stable -y \
+    && apt-get update \
+    && apt-get install -y nginx=${NGINX_VERSION} \
+    && apt-get purge -y software-properties-common \
+    && apt-get --purge -y autoremove \
+    && apt-get -y clean \
+    && rm -rf /etc/apt/sources.list.d/temp.list /var/lib/apt/lists/*
 
 # Install PHP
 RUN echo "Starting PHP install..." \
-    # Install repo and packages
-    && apt-get update && apt-get install -y software-properties-common && \
-    LC_ALL=C.UTF-8 apt-add-repository ppa:ondrej/php -y && \
-    apt-get update && apt-get install -y \
+    && apt-get update \
+    && apt-get install -y software-properties-common \
+    && LC_ALL=C.UTF-8 apt-add-repository ppa:ondrej/php -y \
+    && apt-get update \
+    && apt-get install -y \
     gettext-base \
     php${PHP_VERSION}-cli \
     php${PHP_VERSION}-curl \
@@ -51,26 +56,25 @@ RUN echo "Starting PHP install..." \
     php${PHP_VERSION}-soap \
     php${PHP_VERSION}-xml \
     php${PHP_VERSION}-xmlrpc \
-    php${PHP_VERSION}-zip && \
-    apt-get purge -y software-properties-common && \
-    apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
+    php${PHP_VERSION}-zip \
+    && apt-get purge -y software-properties-common \
+    && apt-get --purge -y autoremove \
+    && apt-get -y clean \
+    && rm -rf /etc/apt/sources.list.d/temp.list /var/lib/apt/lists/*
 
 # Install Moodle App
 RUN echo "Starting Moodle App install..." \
-    # Install repo and packages
     && apt-get update \
     && apt-get install -y wget \
-    # Create Moodle directories
     && mkdir -v /opt/moodle \
     && wget -q https://download.moodle.org/download.php/direct/${MOODLE_TRACK}/moodle-${MOODLE_VERSION}.tgz -O /opt/moodle/moodle-${MOODLE_VERSION}.tgz \
     && tar -xzf /opt/moodle/moodle-${MOODLE_VERSION}.tgz -C /opt/moodle \
     && mv /opt/moodle/moodle /opt/moodle/moodle-${MOODLE_VERSION} \
     && rm /opt/moodle/moodle-${MOODLE_VERSION}.tgz \
-    # Remove/purge dev packages
     && apt-get --purge -y remove wget \
     && apt-get --purge -y autoremove \
     && apt-get -y clean \
-    && rm -rf /etc/apt/sources.list.d/temp.list
+    && rm -rf /etc/apt/sources.list.d/temp.list /var/lib/apt/lists/*
 
 # Copy in the Moodle config and set permissions
 COPY ./config.php /opt/moodle/moodle-${MOODLE_VERSION}/config.php
@@ -79,20 +83,17 @@ RUN chown --reference=/opt/moodle/moodle-${MOODLE_VERSION}/config-dist.php /opt/
 
 # Install Moodle theme
 RUN echo "Starting Moodle theme install..." \
-    # Install git
     && apt-get update \
     && apt-get install -y git \
-    # Create Moodle directories
     && mkdir -v ${MOODLE_THEMEDIR} \
     && cd ${MOODLE_THEMEDIR} \
     && git clone https://github.com/SecurityCompass/moodle-theme_moove.git moove \
     && find ${MOODLE_THEMEDIR} -type d -exec chmod 755 {} \; \
     && find ${MOODLE_THEMEDIR} -type f -exec chmod 644 {} \; \
-    # Remove/purge dev packages
     && apt-get --purge -y remove git \
     && apt-get --purge -y autoremove \
     && apt-get -y clean \
-    && rm -rfv /etc/apt/sources.list.d/temp.list
+    && rm -rf /etc/apt/sources.list.d/temp.list /var/lib/apt/lists/*
 
 # Install Admin presets
 RUN echo "Starting Admin presets install..." \
