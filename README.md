@@ -71,17 +71,29 @@
 
 5. Customize `.env` according to your environment. Most notably `MOODLE_VERSION` and `MOODLE_WWWROOT` (based on your instance IP/FQDN)
 
-6. Build, configure and start the docker containers with docker-compose. Note: `-d` toggles foreground/background and `-V` recreates docker volumes (DATA LOSS).
-    ##### To start from scratch
+6. Build, configure and start the docker containers with docker-compose.
+    * `-d` toggles foreground/background
+    * `-V` recreates anonymous docker volumes (DATA LOSS).
+
+    Here are some ways to run these containers:
+
+    ##### Build containers
     ```bash
     cd moodle-docker
-    docker-compose up --force-recreate --always-recreate-deps --build -d -V
+    docker-compose -f docker-compose.yml -f docker-compose.build.yml build --no-cache
     ```
 
-    ##### Re-create containers/Restart services
+    ##### Deploy in production (Full stack)
     ```bash
     cd moodle-docker
-    docker-compose up --force-recreate --always-recreate-deps --build -d
+    docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --force-recreate --always-recreate-deps -d -V
+    ```
+
+    ##### Deploy Web server and DB separately
+    ```bash
+    cd moodle-docker
+    docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --force-recreate --always-recreate-deps -d -V nginx-php-moodle
+    docker-compose -f docker-compose.yml -f docker-compose.prod-dbonly.yml up --force-recreate --always-recreate-deps -d -V postgres
     ```
 
 7. Follow these instructions to setup the Moodle app:
