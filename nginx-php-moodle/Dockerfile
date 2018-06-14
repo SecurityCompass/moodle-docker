@@ -132,9 +132,5 @@ RUN echo "Starting Moosh install..." \
     unzip -q /root/moosh_setup.zip -d /opt && \
     ln -s /opt/moosh/moosh.php /usr/local/bin/moosh
 
-# Set these to local ports and override in docker-compose
-EXPOSE 8080
-EXPOSE 8443
-
 ENTRYPOINT ["/init"]
 CMD []
