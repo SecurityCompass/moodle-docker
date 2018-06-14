@@ -1,0 +1,18 @@
+# This file contains configuration for building the containers
+
+version: '3.2'
+
+services:
+  nginx-php-moodle:
+    build:
+      args:
+        MOODLE_THEMEDIR: "${MOODLE_THEMEDIR}"
+        MOODLE_TRACK: "${MOODLE_TRACK}"
+        MOODLE_VERSION: "${MOODLE_VERSION}"
+        MOOSH_PACKAGE: "${MOOSH_PACKAGE}"
+        NGINX_VERSION: "${NGINX_VERSION}"
+        PHP_VERSION: "${PHP_VERSION}"
+      context: ./nginx-php-moodle
+  postgres:
+    build:
+      context: ./docker-postgres/9.6/alpine
