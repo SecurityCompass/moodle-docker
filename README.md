@@ -83,6 +83,12 @@
     docker-compose -f docker-compose.yml -f docker-compose.build.yml build --no-cache
     ```
 
+    ##### Deploy locally (Full stack)
+    ```bash
+    cd moodle-docker
+    docker-compose -f docker-compose.yml -f docker-compose.local.yml up --force-recreate --always-recreate-deps -d -V
+    ```
+
     ##### Deploy in production (Full stack)
     ```bash
     cd moodle-docker
