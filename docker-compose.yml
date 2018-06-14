@@ -6,15 +6,6 @@ services:
   nginx-php-moodle:
     networks:
       all:
-    build:
-      args:
-        MOODLE_THEMEDIR: "${MOODLE_THEMEDIR}"
-        MOODLE_TRACK: "${MOODLE_TRACK}"
-        MOODLE_VERSION: "${MOODLE_VERSION}"
-        MOOSH_PACKAGE: "${MOOSH_PACKAGE}"
-        NGINX_VERSION: "${NGINX_VERSION}"
-        PHP_VERSION: "${PHP_VERSION}"
-      context: ./nginx-php-moodle
     image: nginx-php-moodle:${PHP_VERSION}-${MOODLE_VERSION}
     depends_on:
       - postgres
@@ -29,9 +20,6 @@ services:
       PGSQL_USER: "${PGSQL_USER}"
       PGSQL_PASSWORD: "${PGSQL_PASSWORD}"
       PHP_VERSION: "${PHP_VERSION}"
-    ports:
-      - "80:80"
-      - "443:443"
     volumes:
       # Nginx configuration
       - type: bind
@@ -64,8 +52,6 @@ services:
   postgres:
     networks:
       all:
-    build:
-      context: ./docker-postgres/9.6/alpine
     image: moodle-postgres
     environment:
       POSTGRES_DB: "${PGSQL_DATABASE}"
