@@ -73,7 +73,7 @@
 
 6. Build, configure and start the docker containers with docker-compose.
     * `-d` toggles foreground/background
-    * `-V` recreates anonymous docker volumes (DATA LOSS).
+    * `-V` recreates anonymous docker volumes (DATA LOSS!)
 
     Here are some ways to run these containers:
 
