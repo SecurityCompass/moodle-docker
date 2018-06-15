@@ -1,4 +1,5 @@
 # This file contains configuration for running the DB
+---
 
 version: '3.2'
 

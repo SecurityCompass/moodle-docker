@@ -1,9 +1,0 @@
-# This file contains sane configuration defaults for production containers
-
-version: '3.2'
-
-services:
-  nginx-php-moodle:
-    ports:
-      - "8080:80"
-      - "8443:443"
