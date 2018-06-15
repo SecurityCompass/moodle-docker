@@ -80,26 +80,26 @@
     ##### Build containers
     ```bash
     cd moodle-docker
-    docker-compose -f docker-compose.yml -f docker-compose.build.yml build --no-cache
+    docker-compose -f docker-compose.yml -f dc.build.yml build --no-cache
     ```
 
     ##### Deploy locally (Full stack)
     ```bash
     cd moodle-docker
-    docker-compose -f docker-compose.yml -f docker-compose.local.yml up --force-recreate --always-recreate-deps -d -V
+    docker-compose -f docker-compose.yml -f dc.local.yml up --force-recreate --always-recreate-deps -d -V
     ```
 
     ##### Deploy in production (Full stack)
     ```bash
     cd moodle-docker
-    docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --force-recreate --always-recreate-deps -d -V
+    docker-compose -f docker-compose.yml -f dc.prod.yml up --force-recreate --always-recreate-deps -d -V
     ```
 
-    ##### Deploy Web server and DB separately
+    ##### Deploy Web server and DB separately (separate servers)
     ```bash
     cd moodle-docker
-    docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --force-recreate --always-recreate-deps -d -V nginx-php-moodle
-    docker-compose -f docker-compose.yml -f docker-compose.prod-dbonly.yml up --force-recreate --always-recreate-deps -d -V postgres
+    docker-compose -f docker-compose.yml -f dc.prod-dbonly.yml up --force-recreate -d -V postgres
+    docker-compose -f docker-compose.yml -f dc.prod.yml up --force-recreate --no-deps -d -V nginx-php-moodle
     ```
 
 7. Follow these instructions to setup the Moodle app:
