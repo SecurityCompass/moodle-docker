@@ -59,7 +59,6 @@ case ${os_family} in
             apt-get install -y docker-ce
             systemctl enable docker.service
             systemctl start docker.service
-            systemctl status docker.service
 
             # Docker compose
             curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
