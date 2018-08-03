@@ -6,10 +6,8 @@ services:
   nginx-php-moodle:
     build:
       args:
-        MOODLE_THEMEDIR: "${MOODLE_THEMEDIR}"
         MOODLE_TRACK: "${MOODLE_TRACK}"
         MOODLE_VERSION: "${MOODLE_VERSION}"
-        MOOSH_PACKAGE: "${MOOSH_PACKAGE}"
         NGINX_VERSION: "${NGINX_VERSION}"
         PHP_VERSION: "${PHP_VERSION}"
       context: ./nginx-php-moodle
