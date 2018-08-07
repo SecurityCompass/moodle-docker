@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex;
+set -e;
 
 echo "Configuring Moodle ${MOODLE_VERSION}"
 
@@ -21,9 +21,23 @@ echo "Configuring Moodle ${MOODLE_VERSION}"
     --shortname=${MOODLE_SHORT_NAME} \
     --wwwroot=${MOODLE_WWWROOT}
 
-# Update permission on the newly created config file
+echo "Adding optimization configuration for static files"
+cat >> /opt/moodle/moodle-${MOODLE_VERSION}/config.php <<MDL_CONFIG
+
+// Performance optimization for Nginx static content
+\$CFG->xsendfile = 'X-Accel-Redirect';     // Nginx {@see http://wiki.nginx.org/XSendfile}
+\$CFG->xsendfilealiases = array(
+    '/dataroot/' => \$CFG->dataroot,
+);
+
+MDL_CONFIG
+
+echo "Updating permission on the newly created config file"
 chown --reference=/opt/moodle/moodle-${MOODLE_VERSION}/config-dist.php /opt/moodle/moodle-${MOODLE_VERSION}/config.php
 chmod --reference=/opt/moodle/moodle-${MOODLE_VERSION}/config-dist.php /opt/moodle/moodle-${MOODLE_VERSION}/config.php
 
-# Set the theme to Moove
+echo "Enabling Moove theme"
 /usr/bin/php${PHP_VERSION} /opt/moodle/moodle-${MOODLE_VERSION}/admin/cli/cfg.php --name=theme --set=moove
+
+echo "Skipping Moodle registration"
+/usr/bin/php${PHP_VERSION} /opt/moodle/moodle-${MOODLE_VERSION}/admin/cli/cfg.php --name=registrationpending --set=0
