@@ -7,6 +7,7 @@ ARG MOODLE_TRACK
 ARG MOODLE_VERSION
 ARG NGINX_VERSION
 ARG PHP_VERSION
+
 # Print ARGs and install utility packages
 RUN echo "Moodle track:     $MOODLE_TRACK" \
     && echo "Moodle version:   ${MOODLE_VERSION}" \
