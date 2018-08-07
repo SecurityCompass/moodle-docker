@@ -6,6 +6,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ARG MOODLE_TRACK
 ARG MOODLE_VERSION
 ARG NGINX_VERSION
+ARG ONELOGIN_PLUGIN_VER
 ARG PHP_VERSION
 
 # Print ARGs and install utility packages
@@ -85,6 +86,14 @@ RUN echo "Starting Moodle theme install..." \
     && apt-get --purge -y autoremove \
     && apt-get -y clean \
     && rm -rf /etc/apt/sources.list.d/temp.list /var/lib/apt/lists/*
+
+# Install OneLogin plugin
+RUN echo "Starting OneLogin auth plugin install..." \
+    && curl -L -o /tmp/onelogin_saml.tar.gz https://github.com/onelogin/moodle-saml/archive/${ONELOGIN_PLUGIN_VER}.tar.gz \
+    && tar -xvzf /tmp/onelogin_saml.tar.gz -C /opt/moodle/moodle-${MOODLE_VERSION}/auth --strip-components=2 \
+    && chown -R --reference /opt/moodle/moodle-${MOODLE_VERSION}/auth/index.html /opt/moodle/moodle-${MOODLE_VERSION}/auth/onelogin_saml \
+    && find /opt/moodle/moodle-${MOODLE_VERSION}/auth/onelogin_saml -type d -exec chmod 755 {} \; \
+    && find /opt/moodle/moodle-${MOODLE_VERSION}/auth/onelogin_saml -type f -exec chmod 644 {} \;
 
 # Install Opcache admin (PHP cache monitoring)
 RUN echo "Starting Opcache admin install..." \
