@@ -88,12 +88,16 @@
     cd moodle-docker
     docker-compose -f docker-compose.yml -f dc.local.yml up --force-recreate --always-recreate-deps -d -V
     ```
+    * Nginx ports: `8443/8080`
+    * Postgres port: `N/A`
 
     ##### Deploy in production (Full stack)
     ```bash
     cd moodle-docker
     docker-compose -f docker-compose.yml -f dc.prod.yml up --force-recreate --always-recreate-deps -d -V
     ```
+    * Nginx ports: `443/80`
+    * Postgres port: `N/A`
 
     ##### Deploy Web server and DB separately (separate servers)
     ```bash
@@ -101,6 +105,8 @@
     docker-compose -f docker-compose.yml -f dc.prod-dbonly.yml up --force-recreate -d -V postgres
     docker-compose -f docker-compose.yml -f dc.prod.yml up --force-recreate --no-deps -d -V nginx-php-moodle
     ```
+    * Nginx ports: `8443/8080`
+    * Postgres port: `5432`
 
 7. Follow these instructions to setup the Moodle app:
     https://securitycompass.atlassian.net/wiki/spaces/DEP/pages/204046339/Moodle+Docker+Deployment

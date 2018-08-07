@@ -10,10 +10,14 @@ services:
     depends_on:
       - postgres
     environment:
+      MOODLE_ADMIN_EMAIL: "${MOODLE_ADMIN_EMAIL}"
+      MOODLE_ADMIN_PASS: "${MOODLE_ADMIN_PASS}"
       MOODLE_DATAROOT: "${MOODLE_DATAROOT}"
-      MOODLE_THEMEDIR: "${MOODLE_THEMEDIR}"
+      MOODLE_DBTYPE: "${MOODLE_DBTYPE}"
       MOODLE_VERSION: "${MOODLE_VERSION}"
       MOODLE_WWWROOT: "${MOODLE_WWWROOT}"
+      MOODLE_FULL_NAME: "${MOODLE_FULL_NAME}"
+      MOODLE_SHORT_NAME: "${MOODLE_SHORT_NAME}"
       PGSQL_HOSTNAME: "${PGSQL_HOSTNAME}"
       PGSQL_PORT: "${PGSQL_PORT}"
       PGSQL_DATABASE: "${PGSQL_DATABASE}"
@@ -57,6 +61,11 @@ services:
       POSTGRES_DB: "${PGSQL_DATABASE}"
       POSTGRES_USER: "${PGSQL_USER}"
       POSTGRES_PASSWORD: "${PGSQL_PASSWORD}"
+    volumes:
+        - db:/var/lib/postgresql/data
 
 networks:
   all:
+
+volumes:
+    db:
