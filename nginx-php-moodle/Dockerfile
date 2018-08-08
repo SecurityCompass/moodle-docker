@@ -13,6 +13,7 @@ ARG PHP_VERSION
 RUN echo "Moodle track:     $MOODLE_TRACK" \
     && echo "Moodle version:   ${MOODLE_VERSION}" \
     && echo "Nginx version:    ${NGINX_VERSION}" \
+    && echo "OneLogin version: ${ONELOGIN_PLUGIN_VER}" \
     && echo "PHP version:      ${PHP_VERSION}" \
     && echo "Starting util packages install..." \
     && apt-get update\
@@ -87,7 +88,7 @@ RUN echo "Starting Moodle theme install..." \
     && apt-get -y clean \
     && rm -rf /etc/apt/sources.list.d/temp.list /var/lib/apt/lists/*
 
-# Install OneLogin plugin
+# Install OneLogin auth plugin
 RUN echo "Starting OneLogin auth plugin install..." \
     && curl -L -o /tmp/onelogin_saml.tar.gz https://github.com/onelogin/moodle-saml/archive/${ONELOGIN_PLUGIN_VER}.tar.gz \
     && tar -xvzf /tmp/onelogin_saml.tar.gz -C /opt/moodle/moodle-${MOODLE_VERSION}/auth --strip-components=2 \
