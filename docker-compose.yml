@@ -18,6 +18,7 @@ services:
       MOODLE_WWWROOT: "${MOODLE_WWWROOT}"
       MOODLE_FULL_NAME: "${MOODLE_FULL_NAME}"
       MOODLE_SHORT_NAME: "${MOODLE_SHORT_NAME}"
+      MOODLE_UPGRADE_KEY: "${MOODLE_UPGRADE_KEY}"
       PGSQL_HOSTNAME: "${PGSQL_HOSTNAME}"
       PGSQL_PORT: "${PGSQL_PORT}"
       PGSQL_DATABASE: "${PGSQL_DATABASE}"
@@ -62,10 +63,12 @@ services:
       POSTGRES_USER: "${PGSQL_USER}"
       POSTGRES_PASSWORD: "${PGSQL_PASSWORD}"
     volumes:
-        - db:/var/lib/postgresql/data
+      - type: bind
+        source: db
+        target: /var/lib/postgresql/data
 
 networks:
   all:
 
 volumes:
-    db:
+  db:
