@@ -18,7 +18,6 @@ if wait_for_success "/etc/init.d/php7.2-fpm status"; then
             echo "Attempting to upgrade Moodle"
             /usr/bin/php${PHP_VERSION} /opt/moodle/moodle-${MOODLE_VERSION}/admin/cli/upgrade.php --non-interactive
 
-            echo "Upgrade complete!"
         else
             echo "Starting initial configuration for Moodle ${MOODLE_VERSION}"
             /usr/bin/php${PHP_VERSION} /opt/moodle/moodle-${MOODLE_VERSION}/admin/cli/install.php \
@@ -58,8 +57,8 @@ MDL_CONFIG
 
             echo "Skipping Moodle registration"
             /usr/bin/php${PHP_VERSION} /opt/moodle/moodle-${MOODLE_VERSION}/admin/cli/cfg.php --name=registrationpending --set=0
-
-            echo "Installation complete!"
         fi
     fi
 fi
+
+echo "Configuration complete!"
