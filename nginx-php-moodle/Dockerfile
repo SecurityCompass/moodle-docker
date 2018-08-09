@@ -111,16 +111,20 @@ RUN echo "Starting Moosh install..." \
     && ln -s /opt/moosh/moosh.php /usr/local/bin/moosh
 
 # Copy NGINX service script
-COPY start-nginx.sh /etc/services.d/nginx/run
+COPY bin/start-nginx.sh /etc/services.d/nginx/run
 RUN chmod 755 /etc/services.d/nginx/run
 
 # Copy PHP-FPM service script
-COPY start-fpm.sh /etc/services.d/php_fpm/run
+COPY bin/start-fpm.sh /etc/services.d/php_fpm/run
 RUN chmod 755 /etc/services.d/php_fpm/run
 
 # Copy Moodle config service script
-COPY configure-moodle.sh /opt/moodle/configure-moodle.sh
-RUN chmod 500 /opt/moodle/configure-moodle.sh
+COPY bin/configure-moodle.sh /usr/local/bin/configure-moodle.sh
+RUN chmod 500 /usr/local/bin/configure-moodle.sh
+
+# Copy Moodle config service script
+COPY bin/check_db.php /usr/local/bin/check_db.php
+RUN chmod 500 /usr/local/bin/check_db.php
 
 # Add S6 supervisor (for graceful stop)
 ADD https://github.com/just-containers/s6-overlay/releases/download/v1.21.4.0/s6-overlay-amd64.tar.gz /tmp/
