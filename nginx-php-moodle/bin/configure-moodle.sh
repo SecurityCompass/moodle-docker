@@ -14,7 +14,7 @@ if wait_for_success "/etc/init.d/php7.2-fpm status"; then
         echo "PostgreSQL started!"
 
         # Try to upgrade if config.php found
-        if [[ -s /opt/moodle/config_backup/config.php ]]; then
+        if [[ -s /opt/moodle/moodle-${MOODLE_VERSION}/config.php ]]; then
             echo "Attempting to upgrade Moodle"
             /usr/bin/php${PHP_VERSION} /opt/moodle/moodle-${MOODLE_VERSION}/admin/cli/upgrade.php --non-interactive
 
@@ -52,9 +52,6 @@ MDL_CONFIG
             echo "Updating permission on the newly created config file"
             chown --reference=/opt/moodle/moodle-${MOODLE_VERSION}/config-dist.php /opt/moodle/moodle-${MOODLE_VERSION}/config.php
             chmod --reference=/opt/moodle/moodle-${MOODLE_VERSION}/config-dist.php /opt/moodle/moodle-${MOODLE_VERSION}/config.php
-
-            # Save config to the host
-            cp /opt/moodle/moodle-${MOODLE_VERSION}/config.php /opt/moodle/config_backup/config.php
 
             echo "Enabling Moove theme"
             /usr/bin/php${PHP_VERSION} /opt/moodle/moodle-${MOODLE_VERSION}/admin/cli/cfg.php --name=theme --set=moove
