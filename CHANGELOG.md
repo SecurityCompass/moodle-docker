@@ -6,12 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [0.1.0] - 2017-08-13
 ### Added
-- Project changelog
-- Dockerfile for a container to build DEB packages
-- Docker compose configuration for building DEB packages
+- Project `CHANGELOG.md`
+- `Dockerfile` for a container to build DEB packages
+- `docker-compose` configuration for building DEB packages
 
 ### Changed
 - Update `docker-compose` version
 
 ### Removed
 - `docker-compose` versions from extended configurations
+- Unused `config.php` from `conf`
