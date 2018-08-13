@@ -43,10 +43,13 @@ services:
       - "optional"
       #
       - "--description"
-      - "Moodle deployment using Docker"
+      - "Docker based Moodle Deployment\nThis project deploys the Moodle (Modular Object-Oriented Dynamic Learning\nEnvironment) course management system using one Docker container that runs\nboth Nginx and PHP/PHP-FPM services"
       #
       - "--url"
       - "https://www.securitycompass.com/"
+      #
+      - "--deb-field"
+      - "Vcs-Browser: https://github.com/SecurityCompass/moodle-docker"
       # Package dependencies
       - "--depends"
       - "docker-ce > 18"
