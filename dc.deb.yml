@@ -58,10 +58,10 @@ services:
       # Enables INFO output
       - "--verbose"
       # Files to package
-      - "/package/conf=/etc/moodle"
-      - "/package/dc.prod.yml=/etc/moodle"
-      - "/package/dc.prod-dbonly.yml=/etc/moodle"
-      - "/package/docker-compose.yml=/etc/moodle"
+      - "/package/conf=/etc/moodle-docker"
+      - "/package/dc.prod.yml=/etc/moodle-docker"
+      - "/package/dc.prod-dbonly.yml=/etc/moodle-docker"
+      - "/package/docker-compose.yml=/etc/moodle-docker"
     environment:
       MOODLE_VERSION: "${MOODLE_VERSION}"
       PHP_VERSION: "${PHP_VERSION}"
