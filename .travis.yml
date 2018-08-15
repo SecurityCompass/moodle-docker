@@ -1,8 +1,8 @@
 env:
-#  - SHELLCHECK_OPTS="-e SC2086 -e SC2046 -e SC2154 -e SC2089 -e SC2090 -e SC2091 -e SC1091 -e SC2129 -e SC2155 -e SC1117 -e SC2174 -e SC2124 -e SC2207 -e SC2206"
   - SHELLCHECK_OPTS="-e SC1008 -e SC2154"
 git:
   submodules: false
 language: bash
 script:
-  - shellcheck $(find . -type f -name '*.sh')
+  - set -x
+  - shellcheck -v $(find . -type f -name '*.sh')
