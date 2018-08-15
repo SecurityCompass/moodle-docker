@@ -4,5 +4,4 @@ git:
   submodules: false
 language: bash
 script:
-  - find . -type f -name '*.sh'
-  - shellcheck *.sh
+  - shellcheck $(find . -type f -name '*.sh')
