@@ -4,7 +4,8 @@ set -e;
 echo "Starting Nginx"
 
 # Source shtdlib
-. /usr/local/bin/shtdlib.sh
+# shellcheck disable=SC1091
+source /usr/local/bin/shtdlib.sh
 
 # Wait for PHP-FPM to start Nginx
 if wait_for_success "/etc/init.d/php7.2-fpm status"; then
