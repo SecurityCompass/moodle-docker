@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-
-# Version
-version='0.1'
+#
+# Simple script to setup the docker host
+# Version: 0.1
+#
 
 # Set strict mode
 set -euo pipefail
