@@ -1,6 +1,8 @@
 # This file contains configuration for running the DB
 ---
 
+version: '3.6'
+
 services:
   postgres:
     ports:

@@ -3,6 +3,8 @@
 # and the README to deploy individual services
 ---
 
+version: '3.6'
+
 services:
   nginx-php-moodle:
     ports:

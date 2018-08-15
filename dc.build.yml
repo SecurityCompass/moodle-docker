@@ -1,4 +1,7 @@
 # This file contains configuration for building the containers
+---
+
+version: '3.6'
 
 services:
   nginx-php-moodle:
