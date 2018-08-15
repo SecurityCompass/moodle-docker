@@ -7,12 +7,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.1.0] - 2017-08-13
 ### Added
 - Project `CHANGELOG.md`
-- `Dockerfile` for a container to build DEB packages
-- `docker-compose` configuration for building DEB packages
+- Container for building DEB packages
+  - `Dockerfile` for container
+  - `dc.deb.yml` `docker-compose` configuration
+  - `README.md` with instructions and samples
+- Travis CI configuration to check shell scripts
+- `README.md` summary
 
 ### Changed
-- Update `docker-compose` version
+- Update/re-add `docker-compose` version
+- Fix DB volume type in main `docker-compose` configuration
+- Fix shellcheck errors in `*.sh` scripts
 
 ### Removed
-- `docker-compose` versions from extended configurations
-- Unused `config.php` from `conf`
+- Unused/empty `config.php` from `conf`
