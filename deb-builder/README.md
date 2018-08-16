@@ -60,7 +60,6 @@ moodle-docker_deb-build_1 exited with code 0
 │       │   └── etc
 │       │       ├── nginx
 │       │       │   ├── conf.d
-│       │       │   │   ├── moodle.conf
 │       │       │   │   └── moodle.template
 │       │       │   ├── nginx.conf
 │       │       │   └── ssl
