@@ -57,7 +57,7 @@ services:
   postgres:
     networks:
       all:
-    image: moodle-postgres
+    image: postgres:9.6
     environment:
       POSTGRES_DB: "${PGSQL_DATABASE}"
       POSTGRES_USER: "${PGSQL_USER}"
