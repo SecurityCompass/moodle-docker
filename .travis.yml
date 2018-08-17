@@ -1,0 +1,7 @@
+env:
+  - SHELLCHECK_OPTS="-e SC1008 -e SC2154"
+git:
+  submodules: false
+language: bash
+script:
+  - shellcheck $(find . -type f -name '*.sh')

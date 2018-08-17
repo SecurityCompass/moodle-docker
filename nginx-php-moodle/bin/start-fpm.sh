@@ -12,4 +12,4 @@ chown -R www-data:www-data /var/run/php-fpm
 (/usr/local/bin/configure-moodle.sh) &
 
 # Start PHP-FPM
-/usr/sbin/php-fpm${PHP_VERSION} -R -F
+"/usr/sbin/php-fpm${PHP_VERSION}" -R -F

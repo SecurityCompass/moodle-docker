@@ -1,0 +1,72 @@
+---
+
+version: '3.6'
+
+services:
+  deb-build:
+    command:
+      # source
+      - '--input-type'
+      - 'dir'
+      # target type
+      - "--output-type"
+      - "deb"
+      # DEB file name
+      - "--package"
+      - "/package/moodle-docker-${PHP_VERSION}-${MOODLE_VERSION}.deb"
+      # package name
+      - "--name"
+      - "moodle-docker"
+      #
+      - "--version"
+      - "${PHP_VERSION}-${MOODLE_VERSION}"
+      #
+      - "--deb-changelog"
+      - "CHANGELOG.md"
+      #
+      - "--license"
+      - "MIT"
+      #
+      - "--vendor"
+      - "Security Compass <devops@securitycompass.com>"
+      #
+      - "--category"
+      - "web"
+      #
+      - "--maintainer"
+      - "Security Compass <devops@securitycompass.com>"
+      #
+      - "--category"
+      - "web"
+      #
+      - "--deb-priority"
+      - "optional"
+      #
+      - "--description"
+      - "Docker based Moodle Deployment\nThis project deploys the Moodle (Modular Object-Oriented Dynamic Learning\nEnvironment) course management system using one Docker container that runs\nboth Nginx and PHP/PHP-FPM services"
+      #
+      - "--url"
+      - "https://www.securitycompass.com/"
+      #
+      - "--deb-field"
+      - "Vcs-Browser: https://github.com/SecurityCompass/moodle-docker"
+      # Package dependencies
+      - "--depends"
+      - "docker-ce > 18"
+      # Overwrite existing DEB file
+      - "--force"
+      # Enables INFO output
+      - "--verbose"
+      # Files to package
+      - "/package/conf=/etc/moodle-docker"
+      - "/package/dc.prod.yml=/etc/moodle-docker"
+      - "/package/dc.prod-dbonly.yml=/etc/moodle-docker"
+      - "/package/docker-compose.yml=/etc/moodle-docker"
+    environment:
+      MOODLE_VERSION: "${MOODLE_VERSION}"
+      PHP_VERSION: "${PHP_VERSION}"
+    image: fpm:deb
+    volumes:
+      - type: bind
+        source: ${PWD}
+        target: /package

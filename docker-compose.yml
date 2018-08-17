@@ -1,6 +1,6 @@
 ---
 
-version: '3.2'
+version: '3.6'
 
 services:
   nginx-php-moodle:
@@ -63,7 +63,7 @@ services:
       POSTGRES_USER: "${PGSQL_USER}"
       POSTGRES_PASSWORD: "${PGSQL_PASSWORD}"
     volumes:
-      - type: bind
+      - type: volume
         source: db
         target: /var/lib/postgresql/data
 
