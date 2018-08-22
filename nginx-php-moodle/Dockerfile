@@ -3,6 +3,7 @@ FROM ubuntu:xenial
 # Disable frontend dialogs
 ENV DEBIAN_FRONTEND noninteractive
 
+ARG MOODLE_DOWNLOAD_FILE
 ARG MOODLE_TRACK
 ARG MOODLE_VERSION
 ARG NGINX_VERSION
@@ -11,6 +12,7 @@ ARG PHP_VERSION
 
 # Print ARGs and install utility packages
 RUN echo "Moodle track:     $MOODLE_TRACK" \
+    && echo "Moodle filename:  ${MOODLE_DOWNLOAD_FILE}" \
     && echo "Moodle version:   ${MOODLE_VERSION}" \
     && echo "Nginx version:    ${NGINX_VERSION}" \
     && echo "OneLogin version: ${ONELOGIN_PLUGIN_VER}" \
@@ -66,7 +68,7 @@ RUN echo "Starting Moodle App install..." \
     && apt-get update \
     && apt-get install -y wget \
     && mkdir -v /opt/moodle \
-    && wget -q https://download.moodle.org/download.php/direct/${MOODLE_TRACK}/moodle-${MOODLE_VERSION}.tgz -O /opt/moodle/moodle-${MOODLE_VERSION}.tgz \
+    && wget -q https://download.moodle.org/download.php/direct/${MOODLE_TRACK}/${MOODLE_DOWNLOAD_FILE} -O /opt/moodle/moodle-${MOODLE_VERSION}.tgz \
     && tar -xzf /opt/moodle/moodle-${MOODLE_VERSION}.tgz -C /opt/moodle \
     && mv /opt/moodle/moodle /opt/moodle/moodle-${MOODLE_VERSION} \
     && rm /opt/moodle/moodle-${MOODLE_VERSION}.tgz \
