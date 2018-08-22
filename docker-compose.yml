@@ -6,7 +6,7 @@ services:
   nginx-php-moodle:
     networks:
       all:
-    image: nginx-php-moodle:${PHP_VERSION}-${MOODLE_VERSION}
+    image: ${DOCKER_REGISTRY_URL}/nginx-php-moodle:${PHP_VERSION}-${MOODLE_VERSION}
     depends_on:
       - postgres
     environment:
@@ -57,7 +57,7 @@ services:
   postgres:
     networks:
       all:
-    image: postgres:9.6
+    image: ${DOCKER_REGISTRY_URL}/postgres:9.6
     environment:
       POSTGRES_DB: "${PGSQL_DATABASE}"
       POSTGRES_USER: "${PGSQL_USER}"
