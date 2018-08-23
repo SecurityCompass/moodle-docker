@@ -50,6 +50,12 @@ services:
       #
       - "--deb-field"
       - "Vcs-Browser: https://github.com/SecurityCompass/moodle-docker"
+      #
+      - "--after-install"
+      - "/package/systemd/postinst.sh"
+      #
+      - "--before-remove"
+      - "/package/systemd/prerm.sh"
       # Package dependencies
       - "--depends"
       - "docker-ce > 18"
@@ -58,11 +64,12 @@ services:
       # Enables INFO output
       - "--verbose"
       # Files to package
-      - "/package/.env=/etc/moodle-docker/.env"
-      - "/package/conf=/etc/moodle-docker"
-      - "/package/dc.prod-dbonly.yml=/etc/moodle-docker"
-      - "/package/dc.prod.yml=/etc/moodle-docker"
-      - "/package/docker-compose.yml=/etc/moodle-docker"
+      - "/package/.env=/etc/moodle-docker/"
+      - "/package/conf=/etc/moodle-docker/"
+      - "/package/dc.prod-dbonly.yml=/etc/moodle-docker/"
+      - "/package/dc.prod.yml=/etc/moodle-docker/"
+      - "/package/docker-compose.yml=/etc/moodle-docker/"
+      - "/package/systemd/moodle-docker.service=/lib/systemd/system/"
     environment:
       MOODLE_VERSION: "${MOODLE_VERSION}"
       PHP_VERSION: "${PHP_VERSION}"
