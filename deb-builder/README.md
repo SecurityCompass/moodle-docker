@@ -60,6 +60,7 @@ moodle-docker_deb-build_1 exited with code 0
 │       │   └── etc
 │       │       ├── nginx
 │       │       │   ├── conf.d
+│       │       │   │   ├── moodle.conf
 │       │       │   │   └── moodle.template
 │       │       │   ├── nginx.conf
 │       │       │   └── ssl
@@ -77,12 +78,18 @@ moodle-docker_deb-build_1 exited with code 0
 │       ├── dc.prod-dbonly.yml
 │       ├── dc.prod.yml
 │       └── docker-compose.yml
+├── lib
+│   └── systemd
+│       └── system
+│           └── moodle-docker.service
 ├── md5sums
+├── postinst
+├── prerm
 └── usr
     └── share
         └── doc
             └── moodle-docker
                 └── changelog.gz
 
-16 directories, 16 files
+19 directories, 19 files
 ```
