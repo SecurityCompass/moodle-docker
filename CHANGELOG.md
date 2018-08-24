@@ -13,8 +13,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Build from the latest stable Moodle build
-- Update DEB builder README
+- Update DEB builder `README.md`
 - Fetch images from Docker registry URL by default
+- Update `README.md` with latest changes
 
 ## [0.1.0] - 2018-08-13
 ### Added
