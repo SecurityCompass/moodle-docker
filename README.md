@@ -3,7 +3,7 @@
 ## Summary
 This project deploys the Moodle (Modular Object-Oriented Dynamic Learning Environment) course management system using one Docker container that runs both Nginx and PHP/PHP-FPM services
 
-## Setup
+## Local Environment Setup
 
 1. Install Docker on your system.
     ```bash
