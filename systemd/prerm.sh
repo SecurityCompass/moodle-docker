@@ -11,7 +11,7 @@ dummy() {
     :
 }
 
-if [ "${1}" = "remove" -a -z "${2}" ]
+if [ "${1}" = "remove" ] && [ -z "${2}" ]
 then
     # "before remove" goes here
     before_remove

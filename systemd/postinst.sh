@@ -22,7 +22,7 @@ systemctl enable moodle-docker >/dev/null || true
 #systemctl start moodle-docker >/dev/null || true
 }
 
-if [ "${1}" = "configure" -a -z "${2}" ] || \
+if [ "${1}" = "configure" ] && [ -z "${2}" ] || \
    [ "${1}" = "abort-remove" ]
 then
     # "after install" here
@@ -30,7 +30,7 @@ then
     #   In that case, this script, which should be idemptoent, is run
     #   to ensure a clean roll-back of the removal.
     after_install
-elif [ "${1}" = "configure" -a -n "${2}" ]
+elif [ "${1}" = "configure" ] && [ -n "${2}" ]
 then
     upgradeFromVersion="${2}"
     # "after upgrade" here
@@ -38,7 +38,7 @@ then
     # but their config files aren't, but a newer version of the
     # package is installed later, called "Config-Files" state.
     # basically, that still looks a _lot_ like an upgrade to me.
-    after_upgrade "${2}"
+    after_upgrade "${upgradeFromVersion}"
 elif echo "${1}" | grep -E -q "(abort|fail)"
 then
     echo "Failed to install before the post-installation script was run." >&2
