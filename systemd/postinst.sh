@@ -20,6 +20,16 @@ systemctl --system daemon-reload >/dev/null || true
 systemctl enable moodle-docker >/dev/null || true
 # Skip starting since we need to configure `.env`
 #systemctl start moodle-docker >/dev/null || true
+
+# Create Moodle data directory
+if [ ! -d opt/moodle/moodledata ]; then
+    echo "Creating Moodle data directory"
+    mkdir -p /opt/moodle/moodledata
+    chmod 777 /opt/moodle/moodledata
+else
+    echo "Moodle data directory already exists"
+fi
+
 }
 
 if [ "${1}" = "configure" ] && [ -z "${2}" ] || \
