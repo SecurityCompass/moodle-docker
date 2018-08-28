@@ -1,0 +1,21 @@
+[Unit]
+Description=Docker based Moodle Deployment
+Documentation=https://github.com/SecurityCompass/moodle-docker
+After=docker.service
+Requires=docker.service
+
+[Service]
+WorkingDirectory=/etc/moodle-docker
+Type=oneshot
+RemainAfterExit=yes
+
+ExecStartPre=-/usr/local/bin/docker-compose --file /etc/moodle-docker/docker-compose.yml pull --quiet
+ExecStart=/usr/local/bin/docker-compose --file /etc/moodle-docker/docker-compose.yml --file /etc/moodle-docker/dc.prod.yml up --detach
+
+ExecReload=-/usr/local/bin/docker-compose --file /etc/moodle-docker/docker-compose.yml pull --quiet
+ExecReload=/usr/local/bin/docker-compose --file /etc/moodle-docker/docker-compose.yml --file /etc/moodle-docker/dc.prod.yml up --detach
+
+ExecStop=/usr/local/bin/docker-compose --file /etc/moodle-docker/docker-compose.yml stop
+
+[Install]
+WantedBy=multi-user.target
