@@ -73,15 +73,3 @@ case ${os_family} in
         exit 1
     ;;
 esac
-
-# Create Moodle data directory
-if [ ! -d opt/moodle/moodledata ]; then
-    echo "Creating Moodle data directory"
-    mkdir -p /opt/moodle/moodledata
-    chmod 777 /opt/moodle/moodledata
-else
-    echo "Moodle data directory already exists"
-fi
-
-# Postgres entrypoint has to be executable. Git holds the executable bit but sometimes the file is created with incorrect permissions.
-chmod +x docker-postgres/9.6/alpine/docker-entrypoint.sh

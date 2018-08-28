@@ -29,3 +29,6 @@ Temporary Items
 
 ### JetBrains template
 .idea/
+
+# Ignore any built artifacts
+*.deb
