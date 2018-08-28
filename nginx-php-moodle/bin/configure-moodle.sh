@@ -11,7 +11,7 @@ if wait_for_success "/etc/init.d/php7.2-fpm status"; then
     echo "PHP-FPM started!"
 
     echo "Waiting for PostgreSQL to come up..."
-    if wait_for_success "/usr/bin/php${PHP_VERSION} -f /usr/local/bin/check_db.php"; then
+    if wait_for_success "/usr/bin/php${PHP_VERSION} -f /usr/local/bin/check_db.php" 120 10; then
         echo "PostgreSQL started!"
 
         # Try to upgrade if config.php found
