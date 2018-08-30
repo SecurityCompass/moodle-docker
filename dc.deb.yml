@@ -64,7 +64,7 @@ services:
       # Enables INFO output
       - "--verbose"
       # Files to package
-      - "/package/.env=/etc/moodle-docker/"
+      - "/package/.env=/etc/moodle-docker/.env.example"
       - "/package/conf=/etc/moodle-docker/"
       - "/package/dc.prod-dbonly.yml=/etc/moodle-docker/"
       - "/package/dc.prod.yml=/etc/moodle-docker/"
