@@ -39,17 +39,17 @@ echo "Setting up .env file"
 if [ ! -f /etc/moodle-docker/.env ]; then
     echo "Creating .env from example file"
     cp /etc/moodle-docker/.env.example /etc/moodle-docker/.env
+
+    echo "Configuring .env..."
+    moodle_admin_pass=$(gen_rand_chars)
+    moodle_upgrade_key=$(gen_rand_chars)
+    pgsql_password=$(gen_rand_chars)
+    sed -i "s/MOODLE_ADMIN_PASS=.*/MOODLE_ADMIN_PASS=${moodle_admin_pass}/g" /etc/moodle-docker/.env
+    sed -i "s/MOODLE_UPGRADE_KEY=.*/MOODLE_UPGRADE_KEY=${moodle_upgrade_key}/g" /etc/moodle-docker/.env
+    sed -i "s/PGSQL_PASSWORD=.*/PGSQL_PASSWORD=${pgsql_password}/g" /etc/moodle-docker/.env
 else
     echo "Nothing to do, .env already exists"
 fi
-
-echo "Configuring .env..."
-moodle_admin_pass=$(gen_rand_chars)
-moodle_upgrade_key=$(gen_rand_chars)
-pgsql_password=$(gen_rand_chars)
-sed -i "s/MOODLE_ADMIN_PASS=.*/MOODLE_ADMIN_PASS=${moodle_admin_pass}/g" /etc/moodle-docker/.env
-sed -i "s/MOODLE_UPGRADE_KEY=.*/MOODLE_UPGRADE_KEY=${moodle_upgrade_key}/g" /etc/moodle-docker/.env
-sed -i "s/PGSQL_PASSWORD=.*/PGSQL_PASSWORD=${pgsql_password}/g" /etc/moodle-docker/.env
 
 echo "Configuring and enabling systemd units"
 systemctl --system daemon-reload >/dev/null || true
