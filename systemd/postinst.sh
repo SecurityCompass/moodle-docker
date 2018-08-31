@@ -22,7 +22,6 @@ fi
 
 after_install() {
     :
-#!/usr/bin/env bash
 
 echo "Checking Moodle data directory"
 if [ ! -d /opt/moodle/moodledata ]; then
