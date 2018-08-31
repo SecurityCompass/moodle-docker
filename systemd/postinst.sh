@@ -4,9 +4,7 @@
 #  - First param is length, default: 20
 #  - Second param is characters, default: A-Za-z0-9_
 gen_rand_chars() {
-    local length="${1:-20}"
-    local chars="${2:-A-Za-z0-9_}"
-    LC_CTYPE=C tr -dc ${chars} < /dev/urandom | head -c ${length}
+    LC_CTYPE=C tr -dc "${2:-A-Za-z0-9_}" < /dev/urandom | head -c "${1:-20}"
 }
 
 after_upgrade() {
@@ -54,7 +52,6 @@ fi
 echo "Configuring and enabling systemd units"
 systemctl --system daemon-reload >/dev/null || true
 systemctl enable moodle-docker >/dev/null || true
-systemctl start moodle-docker >/dev/null || true
 }
 
 if [ "${1}" = "configure" ] && [ -z "${2}" ] || \
