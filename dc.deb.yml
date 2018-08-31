@@ -11,15 +11,15 @@ services:
       # target type
       - "--output-type"
       - "deb"
-      # DEB file name
-      - "--package"
-      - "/package/moodle-docker-${PHP_VERSION}-${MOODLE_VERSION}.deb"
       # package name
       - "--name"
       - "moodle-docker"
       #
       - "--version"
       - "${PHP_VERSION}-${MOODLE_VERSION}"
+      #
+      - "--iteration"
+      - "1"
       #
       - "--deb-changelog"
       - "CHANGELOG.md"
