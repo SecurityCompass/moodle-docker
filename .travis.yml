@@ -1,5 +1,5 @@
 env:
-  - SHELLCHECK_OPTS="-e SC1008 -e SC2154"
+  - SHELLCHECK_OPTS="-e SC1008 -e SC2154 -e SC2119"
 git:
   submodules: false
 language: bash
