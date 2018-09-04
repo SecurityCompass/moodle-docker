@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.1.2] - 2018-09-04
+### Added
+- DEB Package
+  - Added `iteration` to DEB name
+  - `.env.example` so we have a sample
+  - `.env` file creation from `.env.example` and customization
+  - Random password generator
+
+### Changed
+- Bumped Moodle version to 3.5.1
+
 ## [0.1.1] - 2018-08-23
 ### Added
 - `systemd` files to DEB package
