@@ -56,6 +56,9 @@ MDL_CONFIG
             echo "Enabling Moove theme"
             "/usr/bin/php${PHP_VERSION}" "/opt/moodle/moodle-${MOODLE_VERSION}/admin/cli/cfg.php" --name=theme --set=moove
 
+            echo "Override default password policy to remove non-alphanumeric character requirement"
+            "/usr/bin/php${PHP_VERSION}" "/opt/moodle/moodle-${MOODLE_VERSION}/admin/cli/cfg.php" --name=minpasswordnonalphanum --set=0
+
             echo "Skipping Moodle registration"
             "/usr/bin/php${PHP_VERSION}" "/opt/moodle/moodle-${MOODLE_VERSION}/admin/cli/cfg.php" --name=registrationpending --set=0
         fi
