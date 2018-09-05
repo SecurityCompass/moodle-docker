@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Bumped Moodle version to 3.5.1
 
+### Removed
+- Explicit Deb filename, `fpm` will create it using `version` and `iteration`
+
 ## [0.1.1] - 2018-08-23
 ### Added
 - `systemd` files to DEB package
