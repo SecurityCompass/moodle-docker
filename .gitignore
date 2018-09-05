@@ -32,3 +32,6 @@ Temporary Items
 
 # Ignore any built artifacts
 *.deb
+
+# Ignore VS Code files
+.vscode/
