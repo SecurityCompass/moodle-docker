@@ -26,12 +26,15 @@ jobs:
       services:
         - docker
       script:
-        - ls
-        - docker ps
-        - docker images
+        - apt-get update
+        - apt-cache show docker-ce
+        - apt-get --yes install docker-ce
         - docker --version
         - docker-compose --version
-        - true
+        - ls -lR
+        - docker-compose --file docker-compose.yml pull
+        - docker-compose --file docker-compose.yml --file dc.build.yml build --no-cache nginx-php-moodle
+        - docker images
     - name: "Build DEB package"
       language: bash
       script: true
