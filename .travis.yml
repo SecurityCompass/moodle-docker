@@ -28,6 +28,8 @@ jobs:
       script:
         - sudo apt-get update
         - sudo apt-get --yes install docker-ce
+        - docker --version && docker-compose --version
+        - which docker-compose --version
         - ls -lR
         - docker-compose --file docker-compose.yml pull
         - docker-compose --file docker-compose.yml --file dc.build.yml build --no-cache nginx-php-moodle
