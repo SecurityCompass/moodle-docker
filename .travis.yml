@@ -26,11 +26,9 @@ jobs:
       services:
         - docker
       script:
-        - apt-get update
-        - apt-cache show docker-ce
-        - apt-get --yes install docker-ce
-        - docker --version
-        - docker-compose --version
+        - sudo apt-get update
+        - sudo apt-cache show docker-ce
+        - sudo apt-get --yes install docker-ce
         - ls -lR
         - docker-compose --file docker-compose.yml pull
         - docker-compose --file docker-compose.yml --file dc.build.yml build --no-cache nginx-php-moodle
