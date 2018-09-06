@@ -34,7 +34,8 @@ jobs:
       - docker
     script:
       - bash bin/travis-ci/docker_upgrade.sh
-      - bash bin/travis-ci/docker_build_publish.sh
+      - bash bin/travis-ci/docker_build.sh
+      - bash bin/travis-ci/docker_publish.sh
   - name: DEB package
     language: bash
     script: 
