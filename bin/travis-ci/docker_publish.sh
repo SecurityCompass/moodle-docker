@@ -8,3 +8,4 @@ echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USER" --pas
 # Push the images
 docker push "${DOCKER_REGISTRY_URL}/moodle/nginx-php-moodle:${PHP_VERSION}-${MOODLE_VERSION}"
 docker push "${DOCKER_REGISTRY_URL}/moodle/nginx-php-moodle:latest"
+docker images
