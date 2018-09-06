@@ -37,6 +37,10 @@ jobs:
       - bash bin/travis-ci/docker_build.sh
       - bash bin/travis-ci/docker_publish.sh
   - name: DEB package
-    language: bash
-    script: 
-      - echo "IMPLEMENT ME"
+    language: minimal
+    sudo: required
+    services:
+      - docker
+    script:
+      - bash bin/travis-ci/docker_upgrade.sh
+      - bash bin/travis-ci/deb_build.sh
