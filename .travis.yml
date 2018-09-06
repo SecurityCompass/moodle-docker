@@ -26,27 +26,16 @@ jobs:
     language: bash
     script:
       - shellcheck $(find . -type f -name '*.sh')
-  - stage: Build
-    name: Build Docker image
+  - stage: Build and Publish
+    name: Docker image
     language: minimal
     sudo: required
     services:
       - docker
     script:
       - bash bin/travis-ci/docker_upgrade.sh
-      - bash bin/travis-ci/docker_build.sh
-      - docker images
-  - name: "Build DEB package"
+      - bash bin/travis-ci/docker_build_publish.sh
+  - name: DEB package
     language: bash
-    script: echo "IMPLEMENT ME"
-  - stage: Publish
-    name: Push docker image
-    language: minimal
-    sudo: required
-    services:
-      - docker
-    script:
-      - bash bin/travis-ci/docker_publish.sh
-  - name: Push DEB package
-    language: bash
-    script: echo "IMPLEMENT ME"
+    script: 
+      - echo "IMPLEMENT ME"
