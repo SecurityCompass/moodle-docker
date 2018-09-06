@@ -1,3 +1,4 @@
+# Define build stages
 stages:
   - tests
   - name: build
@@ -5,24 +6,26 @@ stages:
   - name: publish
     if: branch = master
 
+# Ignore submodules for all stages
+git:
+  submodules: false
+
 jobs:
   include:
     - stage: "Tests"
       name: "Shellcheck"
       env:
         - SHELLCHECK_OPTS="-e SC1008 -e SC2154"
-      git:
-        submodules: false
       language: bash
       script:
         - shellcheck $(find . -type f -name '*.sh')
     - stage: "Build"
       name: "Build Docker image"
       script: true
-      name: "Build DEB package"
+    - name: "Build DEB package"
       script: true
     - stage: "Publish"
       name: "Push docker image"
       script: true
-      name: "Push DEB package"
+    - name: "Push DEB package"
       script: true
