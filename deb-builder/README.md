@@ -49,7 +49,8 @@ moodle-docker_deb-build_1 exited with code 0
 ### Application and Debian packaging files
 
 ```bash
-# dpkg -x moodle-docker-7.2-3.5.deb /tmp/moodle
+# dpkg -x moodle-docker_7.2-3.5.1-1_amd64.deb /tmp/moodle
+# dpkg -e moodle-docker_7.2-3.5.1-1_amd64.deb /tmp/moodle
 # tree /tmp/moodle
 /tmp/moodle
 ├── conffiles
@@ -62,7 +63,6 @@ moodle-docker_deb-build_1 exited with code 0
 │       │       │   ├── conf.d
 │       │       │   │   ├── moodle.conf
 │       │       │   │   └── moodle.template
-│       │       │   ├── nginx.conf
 │       │       │   └── ssl
 │       │       │       ├── moodle.crt
 │       │       │       └── moodle.key
@@ -91,5 +91,5 @@ moodle-docker_deb-build_1 exited with code 0
             └── moodle-docker
                 └── changelog.gz
 
-19 directories, 19 files
+19 directories, 18 files
 ```

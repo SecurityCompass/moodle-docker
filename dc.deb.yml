@@ -11,15 +11,15 @@ services:
       # target type
       - "--output-type"
       - "deb"
-      # DEB file name
-      - "--package"
-      - "/package/moodle-docker-${PHP_VERSION}-${MOODLE_VERSION}.deb"
       # package name
       - "--name"
       - "moodle-docker"
       #
       - "--version"
       - "${PHP_VERSION}-${MOODLE_VERSION}"
+      #
+      - "--iteration"
+      - "1"
       #
       - "--deb-changelog"
       - "CHANGELOG.md"
@@ -64,7 +64,7 @@ services:
       # Enables INFO output
       - "--verbose"
       # Files to package
-      - "/package/.env=/etc/moodle-docker/"
+      - "/package/.env=/etc/moodle-docker/.env.example"
       - "/package/conf=/etc/moodle-docker/"
       - "/package/dc.prod-dbonly.yml=/etc/moodle-docker/"
       - "/package/dc.prod.yml=/etc/moodle-docker/"

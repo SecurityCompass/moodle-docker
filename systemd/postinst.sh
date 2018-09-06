@@ -1,4 +1,12 @@
 #!/bin/sh
+
+# Create string of random characters
+#  - First param is length, default: 20
+#  - Second param is characters, default: A-Za-z0-9_
+gen_rand_chars() {
+    LC_CTYPE=C tr -dc "${2:-A-Za-z0-9_}" < /dev/urandom | head -c "${1:-20}"
+}
+
 after_upgrade() {
     :
 
@@ -14,15 +22,9 @@ fi
 
 after_install() {
     :
-#!/usr/bin/env bash
 
-systemctl --system daemon-reload >/dev/null || true
-systemctl enable moodle-docker >/dev/null || true
-# Skip starting since we need to configure `.env`
-#systemctl start moodle-docker >/dev/null || true
-
-# Create Moodle data directory
-if [ ! -d opt/moodle/moodledata ]; then
+echo "Checking Moodle data directory"
+if [ ! -d /opt/moodle/moodledata ]; then
     echo "Creating Moodle data directory"
     mkdir -p /opt/moodle/moodledata
     chmod 777 /opt/moodle/moodledata
@@ -30,6 +32,25 @@ else
     echo "Moodle data directory already exists"
 fi
 
+echo "Setting up .env file"
+if [ ! -f /etc/moodle-docker/.env ]; then
+    echo "Creating .env from example file"
+    cp /etc/moodle-docker/.env.example /etc/moodle-docker/.env
+
+    echo "Configuring .env..."
+    moodle_admin_pass=$(gen_rand_chars 32)
+    moodle_upgrade_key=$(gen_rand_chars 32)
+    pgsql_password=$(gen_rand_chars 32)
+    sed -i "s/MOODLE_ADMIN_PASS=.*/MOODLE_ADMIN_PASS=${moodle_admin_pass}/g" /etc/moodle-docker/.env
+    sed -i "s/MOODLE_UPGRADE_KEY=.*/MOODLE_UPGRADE_KEY=${moodle_upgrade_key}/g" /etc/moodle-docker/.env
+    sed -i "s/PGSQL_PASSWORD=.*/PGSQL_PASSWORD=${pgsql_password}/g" /etc/moodle-docker/.env
+else
+    echo "Nothing to do, .env already exists"
+fi
+
+echo "Configuring and enabling systemd units"
+systemctl --system daemon-reload >/dev/null || true
+systemctl enable moodle-docker >/dev/null || true
 }
 
 if [ "${1}" = "configure" ] && [ -z "${2}" ] || \
