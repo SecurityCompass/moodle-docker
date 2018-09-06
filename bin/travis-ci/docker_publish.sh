@@ -5,4 +5,3 @@ echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USER" --pas
 
 # Push image
 docker-compose --file docker-compose.yml --file dc.build.yml push nginx-php-moodle
-docker images

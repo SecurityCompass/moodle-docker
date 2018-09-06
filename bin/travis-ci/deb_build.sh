@@ -1,6 +1,6 @@
 #!/bin/bash
 
-apt-get --yes install tree
+sudo apt-get --yes install tree
 
 # Build DEB package
 docker-compose --file dc.deb.yml up
