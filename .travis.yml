@@ -21,11 +21,24 @@ jobs:
         - shellcheck $(find . -type f -name '*.sh')
     - stage: "Build"
       name: "Build Docker image"
-      script: true
+      language: minimal
+      sudo: required
+      services:
+        - docker
+      script:
+        - ls
+        - docker ps
+        - docker images
+        - docker --version
+        - docker-compose --version
+        - true
     - name: "Build DEB package"
+      language: bash
       script: true
     - stage: "Publish"
       name: "Push docker image"
+      language: bash
       script: true
     - name: "Push DEB package"
+      language: bash
       script: true
