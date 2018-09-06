@@ -44,3 +44,4 @@ jobs:
     script:
       - bash bin/travis-ci/docker_upgrade.sh
       - bash bin/travis-ci/deb_build.sh
+      - bash bin/travis-ci/deb_package.sh

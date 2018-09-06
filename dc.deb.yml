@@ -4,6 +4,8 @@ version: '3.6'
 
 services:
   deb-build:
+    build:
+      context: ./deb-builder/
     command:
       # source
       - '--input-type'
