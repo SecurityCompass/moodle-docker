@@ -1,7 +1,28 @@
-env:
-  - SHELLCHECK_OPTS="-e SC1008 -e SC2154"
-git:
-  submodules: false
-language: bash
-script:
-  - shellcheck $(find . -type f -name '*.sh')
+stages:
+  - tests
+  - name: build
+    if: branch = master
+  - name: publish
+    if: branch = master
+
+jobs:
+  include:
+    - stage: "Tests"
+      name: "Shellcheck"
+      env:
+        - SHELLCHECK_OPTS="-e SC1008 -e SC2154"
+      git:
+        submodules: false
+      language: bash
+      script:
+        - shellcheck $(find . -type f -name '*.sh')
+    - stage: "Build"
+      name: "Build Docker image"
+      script: true
+      name: "Build DEB package"
+      script: true
+    - stage: "Publish"
+      name: "Push docker image"
+      script: true
+      name: "Push DEB package"
+      script: true
