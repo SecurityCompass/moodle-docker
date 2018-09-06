@@ -27,7 +27,6 @@ jobs:
         - docker
       script:
         - sudo apt-get update
-        - sudo apt-cache show docker-ce
         - sudo apt-get --yes install docker-ce
         - ls -lR
         - docker-compose --file docker-compose.yml pull
@@ -35,11 +34,11 @@ jobs:
         - docker images
     - name: "Build DEB package"
       language: bash
-      script: true
+      script: echo "IMPLEMENT ME"
     - stage: "Publish"
       name: "Push docker image"
       language: bash
-      script: true
+      script: echo "IMPLEMENT ME"
     - name: "Push DEB package"
       language: bash
-      script: true
+      script: echo "IMPLEMENT ME"
