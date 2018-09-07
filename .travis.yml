@@ -29,7 +29,8 @@ jobs:
   - name: Dockerfile linter
     language: minimal
     script:
-      - find . -type f -name 'Dockerfile' -exec docker run -it --rm --privileged -v $PWD:/root/ projectatomic/dockerfile-lint dockerfile_lint -f {} \;
+      - docker run --rm -v $PWD:/root/ projectatomic/dockerfile-lint dockerfile_lint -f ./deb-builder/Dockerfile
+      - docker run --rm -v $PWD:/root/ projectatomic/dockerfile-lint dockerfile_lint -f./nginx-php-moodle/Dockerfile
   - stage: Build and Publish
     name: Docker image
     language: minimal
