@@ -56,9 +56,6 @@ services:
       - "--after-install"
       - "/package/systemd/postinst.sh"
       #
-      - "--workdir"
-      - "/package"
-      #
       - "--before-remove"
       - "/package/systemd/prerm.sh"
       # Package dependencies
