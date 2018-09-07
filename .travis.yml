@@ -26,6 +26,10 @@ jobs:
     language: bash
     script:
       - shellcheck $(find . -type f -name '*.sh')
+  - name: Dockerfile linter
+    language: minimal
+    script:
+      - find . -type f -name 'Dockerfile' -exec docker run -it --rm --privileged -v $PWD:/root/ projectatomic/dockerfile-lint dockerfile_lint -f {} \;
   - stage: Build and Publish
     name: Docker image
     language: minimal
@@ -45,3 +49,4 @@ jobs:
       - bash bin/travis-ci/docker_upgrade.sh
       - bash bin/travis-ci/deb_build.sh
       - bash bin/travis-ci/deb_package.sh
+      - bash bin/travis-ci/deb_publish.sh
