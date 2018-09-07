@@ -30,7 +30,7 @@ jobs:
     language: minimal
     script:
       - docker run --rm -v $PWD:/root/ projectatomic/dockerfile-lint dockerfile_lint -f ./deb-builder/Dockerfile
-      - docker run --rm -v $PWD:/root/ projectatomic/dockerfile-lint dockerfile_lint -f./nginx-php-moodle/Dockerfile
+      - docker run --rm -v $PWD:/root/ projectatomic/dockerfile-lint dockerfile_lint -f ./nginx-php-moodle/Dockerfile
   - stage: Build and Publish
     name: Docker image
     language: minimal
