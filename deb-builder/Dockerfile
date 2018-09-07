@@ -19,8 +19,8 @@ RUN apt-get update \
 RUN gem install --no-ri --no-rdoc fpm \
     && gem cleanup
 
-VOLUME [ "/package" ]
-WORKDIR "/package"
+VOLUME /package
+WORKDIR /package
 
 ENTRYPOINT [ "/usr/local/bin/fpm" ]
 CMD [ "--help" ]
