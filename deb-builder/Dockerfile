@@ -21,5 +21,5 @@ RUN gem install --no-ri --no-rdoc fpm \
 
 VOLUME [ "/package" ]
 
-ENTRYPOINT [ "/usr/local/bin/fpm" ]
+ENTRYPOINT [ "cd /package && /usr/local/bin/fpm" ]
 CMD [ "--help" ]
