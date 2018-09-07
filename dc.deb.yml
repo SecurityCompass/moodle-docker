@@ -24,7 +24,7 @@ services:
       - "1"
       #
       - "--deb-changelog"
-      - "CHANGELOG.md"
+      - "/package/CHANGELOG.md"
       #
       - "--license"
       - "MIT"

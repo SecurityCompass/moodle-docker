@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e 
+set -o pipefail
 
 sudo apt-get --yes install tree
 
