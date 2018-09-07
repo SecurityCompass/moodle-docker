@@ -20,6 +20,7 @@ RUN gem install --no-ri --no-rdoc fpm \
     && gem cleanup
 
 VOLUME [ "/package" ]
+WORKDIR "/package"
 
-ENTRYPOINT [ "cd /package && /usr/local/bin/fpm" ]
+ENTRYPOINT [ "/usr/local/bin/fpm" ]
 CMD [ "--help" ]
