@@ -7,7 +7,7 @@ LABEL version="deb"
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update \
-    && apt-get install --yes --no-install-recommends \
+    && apt-get install --yes \
         gcc \
         make \
         ruby \
