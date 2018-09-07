@@ -8,7 +8,6 @@ sudo apt-get --yes install tree
 docker-compose --file dc.deb.yml up
 
 # Verify DEB file content
-ls -la
 DEB_FILE=$(ls ./*.deb)
 ls -la "${DEB_FILE}"
 dpkg -e "${DEB_FILE}" /tmp/moodle_deb
