@@ -29,7 +29,7 @@ jobs:
   - name: Tag update
     language: bash
     script:
-      - bash bin/travis/check_tag.sh
+      - bash bin/travis-ci/check_tag.sh
   - name: Dockerfile linter
     language: minimal
     script:
