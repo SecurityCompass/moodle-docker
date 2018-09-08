@@ -16,6 +16,6 @@ echo "Iteration version: ${iteration_ver}"
 
 # Validate version strings
 version_pattern='^v\d\.\d\.\d$'
-echo "${latest_tag}" | grep -P ${version_pattern} || echo "Invalid tag from repo: ${latest_tag}" && exit 1
-echo "${changelog_ver}" | grep -P ${version_pattern} || echo "Invalid tag from CHANGELOG: ${changelog_ver}" && exit 1
-echo "${iteration_ver}" | grep -P ${version_pattern} || echo "Invalid iteration from DEB configuration: ${iteration_ver}" && exit 1
+echo "${latest_tag}" | grep -qP ${version_pattern} || ( echo "Invalid tag from repo: ${latest_tag}" && exit 1 )
+echo "${changelog_ver}" | grep -qP ${version_pattern} || ( echo "Invalid tag from CHANGELOG: ${changelog_ver}" && exit 1 )
+echo "${iteration_ver}" | grep -qP ${version_pattern} || ( echo "Invalid iteration from DEB configuration: ${iteration_ver}" && exit 1 )
