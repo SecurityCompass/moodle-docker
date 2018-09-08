@@ -19,6 +19,11 @@ env:
 
 jobs:
   include:
+  - stage: Best practices
+    name: Tag & iteration update
+    language: bash
+    script:
+      - bash bin/travis-ci/check_tag.sh
   - stage: Tests
     name: Shellcheck
     env:
@@ -26,10 +31,6 @@ jobs:
     language: bash
     script:
       - shellcheck $(find . -type f -name '*.sh')
-  - name: Tag & iteration update
-    language: bash
-    script:
-      - bash bin/travis-ci/check_tag.sh
   - name: Dockerfile linter
     language: minimal
     script:
