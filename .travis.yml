@@ -26,7 +26,7 @@ jobs:
     language: bash
     script:
       - shellcheck $(find . -type f -name '*.sh')
-  - name: Tag update
+  - name: Tag & iteration update
     language: bash
     script:
       - bash bin/travis-ci/check_tag.sh
