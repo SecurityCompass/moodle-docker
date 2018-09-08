@@ -29,7 +29,7 @@ jobs:
   - name: Tag update
     language: bash
     script:
-      - curl -s https://api.github.com/repos/SecurityCompass/libcloud/git/refs/tags | jq -r '.[]|.ref?' | sort -nr | cut -d"/" -f3 | head -n1 && false
+      - bash bin/travis/check_tag.sh
   - name: Dockerfile linter
     language: minimal
     script:
