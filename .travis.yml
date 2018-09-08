@@ -1,9 +1,8 @@
 # Define build stages
 stages:
-  - tests
-  - name: build
-    if: branch = master
-  - name: publish
+  - Best practices
+  - Tests
+  - name: Build and Publish
     if: branch = master
 
 # Ignore submodules for all stages
