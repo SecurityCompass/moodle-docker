@@ -7,7 +7,7 @@ latest_tag=$(curl -s https://api.github.com/repos/SecurityCompass/moodle-docker/
 echo "Latest tag is: ${latest_tag}"
 
 # Get the latest tag from the CHANGELOG
-changelog_ver=$(grep -oP '\[\d\.\d\.\d\]' CHANGELOG.md | tr -d '[]' | sort -nr | head -n1)
+changelog_ver=$(grep -oP '\[v\d\.\d\.\d\]' CHANGELOG.md | tr -d '[]' | sort -nr | head -n1)
 echo "Latest version in CHANGELOG: ${changelog_ver}"
 
 # Get iteration from DEB builder configuration
