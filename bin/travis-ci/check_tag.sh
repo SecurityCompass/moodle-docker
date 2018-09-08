@@ -3,7 +3,7 @@ set -e
 set -o pipefail
 
 # Get the latest tag from GitHub
-latest_tag=$(curl -s https://api.github.com/repos/SecurityCompass/libcloud/git/refs/tags | jq -r '.[]|.ref?' | sort -nr | cut -d"/" -f3 | head -n1)
+latest_tag=$(curl -s https://api.github.com/repos/SecurityCompass/moodle-docker/git/refs/tags | jq -r '.[]|.ref?' | sort -nr | cut -d"/" -f3 | head -n1)
 echo "Latest tag is: ${latest_tag}"
 
 # Get the latest tag from the CHANGELOG
@@ -15,6 +15,6 @@ iteration_ver=$(grep -A1 iteration dc.deb.yml | tail -n1 | cut -d'"' -f2)
 echo "Iteration version: ${iteration_ver}"
 
 # Validate that the versions are 
-echo "${latest_tag}" | grep -P '^\d\.\d\.\d$'
-echo "${changelog_ver}" | grep -P '^\d\.\d\.\d$'
-echo "${iteration_ver}" | grep -P '^\d\.\d\.\d$'
+echo "${latest_tag}" | grep -P '^\d\.\d\.\d$' || echo "Invalid tag from repo: ${latest_tag}"
+echo "${changelog_ver}" | grep -P '^\d\.\d\.\d$' || echo "Invalid tag from CHANGELOG: ${changelog_ver}"
+echo "${iteration_ver}" | grep -P '^\d\.\d\.\d$' || echo "Invalid iteration from DEB configuration: ${iteration_ver}"
