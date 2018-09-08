@@ -26,6 +26,10 @@ jobs:
     language: bash
     script:
       - shellcheck $(find . -type f -name '*.sh')
+  - name: Tag update
+    language: bash
+    script:
+      - curl -s https://api.github.com/repos/SecurityCompass/libcloud/git/refs/tags | jq -r '.[]|.ref?' | sort -nr | cut -d"/" -f3 | head -n1 && false
   - name: Dockerfile linter
     language: minimal
     script:
