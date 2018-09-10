@@ -2,6 +2,13 @@
 set -e
 set -o pipefail
 
+echo "Installing shtdlib"
+curl -s -L -o /usr/local/bin/shtdlib.sh https://github.com/sdelements/shtdlib/raw/master/shtdlib.sh
+chmod 775 /usr/local/bin/shtdlib.sh
+# shellcheck disable=SC1091
+source /usr/local/bin/shtdlib.sh
+color_echo green "shtdlib.sh installed successfully"
+
 # Get the latest tag from GitHub
 latest_tag=$(curl -s https://api.github.com/repos/SecurityCompass/moodle-docker/git/refs/tags | jq -r '.[]|.ref?' | sort -nr | cut -d"/" -f3 | head -n1)
 echo "Latest tag is: ${latest_tag}"
@@ -19,3 +26,6 @@ version_pattern='^v\d\.\d\.\d$'
 echo "${latest_tag}" | grep -qP ${version_pattern} || ( echo "Invalid tag from repo: ${latest_tag}" && exit 1 )
 echo "${changelog_ver}" | grep -qP ${version_pattern} || ( echo "Invalid tag from CHANGELOG: ${changelog_ver}" && exit 1 )
 echo "${iteration_ver}" | grep -qP ${version_pattern} || ( echo "Invalid iteration from DEB configuration: ${iteration_ver}" && exit 1 )
+
+compare_versions ${latest_tag} ${changelog_ver}
+compare_versions ${latest_tag} ${iteration_ver}
