@@ -12,6 +12,7 @@ jobs:
   include:
   - stage: Best practices
     name: Tag & iteration update
+    sudo: required
     language: bash
     script:
       - bash bin/travis-ci/check_tag.sh
