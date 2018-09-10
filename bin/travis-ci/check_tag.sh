@@ -27,5 +27,8 @@ echo "${latest_tag}" | grep -qP ${version_pattern} || ( echo "Invalid tag from r
 echo "${changelog_ver}" | grep -qP ${version_pattern} || ( echo "Invalid tag from CHANGELOG: ${changelog_ver}" && exit 1 )
 echo "${iteration_ver}" | grep -qP ${version_pattern} || ( echo "Invalid iteration from DEB configuration: ${iteration_ver}" && exit 1 )
 
-compare_versions ${latest_tag} ${changelog_ver}
-compare_versions ${latest_tag} ${iteration_ver}
+# Ensure that we tag relevant files in each PR
+if ! compare_versions "${latest_tag}" "${changelog_ver}" || ! compare_versions "${latest_tag}" "${iteration_ver}"; then
+    echo "Error: Version in CHANGELOG.md and 'dc.deb.yml' not updated"
+    exit 1
+fi
