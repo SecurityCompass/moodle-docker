@@ -2,8 +2,7 @@
 stages:
   - Best practices
   - Tests
-  - name: Build and Publish
-    if: branch = master
+  - Build and Publish
 
 # Ignore submodules for all stages
 git:
@@ -41,7 +40,7 @@ jobs:
     script:
       - bash bin/travis-ci/docker_upgrade.sh
       - bash bin/travis-ci/docker_build.sh
-      - bash bin/travis-ci/docker_publish.sh
+      - if [[ ${TRAVIS_BRANCH} = "master" ]]; then bash bin/travis-ci/docker_publish.sh; fi
   - name: DEB package
     language: minimal
     sudo: required
@@ -51,4 +50,4 @@ jobs:
       - bash bin/travis-ci/docker_upgrade.sh
       - bash bin/travis-ci/deb_build.sh
       - bash bin/travis-ci/deb_package.sh
-      - bash bin/travis-ci/deb_publish.sh
+      - if [[ ${TRAVIS_BRANCH} = "master" ]]; then bash bin/travis-ci/deb_publish.sh; fi
