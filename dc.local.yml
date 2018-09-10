@@ -1,0 +1,15 @@
+# This file contains configuration defaults for base/local environments
+# By default, all containers are deployed on the same host. See `docker-compose.prod-dbonly.yml`
+# and the README to deploy individual services
+---
+
+version: '3.6'
+
+services:
+  nginx-php-moodle:
+    image: nginx-php-moodle
+    ports:
+      - "8080:80"
+      - "8443:443"
+  certbot:
+    image: sc-certbot

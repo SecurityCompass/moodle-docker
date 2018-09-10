@@ -27,6 +27,9 @@ services:
       PGSQL_USER: "${PGSQL_USER}"
       PGSQL_PASSWORD: "${PGSQL_PASSWORD}"
       PHP_VERSION: "${PHP_VERSION}"
+      CHALLENGE_DIR: "${CHALLENGE_DIR}"
+      CERT_DIR: "${CERT_DIR}"
+      CERT_DOMAIN: "${CERT_DOMAIN}"
     ports:
       - "${HTTP_PORT}:${HTTP_PORT}"
       - "${HTTPS_PORT}:${HTTPS_PORT}"
@@ -59,6 +62,13 @@ services:
       - type: bind
         source: ./conf/etc/php/7.2/fpm/pool.d/www.conf
         target: /etc/php/7.2/fpm/pool.d/www.conf
+      # Directory for serving certbot challenge files
+      - type: volume
+        source: certbot-challenges
+        target: ${CHALLENGE_DIR}
+      - type: volume
+        source: certbot-certs
+        target: ${CERT_DIR}
   postgres:
     networks:
       all:
@@ -71,9 +81,27 @@ services:
       - type: volume
         source: db
         target: /var/lib/postgresql/data
+  certbot:
+    networks:
+      all:
+    image: ${DOCKER_REGISTRY_URL}/sc-certbot:latest
+    depends_on:
+      - nginx-php-moodle
+    environment:
+      ADMIN_EMAIL: "${ADMIN_EMAIL}"
+      CERT_DOMAIN: "${CERT_DOMAIN}"
+    volumes:
+      - type: volume
+        source: certbot-challenges
+        target: /challenges
+      - type: volume
+        source: certbot-certs
+        target: /certs
 
 networks:
   all:
 
 volumes:
   db:
+  certbot-challenges:
+  certbot-certs:

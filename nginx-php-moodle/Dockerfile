@@ -22,7 +22,7 @@ RUN echo "Moodle track:     $MOODLE_TRACK" \
     && echo "PHP version:      ${PHP_VERSION}" \
     && echo "Starting util packages install..." \
     && apt-get update\
-    && apt-get install -y vim unzip curl netbase \
+    && apt-get install -y vim unzip curl netbase inotify-tools \
     && apt-get --purge -y autoremove \
     && apt-get -y clean \
     && rm -rf /etc/apt/sources.list.d/temp.list /var/lib/apt/lists/*
@@ -122,6 +122,10 @@ RUN chmod 755 /etc/services.d/nginx/run
 # Copy PHP-FPM service script
 COPY bin/start-fpm.sh /etc/services.d/php_fpm/run
 RUN chmod 755 /etc/services.d/php_fpm/run
+
+# Copy certificate watch script
+COPY bin/watch_certificate_dir.sh /etc/services.d/watch_certificate_dir/run
+RUN chmod 755 /etc/services.d/watch_certificate_dir/run
 
 # Copy Moodle config service script
 COPY bin/configure-moodle.sh /usr/local/bin/configure-moodle.sh
