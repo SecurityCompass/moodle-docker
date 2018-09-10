@@ -4,8 +4,8 @@ set -o pipefail
 set -x
 
 echo "Installing shtdlib"
-curl -s -L -o /usr/local/bin/shtdlib.sh https://github.com/sdelements/shtdlib/raw/master/shtdlib.sh
-chmod 775 /usr/local/bin/shtdlib.sh
+sudo curl -s -L -o /usr/local/bin/shtdlib.sh https://github.com/sdelements/shtdlib/raw/master/shtdlib.sh
+sudo chmod 775 /usr/local/bin/shtdlib.sh
 # shellcheck disable=SC1091
 source /usr/local/bin/shtdlib.sh
 color_echo green "shtdlib.sh installed successfully"
