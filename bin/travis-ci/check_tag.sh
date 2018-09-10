@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 set -o pipefail
-set -x
 
 echo "Installing shtdlib"
 sudo curl -s -L -o /usr/local/bin/shtdlib.sh https://github.com/sdelements/shtdlib/raw/master/shtdlib.sh
@@ -24,9 +23,9 @@ echo "Iteration version: ${iteration_ver}"
 
 # Validate version strings
 version_pattern='^v\d\.\d\.\d$'
-echo "${latest_tag}" | grep -qP ${version_pattern} || ( echo "Invalid tag from repo: ${latest_tag}" && exit 1 )
-echo "${changelog_ver}" | grep -qP ${version_pattern} || ( echo "Invalid tag from CHANGELOG: ${changelog_ver}" && exit 1 )
-echo "${iteration_ver}" | grep -qP ${version_pattern} || ( echo "Invalid iteration from DEB configuration: ${iteration_ver}" && exit 1 )
+echo "${latest_tag}" | grep -qP ${version_pattern} || ( echo "Invalid tag from repo: '${latest_tag}'" && exit 1 )
+echo "${changelog_ver}" | grep -qP ${version_pattern} || ( echo "Invalid tag from CHANGELOG: '${changelog_ver}'" && exit 1 )
+echo "${iteration_ver}" | grep -qP ${version_pattern} || ( echo "Invalid iteration from DEB configuration: '${iteration_ver}'" && exit 1 )
 
 # Ensure that we tag relevant files in each PR
 if ! compare_versions "${latest_tag}" "${changelog_ver}" || ! compare_versions "${latest_tag}" "${iteration_ver}"; then
