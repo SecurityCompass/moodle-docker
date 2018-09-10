@@ -1,7 +1,7 @@
 # Define build stages
 stages:
-  - Best practices
   - Tests
+  - SDLC Tasks
   - Build and Publish
 
 # Ignore submodules for all stages
@@ -10,12 +10,6 @@ git:
 
 jobs:
   include:
-  - stage: Best practices
-    name: Tag & iteration update
-    sudo: required
-    language: bash
-    script:
-      - bash bin/travis-ci/check_tag.sh
   - stage: Tests
     name: Shellcheck
     env:
@@ -28,6 +22,12 @@ jobs:
     script:
       - docker run --rm -v $PWD:/root/ projectatomic/dockerfile-lint dockerfile_lint -f ./deb-builder/Dockerfile
       - docker run --rm -v $PWD:/root/ projectatomic/dockerfile-lint dockerfile_lint -f ./nginx-php-moodle/Dockerfile
+  - stage: SDLC Tasks
+    name: Tag & iteration update
+    sudo: required
+    language: bash
+    script:
+      - bash bin/travis-ci/check_tag.sh
   - stage: Build and Publish
     name: Docker image
     env:
@@ -41,6 +41,7 @@ jobs:
     script:
       - bash bin/travis-ci/docker_upgrade.sh
       - bash bin/travis-ci/docker_build.sh
+      # Publish if we're on or pushing to master
       - if [[ ${TRAVIS_BRANCH} = "master" ]]; then bash bin/travis-ci/docker_publish.sh; fi
   - name: DEB package
     language: minimal
@@ -51,4 +52,5 @@ jobs:
       - bash bin/travis-ci/docker_upgrade.sh
       - bash bin/travis-ci/deb_build.sh
       - bash bin/travis-ci/deb_package.sh
+      # Publish if we're on or pushing to master
       - if [[ ${TRAVIS_BRANCH} = "master" ]]; then bash bin/travis-ci/deb_publish.sh; fi
