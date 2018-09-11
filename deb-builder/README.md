@@ -68,7 +68,7 @@ moodle-docker_deb-build_1 exited with code 0
 │       │       │       └── moodle.key
 │       │       └── php
 │       │           └── 7.2
-│       │             pus  ├── fpm
+│       │               ├── fpm
 │       │               │   ├── php-fpm.conf
 │       │               │   ├── php.ini
 │       │               │   └── pool.d
