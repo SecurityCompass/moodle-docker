@@ -9,6 +9,11 @@ sudo chmod 775 /usr/local/bin/shtdlib.sh
 source /usr/local/bin/shtdlib.sh
 color_echo green "shtdlib.sh installed successfully"
 
+git tag -l
+git tag -l | sort --version-sort
+git tag -l | sort --version-sort | tail -n1
+git fetch origin
+
 # Get the latest tag from GitHub
 latest_tag=$(git tag -l | sort --version-sort | tail -n1)
 echo "Latest tag is: '${latest_tag}'"
