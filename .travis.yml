@@ -22,7 +22,7 @@ jobs:
     script:
       - docker run --rm -v $PWD:/root/ projectatomic/dockerfile-lint dockerfile_lint -f ./deb-builder/Dockerfile
       - docker run --rm -v $PWD:/root/ projectatomic/dockerfile-lint dockerfile_lint -f ./nginx-php-moodle/Dockerfile
-  - stage: SDLC Tasks
+  - stage: "SDLC Tasks"
     name: Tag & iteration update
     sudo: required
     language: bash

@@ -19,16 +19,18 @@ function compare_versions {
 }
 
 # Get the latest tag from GitHub
+set -x
+curl -s https://api.github.com/repos/SecurityCompass/moodle-docker/git/refs/tags | jq -r '.[]|.ref?' | sort -nr | cut -d"/" -f3 | head -n1
 latest_tag=$(curl -s https://api.github.com/repos/SecurityCompass/moodle-docker/git/refs/tags | jq -r '.[]|.ref?' | sort -nr | cut -d"/" -f3 | head -n1)
-echo "Latest tag is: ${latest_tag}"
+echo "Latest tag is: '${latest_tag}'"
 
 # Get the latest tag from the CHANGELOG
 changelog_ver=$(grep -oP '\[v\d\.\d\.\d\]' CHANGELOG.md | tr -d '[]' | sort -nr | head -n1)
-echo "Latest version in CHANGELOG: ${changelog_ver}"
+echo "Latest version in CHANGELOG: '${changelog_ver}'"
 
 # Get iteration from DEB builder configuration
 iteration_ver=$(grep -A1 iteration dc.deb.yml | tail -n1 | cut -d'"' -f2)
-echo "Iteration version: ${iteration_ver}"
+echo "Iteration version: '${iteration_ver}'"
 
 # Validate version strings
 version_pattern='^v\d\.\d\.\d$'
