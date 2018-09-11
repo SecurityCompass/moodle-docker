@@ -2,12 +2,21 @@
 set -e
 set -o pipefail
 
-echo "Installing shtdlib"
-sudo curl -s -L -o /usr/local/bin/shtdlib.sh https://github.com/sdelements/shtdlib/raw/master/shtdlib.sh
-sudo chmod 775 /usr/local/bin/shtdlib.sh
-# shellcheck disable=SC1091
-source /usr/local/bin/shtdlib.sh
-color_echo green "shtdlib.sh installed successfully"
+# echo "Installing shtdlib"
+# sudo curl -s -L -o /usr/local/bin/shtdlib.sh https://github.com/sdelements/shtdlib/raw/master/shtdlib.sh
+# sudo chmod 775 /usr/local/bin/shtdlib.sh
+# # shellcheck disable=SC1091
+# source /usr/local/bin/shtdlib.sh
+# color_echo green "shtdlib.sh installed successfully"
+
+function compare_versions {
+    items=( ${@} )
+    assert [ ${#items[@]} -gt 0 ]
+    #shellcheck disable=SC2119
+    lowest_ver=$(printf "%s\\n" "${items[@]}" | version_sort | head -n1)
+    lowest_ver_line=$(printf "%s\\n" "${items[@]}" | grep "${lowest_ver}" --line-number --max-count=1 | awk -F: '{print $1}')
+    return $(( lowest_ver_line-1 ))
+}
 
 # Get the latest tag from GitHub
 latest_tag=$(curl -s https://api.github.com/repos/SecurityCompass/moodle-docker/git/refs/tags | jq -r '.[]|.ref?' | sort -nr | cut -d"/" -f3 | head -n1)
