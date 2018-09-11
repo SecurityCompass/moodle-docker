@@ -19,15 +19,7 @@ function compare_versions {
 }
 
 # Get the latest tag from GitHub
-set -x
-
-curl -s https://api.github.com/repos/SecurityCompass/moodle-docker/git/refs/tags
-curl -s https://api.github.com/repos/SecurityCompass/moodle-docker/git/refs/tags | jq -r '.[]|.ref?'
-curl -s https://api.github.com/repos/SecurityCompass/moodle-docker/git/refs/tags | jq -r '.[]|.ref?' | sort --version-sort
-curl -s https://api.github.com/repos/SecurityCompass/moodle-docker/git/refs/tags | jq -r '.[]|.ref?' | sort --version-sort | cut -d"/" -f3 
-curl -s https://api.github.com/repos/SecurityCompass/moodle-docker/git/refs/tags | jq -r '.[]|.ref?' | sort --version-sort | cut -d"/" -f3 | tail -n1
-
-latest_tag=$(curl -s https://api.github.com/repos/SecurityCompass/moodle-docker/git/refs/tags | jq -r '.[]|.ref?' | sort --version-sort | cut -d"/" -f3 | tail -n1)
+latest_tag=$(git tag -l | sort --version-sort | tail -n1)
 echo "Latest tag is: '${latest_tag}'"
 
 # Get the latest tag from the CHANGELOG
