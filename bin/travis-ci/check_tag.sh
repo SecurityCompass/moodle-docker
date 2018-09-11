@@ -18,10 +18,11 @@
 set -eo pipefail
 
 # echo "Installing shtdlib"
-sudo curl -s -L -o /usr/local/bin/shtdlib.sh https://github.com/sdelements/shtdlib/raw/master/shtdlib.sh
-sudo chmod 775 /usr/local/bin/shtdlib.sh
-# shellcheck disable=SC1091
-source /usr/local/bin/shtdlib.sh
+shtdlib_local_path="/usr/local/bin/shtdlib.sh"
+sudo curl -s -L -o "${shtdlib_local_path}" https://github.com/sdelements/shtdlib/raw/master/shtdlib.sh
+sudo chmod 775 "${shtdlib_local_path}"
+# shellcheck disable=SC1091,SC1090
+source "${shtdlib_local_path}"
 color_echo green "shtdlib.sh installed successfully"
 
 # Get the latest tag from GitHub
@@ -42,7 +43,7 @@ echo "${latest_tag}" | grep -qP ${version_pattern} || ( color_echo red "Invalid 
 echo "${changelog_ver}" | grep -qP ${version_pattern} || ( color_echo red "Invalid tag from CHANGELOG: '${changelog_ver}'" && exit 1 )
 echo "${iteration_ver}" | grep -qP ${version_pattern} || ( color_echo red "Invalid iteration from DEB configuration: '${iteration_ver}'" && exit 1 )
 
-# Ensure that we tag relevant files in each PR
+# Ensure tags in CHANGELOG and iteration are greater than highest repo tag
 if [ "${latest_tag}" = "${changelog_ver}" ] \
    || [ "${latest_tag}" = "${iteration_ver}" ] \
    || ! compare_versions "${latest_tag}" "${changelog_ver}" \
