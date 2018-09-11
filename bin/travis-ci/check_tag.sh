@@ -9,34 +9,31 @@ sudo chmod 775 /usr/local/bin/shtdlib.sh
 source /usr/local/bin/shtdlib.sh
 color_echo green "shtdlib.sh installed successfully"
 
-git tag -l
-git tag -l | sort --version-sort
-git tag -l | sort --version-sort | tail -n1
-git fetch origin
-
 # Get the latest tag from GitHub
 latest_tag=$(git tag -l | sort --version-sort | tail -n1)
-echo "Latest tag is: '${latest_tag}'"
+color_echo green "Latest tag: '${latest_tag}'"
 
 # Get the latest tag from the CHANGELOG
 changelog_ver=$(grep -oP '\[v\d\.\d\.\d\]' CHANGELOG.md | tr -d '[]' | sort -nr | head -n1)
-echo "Latest version in CHANGELOG: '${changelog_ver}'"
+color_echo green "CHANGELOG version: '${changelog_ver}'"
 
 # Get iteration from DEB builder configuration
 iteration_ver=$(grep -A1 iteration dc.deb.yml | tail -n1 | cut -d'"' -f2)
-echo "Iteration version: '${iteration_ver}'"
+color_echo green "Iteration version: '${iteration_ver}'"
 
 # Validate version strings
 version_pattern='^v\d\.\d\.\d$'
-echo "${latest_tag}" | grep -qP ${version_pattern} || ( echo "Invalid tag from repo: '${latest_tag}'" && exit 1 )
-echo "${changelog_ver}" | grep -qP ${version_pattern} || ( echo "Invalid tag from CHANGELOG: '${changelog_ver}'" && exit 1 )
-echo "${iteration_ver}" | grep -qP ${version_pattern} || ( echo "Invalid iteration from DEB configuration: '${iteration_ver}'" && exit 1 )
+echo "${latest_tag}" | grep -qP ${version_pattern} || ( color_echo red "Invalid tag from repo: '${latest_tag}'" && exit 1 )
+echo "${changelog_ver}" | grep -qP ${version_pattern} || ( color_echo red "Invalid tag from CHANGELOG: '${changelog_ver}'" && exit 1 )
+echo "${iteration_ver}" | grep -qP ${version_pattern} || ( color_echo red "Invalid iteration from DEB configuration: '${iteration_ver}'" && exit 1 )
 
 # Ensure that we tag relevant files in each PR
 if [ "${latest_tag}" = "${changelog_ver}" ] \
    || [ "${latest_tag}" = "${iteration_ver}" ] \
    || ! compare_versions "${latest_tag}" "${changelog_ver}" \
    || ! compare_versions "${latest_tag}" "${iteration_ver}"; then
-    echo "Error: Version in CHANGELOG.md and 'dc.deb.yml' not updated"
+    color_echo red "Error: Version in CHANGELOG.md and 'dc.deb.yml' not updated"
     exit 1
+else
+    color_echo green "Version bumps PASS!"
 fi
