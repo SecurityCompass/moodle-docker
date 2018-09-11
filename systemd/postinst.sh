@@ -38,9 +38,9 @@ if [ ! -f /etc/moodle-docker/.env ]; then
     cp /etc/moodle-docker/.env.example /etc/moodle-docker/.env
 
     echo "Configuring .env..."
-    moodle_admin_pass=$(gen_rand_chars 32)
-    moodle_upgrade_key=$(gen_rand_chars 32)
-    pgsql_password=$(gen_rand_chars 32)
+    moodle_admin_pass="$(gen_rand_chars 32)"
+    moodle_upgrade_key="$(gen_rand_chars 32)"
+    pgsql_password="$(gen_rand_chars 32)"
     sed -i "s/MOODLE_ADMIN_PASS=.*/MOODLE_ADMIN_PASS=${moodle_admin_pass}/g" /etc/moodle-docker/.env
     sed -i "s/MOODLE_UPGRADE_KEY=.*/MOODLE_UPGRADE_KEY=${moodle_upgrade_key}/g" /etc/moodle-docker/.env
     sed -i "s/PGSQL_PASSWORD=.*/PGSQL_PASSWORD=${pgsql_password}/g" /etc/moodle-docker/.env
