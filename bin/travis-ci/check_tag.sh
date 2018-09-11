@@ -11,7 +11,7 @@ color_echo green "shtdlib.sh installed successfully"
 
 # Get the latest tag from GitHub
 latest_tag=$(git tag -l | sort --version-sort | tail -n1)
-color_echo green "Latest tag: '${latest_tag}'"
+color_echo green "Latest Git tag: '${latest_tag}'"
 
 # Get the latest tag from the CHANGELOG
 changelog_ver=$(grep -oP '\[v\d\.\d\.\d\]' CHANGELOG.md | tr -d '[]' | sort -nr | head -n1)
