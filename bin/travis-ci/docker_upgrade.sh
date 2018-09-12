@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv sh
+#!/bin/bash
 #
 # Copyright (c) 2018 SD Elements Inc.
 #
@@ -17,15 +17,14 @@
 
 set -eo pipefail
 
-echo "Starting PHP-FPM"
+# Update docker
+sudo apt-get update
+sudo apt-get --yes install docker-ce
 
-# Make unix socket for nginx/php
-mkdir -p /var/run/php-fpm
-touch /var/run/php-fpm/www.sock
-chown -R www-data:www-data /var/run/php-fpm
+# Update docker-compose
+sudo rm /usr/local/bin/docker-compose
+sudo curl -L "https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 
-# Configure Moodle (it will wait for PHP/PostgreSQL in the background)
-(/usr/local/bin/configure-moodle.sh) &
-
-# Start PHP-FPM
-"/usr/sbin/php-fpm${PHP_VERSION}" -R -F
+# Verify
+docker version && docker-compose --version

@@ -1,5 +1,8 @@
 FROM ubuntu:xenial
 
+LABEL name="nginx-php-moodle"
+LABEL version="latest"
+
 # Disable frontend dialogs
 ENV DEBIAN_FRONTEND noninteractive
 

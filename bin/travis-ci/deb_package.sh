@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv sh
+#!/bin/bash
 #
 # Copyright (c) 2018 SD Elements Inc.
 #
@@ -17,15 +17,14 @@
 
 set -eo pipefail
 
-echo "Starting PHP-FPM"
+sudo apt-get --yes install tree
 
-# Make unix socket for nginx/php
-mkdir -p /var/run/php-fpm
-touch /var/run/php-fpm/www.sock
-chown -R www-data:www-data /var/run/php-fpm
+# Build DEB package
+docker-compose --file dc.deb.yml up
 
-# Configure Moodle (it will wait for PHP/PostgreSQL in the background)
-(/usr/local/bin/configure-moodle.sh) &
-
-# Start PHP-FPM
-"/usr/sbin/php-fpm${PHP_VERSION}" -R -F
+# Verify DEB file content
+DEB_FILE="$(ls ./*.deb)"
+ls -la "${DEB_FILE}"
+dpkg -e "${DEB_FILE}" /tmp/moodle_deb
+dpkg -x "${DEB_FILE}" /tmp/moodle_deb
+tree /tmp/moodle_deb
