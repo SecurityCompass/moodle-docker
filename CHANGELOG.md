@@ -10,10 +10,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Dockerfile linter
   - Docker image build and publish to Cargo
   - DEB package build
+  - SDLC script to ensure version bumps
 
 ### Changed
 - Minor bug fixes for `dc.deb.yml`
 - Minor updates to the Moodle and DEB `Dockerfile`
+- Strict mode and copyright notice in bash scripts
 
 ## [v0.1.2] - 2018-09-04
 ### Added
