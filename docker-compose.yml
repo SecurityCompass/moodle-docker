@@ -10,6 +10,8 @@ services:
     depends_on:
       - postgres
     environment:
+      HTTP_PORT: "${HTTP_PORT}"
+      HTTPS_PORT: "${HTTPS_PORT}"
       MOODLE_ADMIN_EMAIL: "${MOODLE_ADMIN_EMAIL}"
       MOODLE_ADMIN_PASS: "${MOODLE_ADMIN_PASS}"
       MOODLE_DATAROOT: "${MOODLE_DATAROOT}"
@@ -25,6 +27,9 @@ services:
       PGSQL_USER: "${PGSQL_USER}"
       PGSQL_PASSWORD: "${PGSQL_PASSWORD}"
       PHP_VERSION: "${PHP_VERSION}"
+    ports:
+      - "${HTTP_PORT}"
+      - "${HTTPS_PORT}"
     volumes:
       # Nginx configuration
       - type: bind
