@@ -44,7 +44,7 @@ services:
       # Moodle data dir
       - type: bind
         source: ${MOODLE_DATAROOT}
-        target: ${MOODLE_DATAROOT}
+        target: /opt/moodle/moodledata
       # PHP configuration
       - type: bind
         source: ./conf/etc/php/7.2/fpm/php.ini
