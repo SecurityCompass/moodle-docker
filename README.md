@@ -26,7 +26,7 @@ This project deploys the Moodle (Modular Object-Oriented Dynamic Learning Enviro
 4. Customize `.env` according to your environment. Most notably `MOODLE_WWWROOT` (based on your instance IP/FQDN)
 
 5. Build, configure and start the docker containers with docker-compose.
-    * `-d` toggles foreground/background
+    * `--detach` toggles foreground/background
 
     Here are some ways to run these containers:
 
@@ -39,27 +39,26 @@ This project deploys the Moodle (Modular Object-Oriented Dynamic Learning Enviro
     ##### Deploy locally (Full stack)
     Modify these lines in `.env` to match your local environment
     
-    * `HTTP_PORT`
-    * `HTTPS_PORT`
-    * `MOODLE_WWWROOT`
-    * `MOODLE_DATAROOT`
+    * `MOODLE_WWWROOT` (Usually 127.0.0.1)
+    * `MOODLE_DATAROOT` (Make this directory locally and use the full path)
         
     Then start the containers with:
     ```bash
     cd moodle-docker
-    docker-compose --file docker-compose.yml --file up --force-recreate --always-recreate-deps --detach
+    docker-compose --file docker-compose.yml up --force-recreate --always-recreate-deps --detach
     ```
-    
-    * Nginx ports: `8443/8080`
-    * Postgres port: `N/A`
-    
+
     ##### Deploy in production (Full stack)
+    Modify these lines in `.env` to match your local environment
+    
+    * `MOODLE_WWWROOT` (Usually the FQDN)
+    * `MOODLE_DATAROOT` (Make this directory and use the full path)
+
+    Then start the containers with:
     ```bash
     cd moodle-docker
     docker-compose --file docker-compose.yml up --force-recreate --always-recreate-deps --detach
     ```
-    * Nginx ports: `443/80`
-    * Postgres port: `N/A`
 
     ##### Deploy Web server and DB separately (separate servers)
     ```bash
@@ -67,8 +66,6 @@ This project deploys the Moodle (Modular Object-Oriented Dynamic Learning Enviro
     docker-compose --file docker-compose.yml --file dc.prod-dbonly.yml up --force-recreate --detach postgres
     docker-compose --file docker-compose.yml up --force-recreate --no-deps --detach nginx-php-moodle
     ```
-    * Nginx ports: `8443/8080`
-    * Postgres port: `5432`
 
 ## Misc.
 
