@@ -10,10 +10,10 @@ Type=oneshot
 RemainAfterExit=yes
 
 ExecStartPre=-/usr/local/bin/docker-compose --file /etc/moodle-docker/docker-compose.yml pull --quiet
-ExecStart=/usr/local/bin/docker-compose --file /etc/moodle-docker/docker-compose.yml --file /etc/moodle-docker/dc.prod.yml up --detach
+ExecStart=/usr/local/bin/docker-compose --file /etc/moodle-docker/docker-compose.yml up --detach
 
 ExecReload=-/usr/local/bin/docker-compose --file /etc/moodle-docker/docker-compose.yml pull --quiet
-ExecReload=/usr/local/bin/docker-compose --file /etc/moodle-docker/docker-compose.yml --file /etc/moodle-docker/dc.prod.yml up --detach
+ExecReload=/usr/local/bin/docker-compose --file /etc/moodle-docker/docker-compose.yml up --detach
 
 ExecStop=/usr/local/bin/docker-compose --file /etc/moodle-docker/docker-compose.yml stop
 

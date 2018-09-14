@@ -1,12 +1,12 @@
 server {
-    listen 80;
+    listen ${HTTP_PORT};
 
     server_name _;
     return 301 https://$host$request_uri;
 }
 
 server {
-    listen 443 ssl;
+    listen ${HTTPS_PORT} ssl;
     ssl_certificate ssl/moodle.crt;
     ssl_certificate_key ssl/moodle.key;
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;

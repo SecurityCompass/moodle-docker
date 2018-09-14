@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v0.1.4] - 2018-09-14
+### Added
+- New ENV variables to configure HTTP and HTTPS ports for Nginx
+
+### Changed
+- Update README
+
+### Removed
+- Remove deprecated docker-compose configuration files
+
 ## [v0.1.3] - 2018-09-07
 ### Added
 - Travis CI jobs
