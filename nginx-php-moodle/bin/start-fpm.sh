@@ -15,8 +15,6 @@
 # from SD Elements Inc..
 # Version
 
-set -eo pipefail
-
 echo "Starting PHP-FPM"
 
 # Make unix socket for nginx/php
