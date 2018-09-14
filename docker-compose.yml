@@ -28,8 +28,8 @@ services:
       PGSQL_PASSWORD: "${PGSQL_PASSWORD}"
       PHP_VERSION: "${PHP_VERSION}"
     ports:
-      - "${HTTP_PORT}"
-      - "${HTTPS_PORT}"
+      - "${HTTP_PORT}:${HTTP_PORT}"
+      - "${HTTPS_PORT}:${HTTPS_PORT}"
     volumes:
       # Nginx configuration
       - type: bind
