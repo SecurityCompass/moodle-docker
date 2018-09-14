@@ -33,21 +33,30 @@ This project deploys the Moodle (Modular Object-Oriented Dynamic Learning Enviro
     ##### Build containers
     ```bash
     cd moodle-docker
-    docker-compose -f docker-compose.yml -f dc.build.yml build --no-cache
+    docker-compose --file docker-compose.yml --file dc.build.yml build --no-cache
     ```
 
     ##### Deploy locally (Full stack)
+    Modify these lines in `.env` to match your local environment
+    
+    * `HTTP_PORT`
+    * `HTTPS_PORT`
+    * `MOODLE_WWWROOT`
+    * `MOODLE_DATAROOT`
+        
+    Then start the containers with:
     ```bash
     cd moodle-docker
-    docker-compose -f docker-compose.yml -f dc.local.yml up --force-recreate --always-recreate-deps -d
+    docker-compose --file docker-compose.yml --file up --force-recreate --always-recreate-deps --detach
     ```
+    
     * Nginx ports: `8443/8080`
     * Postgres port: `N/A`
-
+    
     ##### Deploy in production (Full stack)
     ```bash
     cd moodle-docker
-    docker-compose -f docker-compose.yml -f dc.prod.yml up --force-recreate --always-recreate-deps -d
+    docker-compose --file docker-compose.yml up --force-recreate --always-recreate-deps --detach
     ```
     * Nginx ports: `443/80`
     * Postgres port: `N/A`
@@ -55,8 +64,8 @@ This project deploys the Moodle (Modular Object-Oriented Dynamic Learning Enviro
     ##### Deploy Web server and DB separately (separate servers)
     ```bash
     cd moodle-docker
-    docker-compose -f docker-compose.yml -f dc.prod-dbonly.yml up --force-recreate -d postgres
-    docker-compose -f docker-compose.yml -f dc.prod.yml up --force-recreate --no-deps -d nginx-php-moodle
+    docker-compose --file docker-compose.yml --file dc.prod-dbonly.yml up --force-recreate --detach postgres
+    docker-compose --file docker-compose.yml up --force-recreate --no-deps --detach nginx-php-moodle
     ```
     * Nginx ports: `8443/8080`
     * Postgres port: `5432`
