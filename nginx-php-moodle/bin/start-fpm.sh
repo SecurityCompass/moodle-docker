@@ -24,7 +24,7 @@ chown -R www-data:www-data /var/run/php-fpm
 
 echo "Configure SSMTP"
 sed -i -e 's/mailhub=mail/mailhub=postfix/' \
-    -e 's/#rewriteDomain=/rewriteDomain=${SSMTP_REWRITEDOMAIN}/' \
+    -e "s/#rewriteDomain=/rewriteDomain=${SSMTP_REWRITEDOMAIN}/" \
     -e '/hostname=/d' \
     /etc/ssmtp/ssmtp.conf
 
