@@ -19,7 +19,7 @@ set -eo pipefail
 
 echo "Configuring postfix with any environment variables that are set"
 if [[ -n "${POSTFIX_MYNETWORKS}" ]]; then
-    echo "Setting custom 'mynetworks'"
+    echo "Setting custom 'mynetworks' to '${POSTFIX_MYNETWORKS}'"
     postconf mynetworks="${POSTFIX_MYNETWORKS}"
 else
     echo "Revert 'mynetworks' to default"
@@ -27,11 +27,11 @@ else
 fi
 
 if [[ -n "${POSTFIX_RELAYHOST}" ]]; then
-    echo "Setting 'custom relayhost'"
+    echo "Setting custom 'relayhost' to '${POSTFIX_RELAYHOST}'"
     postconf relayhost="${POSTFIX_RELAYHOST}"
 else
     echo "Revert 'relayhost' to default"
-    postconf -# mynetworks
+    postconf -# relayhost
 fi
 
 echo "Disable chroot for the smtp service"
