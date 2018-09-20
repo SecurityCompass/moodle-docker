@@ -8,6 +8,7 @@ services:
       all:
     image: ${DOCKER_REGISTRY_URL}/nginx-php-moodle:${PHP_VERSION}-${MOODLE_VERSION}
     depends_on:
+      - postfix
       - postgres
     environment:
       HTTP_PORT: "${HTTP_PORT}"
