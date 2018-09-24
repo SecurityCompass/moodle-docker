@@ -64,8 +64,6 @@ services:
   postfix:
     networks:
       all:
-    environment:
-      POSTFIX_MYNETWORKS: "${POSTFIX_MYNETWORKS}"
     image: ${DOCKER_REGISTRY_URL}/postfix
   postgres:
     networks:
