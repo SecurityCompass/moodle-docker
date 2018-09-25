@@ -61,6 +61,7 @@ RUN echo "Starting PHP install..." \
     php${PHP_VERSION}-xml \
     php${PHP_VERSION}-xmlrpc \
     php${PHP_VERSION}-zip \
+    ssmtp \
     && apt-get purge -y software-properties-common \
     && apt-get --purge -y autoremove \
     && apt-get -y clean \

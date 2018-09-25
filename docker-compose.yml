@@ -8,6 +8,7 @@ services:
       all:
     image: ${DOCKER_REGISTRY_URL}/nginx-php-moodle:${PHP_VERSION}-${MOODLE_VERSION}
     depends_on:
+      - postfix
       - postgres
     environment:
       HTTP_PORT: "${HTTP_PORT}"
@@ -27,6 +28,7 @@ services:
       PGSQL_USER: "${PGSQL_USER}"
       PGSQL_PASSWORD: "${PGSQL_PASSWORD}"
       PHP_VERSION: "${PHP_VERSION}"
+      SSMTP_REWRITEDOMAIN: "${SSMTP_REWRITEDOMAIN}"
     ports:
       - "${HTTP_PORT}:${HTTP_PORT}"
       - "${HTTPS_PORT}:${HTTPS_PORT}"
@@ -59,6 +61,10 @@ services:
       - type: bind
         source: ./conf/etc/php/7.2/fpm/pool.d/www.conf
         target: /etc/php/7.2/fpm/pool.d/www.conf
+  postfix:
+    networks:
+      all:
+    image: ${DOCKER_REGISTRY_URL}/postfix
   postgres:
     networks:
       all:
