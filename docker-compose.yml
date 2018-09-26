@@ -5,7 +5,8 @@ version: '3.6'
 services:
   nginx-php-moodle:
     networks:
-      all:
+      db:
+      mail:
     image: ${DOCKER_REGISTRY_URL}/nginx-php-moodle:${PHP_VERSION}-${MOODLE_VERSION}
     depends_on:
       - postgres
@@ -71,7 +72,7 @@ services:
         target: ${CERT_DIR}
   postgres:
     networks:
-      all:
+      db:
     image: ${DOCKER_REGISTRY_URL}/postgres:9.6
     environment:
       POSTGRES_DB: "${PGSQL_DATABASE}"
@@ -83,7 +84,7 @@ services:
         target: /var/lib/postgresql/data
   certbot:
     networks:
-      all:
+      certbot:
     image: ${DOCKER_REGISTRY_URL}/sc-certbot:latest
     depends_on:
       - nginx-php-moodle
@@ -100,6 +101,9 @@ services:
 
 networks:
   all:
+  db:
+  mail:
+  certbot:
 
 volumes:
   db:
