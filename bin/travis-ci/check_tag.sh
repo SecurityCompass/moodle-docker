@@ -34,7 +34,7 @@ changelog_ver="$(grep -oP '\[v\d\.\d\.\d\]' CHANGELOG.md | tr -d '[]' | sort -nr
 color_echo green "CHANGELOG version: '${changelog_ver}'"
 
 # Get iteration from DEB builder configuration
-build_ver="$(grep BUILD_VERSION .env | cut -d'"' -f2)"
+build_ver="$(grep BUILD_VERSION .env | cut -d'=' -f2)"
 color_echo green "Container/DEB iteration version: '${build_ver}'"
 
 # Validate version strings
