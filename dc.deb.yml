@@ -21,7 +21,7 @@ services:
       - "${PHP_VERSION}-${MOODLE_VERSION}"
       #
       - "--iteration"
-      - "v0.1.4"
+      - "${BUILD_VERSION}"
       #
       - "--deb-changelog"
       - "/package/CHANGELOG.md"
@@ -72,6 +72,7 @@ services:
       - "/package/docker-compose.yml=/etc/moodle-docker/"
       - "/package/systemd/moodle-docker.service=/lib/systemd/system/"
     environment:
+      BUILD_VERSION: "${BUILD_VERSION}"
       MOODLE_VERSION: "${MOODLE_VERSION}"
       PHP_VERSION: "${PHP_VERSION}"
     image: fpm:deb
