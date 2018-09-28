@@ -34,21 +34,22 @@ changelog_ver="$(grep -oP '\[v\d\.\d\.\d\]' CHANGELOG.md | tr -d '[]' | sort -nr
 color_echo green "CHANGELOG version: '${changelog_ver}'"
 
 # Get iteration from DEB builder configuration
-iteration_ver="$(grep -A1 iteration dc.deb.yml | tail -n1 | cut -d'"' -f2)"
-color_echo green "Iteration version: '${iteration_ver}'"
+build_ver="$(grep BUILD_VERSION .env | cut -d'"' -f2)"
+color_echo green "Container/DEB iteration version: '${build_ver}'"
 
 # Validate version strings
 version_pattern='^v\d\.\d\.\d$'
 echo "${latest_tag}" | grep -qP ${version_pattern} || ( color_echo red "Invalid tag from repo: '${latest_tag}'" && exit 1 )
 echo "${changelog_ver}" | grep -qP ${version_pattern} || ( color_echo red "Invalid tag from CHANGELOG: '${changelog_ver}'" && exit 1 )
-echo "${iteration_ver}" | grep -qP ${version_pattern} || ( color_echo red "Invalid iteration from DEB configuration: '${iteration_ver}'" && exit 1 )
+echo "${build_ver}" | grep -qP ${version_pattern} || ( color_echo red "Invalid build version: '${build_ver}'" && exit 1 )
 
 # Ensure tags in CHANGELOG and iteration are greater than highest repo tag
 if [ "${latest_tag}" = "${changelog_ver}" ] \
-   || [ "${latest_tag}" = "${iteration_ver}" ] \
+   || [ "${latest_tag}" = "${build_ver}" ] \
+   || [ ! "${changelog_ver}" = "${build_ver}" ] \
    || ! compare_versions "${latest_tag}" "${changelog_ver}" \
-   || ! compare_versions "${latest_tag}" "${iteration_ver}"; then
-    color_echo red "Error: Version in CHANGELOG.md and 'dc.deb.yml' not updated"
+   || ! compare_versions "${latest_tag}" "${build_ver}"; then
+    color_echo red "Error: Incorrect version update in 'CHANGELOG.md' and '.env'"
     exit 1
 else
     color_echo green "Version bumps PASS!"
