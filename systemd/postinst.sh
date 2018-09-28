@@ -27,7 +27,7 @@ echo "Checking Moodle data directory"
 if [ ! -d /opt/moodle/moodledata ]; then
     echo "Creating Moodle data directory"
     mkdir -p /opt/moodle/moodledata
-    chmod 777 /opt/moodle/moodledata
+    chmod 770 /opt/moodle/moodledata
 else
     echo "Moodle data directory already exists"
 fi
