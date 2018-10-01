@@ -23,7 +23,8 @@ EOF
 }
 
 function is_domain {
-    # Ensure cert_domain value is a hostname and not IP address.
+    # Takes domain/IP as parameter.
+    # Returns 0 if value is not an IP address.
     if [ -z "${1}" ] ; then
         echo "Missing parameter 1: Domain name"
         return 1
