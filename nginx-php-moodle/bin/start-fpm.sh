@@ -24,6 +24,12 @@ mkdir -p /var/run/php-fpm
 touch /var/run/php-fpm/www.sock
 chown -R www-data:www-data /var/run/php-fpm
 
+echo "Configure SSMTP"
+sed -i -e 's/mailhub=mail/mailhub=postfix/' \
+    -e "s/#rewriteDomain=/rewriteDomain=${SSMTP_REWRITEDOMAIN}/" \
+    -e '/hostname=/d' \
+    /etc/ssmtp/ssmtp.conf
+
 # Configure Moodle (it will wait for PHP/PostgreSQL in the background)
 (/usr/local/bin/configure-moodle.sh) &
 
