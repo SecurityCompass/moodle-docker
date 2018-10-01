@@ -32,9 +32,9 @@ function is_domain {
     local cert_domain="${1}"
 
     if [[ "${cert_domain}" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-        return 0
-    else
         return 1
+    else
+        return 0
     fi
 }
 
