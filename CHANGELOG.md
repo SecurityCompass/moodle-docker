@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v0.1.7] - 2018-10-01
+### Added
+- A volume to store `config.php` once its created
+
+### Changed
+- Refactor `configure-moodle.sh` to support container upgrades
+
 ## [v0.1.6] - 2018-09-28
 ### Added
 - Track which version of the Moove theme we install
