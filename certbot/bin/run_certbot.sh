@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck disable=SC2039,SC2113,SC2039
+# shellcheck disable=SC2039,SC2113
 
 set -e
 
@@ -95,14 +95,14 @@ function obtain_certificate {
     echo "Obtaining certificate for ${certificate_domain}"
 
     certbot certonly \
-        --webroot -w "$certificate_webroot" \
+        --webroot -w "${certificate_webroot}" \
         --keep-until-expiring \
         --agree-tos \
         --renew-by-default \
         --non-interactive \
         --max-log-backups 100 \
-        --email "$admin_email" \
-        --domain "$certificate_domain"
+        --email "${admin_email}" \
+        --domain "${certificate_domain}"
 }
 
 function renew_certificate {
@@ -118,7 +118,7 @@ function renew_certificate {
 
     echo "Renewing certificates registered on system."
     certbot renew \
-        --webroot -w "$cert_webroot" \
+        --webroot -w "${cert_webroot}" \
         --non-interactive \
         --deploy-hook copy_certificates.sh
 }
@@ -146,12 +146,12 @@ function process_certificates {
 
     if is_domain "${cert_domain}" ; then
         if check_for_cert "${cert_domain}" ; then
-            renew_certificate "$admin_email" "$cert_domain" "$cert_webroot" "$certbot_args"
+            renew_certificate "${admin_email}" "${cert_domain}" "${cert_webroot}" "${certbot_args}"
         else
-            obtain_certificate "$admin_email" "$cert_domain" "$cert_webroot" "$certbot_args"
+            obtain_certificate "${admin_email}" "${cert_domain}" "${cert_webroot}" "${certbot_args}"
         fi
 
-        copy_certificates "$cert_domain"
+        copy_certificates "${cert_domain}"
     else
         echo "Hostname appears to be IP address, not obtaining certificates."
         exit 1
@@ -189,4 +189,4 @@ while getopts ":d:e:r:A:SD" opt; do
     esac
 done
 
-process_certificates "$admin_email" "$certificate_domain" "$certificate_webroot" "$certbot_args"
+process_certificates "${admin_email}" "${certificate_domain}" "${certificate_webroot}" "${certbot_args}"
