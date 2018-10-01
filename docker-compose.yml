@@ -9,6 +9,7 @@ services:
       mail:
     image: ${DOCKER_REGISTRY_URL}/nginx-php-moodle:${PHP_VERSION}-${MOODLE_VERSION}
     depends_on:
+      - postfix
       - postgres
     environment:
       HTTP_PORT: "${HTTP_PORT}"
@@ -31,6 +32,7 @@ services:
       CHALLENGE_DIR: "${CHALLENGE_DIR}"
       CERT_DIR: "${CERT_DIR}"
       CERT_DOMAIN: "${CERT_DOMAIN}"
+      SSMTP_REWRITEDOMAIN: "${SSMTP_REWRITEDOMAIN}"
     ports:
       - "${HTTP_PORT}:${HTTP_PORT}"
       - "${HTTPS_PORT}:${HTTPS_PORT}"
@@ -70,6 +72,10 @@ services:
       - type: volume
         source: certbot-certs
         target: ${CERT_DIR}
+  postfix:
+    networks:
+      all:
+    image: ${DOCKER_REGISTRY_URL}/postfix
   postgres:
     networks:
       db:
