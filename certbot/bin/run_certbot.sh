@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck disable=SC2039,SC2113
+# shellcheck disable=SC2039,SC2113,SC2039
 
 set -e
 
@@ -22,7 +22,7 @@ Version: ${VERSION}
 EOF
 }
 
-function check_hostname {
+function is_domain {
     # Ensure cert_domain value is a hostname and not IP address.
     if [ -z "${1}" ] ; then
         echo "Missing parameter 1: Domain name"
@@ -144,7 +144,7 @@ function process_certificates {
     local cert_webroot="${3}"
     local certbot_args="${4:-}"
 
-    if check_hostname "${cert_domain}" ; then
+    if is_domain "${cert_domain}" ; then
         if check_for_cert "${cert_domain}" ; then
             renew_certificate "$admin_email" "$cert_domain" "$cert_webroot" "$certbot_args"
         else
