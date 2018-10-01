@@ -22,12 +22,12 @@ source /usr/local/bin/shtdlib.sh
 echo "Watching ${CERT_DIR} for updated certs..."
 
 function reload_nginx {
+    sleep 5 # Sleep for 5s until file operations complete.
     echo "Detected files modified in certificate directory..."
     echo "Linking certificate files..."
     ln -sf "${CERT_DIR}/${CERT_DOMAIN}.fullchain.pem" /etc/nginx/ssl/moodle.crt
     ln -sf "${CERT_DIR}/${CERT_DOMAIN}.key.pem" /etc/nginx/ssl/moodle.key
     echo "Reloading nginx..."
-    sleep 10
     pkill -SIGHUP nginx
     echo "Nginx reloaded."
 }

@@ -22,6 +22,22 @@ Version: ${VERSION}
 EOF
 }
 
+function check_hostname {
+    # Ensure cert_domain value is a hostname and not IP address.
+    if [ -z "${1}" ] ; then
+        echo "Missing parameter 1: Domain name"
+        return 1
+    fi
+
+    local cert_domain="${1}"
+
+    if [[ "${cert_domain}" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 function check_for_cert {
     # Check if certificate directory exists
     if [ -z "${1}" ] ; then
@@ -32,7 +48,7 @@ function check_for_cert {
     local cert_domain="${1}"
     local cert_dir="/etc/letsencrypt/live/${cert_domain}"
 
-    if [ -d "$cert_dir" ] ; then
+    if [ -d "${cert_dir}" ] ; then
         echo "Found ${cert_dir}."
         return 0
     else
@@ -128,13 +144,18 @@ function process_certificates {
     local cert_webroot="${3}"
     local certbot_args="${4:-}"
 
-    if check_for_cert "${cert_domain}" ; then
-        renew_certificate "$admin_email" "$cert_domain" "$cert_webroot" "$certbot_args"
-    else
-        obtain_certificate "$admin_email" "$cert_domain" "$cert_webroot" "$certbot_args"
-    fi
+    if check_hostname "${cert_domain}" ; then
+        if check_for_cert "${cert_domain}" ; then
+            renew_certificate "$admin_email" "$cert_domain" "$cert_webroot" "$certbot_args"
+        else
+            obtain_certificate "$admin_email" "$cert_domain" "$cert_webroot" "$certbot_args"
+        fi
 
-    copy_certificates "$cert_domain"
+        copy_certificates "$cert_domain"
+    else
+        echo "Hostname appears to be IP address, not obtaining certificates."
+        exit 1
+    fi
 }
 
 admin_email="${admin_email:-}"
