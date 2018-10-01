@@ -19,14 +19,24 @@
 # shellcheck disable=SC1091
 source /usr/local/bin/shtdlib.sh
 
+moodle_cert='/etc/nginx/ssl/moodle.crt'
+moodle_key='/etc/nginx/ssl/moodle.key'
+
 echo "Watching ${CERT_DIR} for updated certs..."
 
 function reload_nginx {
-    sleep 5 # Sleep for 5s until file operations complete.
     echo "Detected files modified in certificate directory..."
+    sleep 5 # Sleep for 5s for file operations to complete.
+
     echo "Linking certificate files..."
-    ln -sf "${CERT_DIR}/${CERT_DOMAIN}.fullchain.pem" /etc/nginx/ssl/moodle.crt
-    ln -sf "${CERT_DIR}/${CERT_DOMAIN}.key.pem" /etc/nginx/ssl/moodle.key
+    if [ -L "${moodle_cert}" ] && [ -L "${moodle_key}" ] ; then
+        echo "Certificate symlinks already exist. Continuing..."
+    else
+        echo "Certificate symlinks not found, creating..."
+        ln -sf "${CERT_DIR}/${CERT_DOMAIN}.fullchain.pem" "${moodle_cert}"
+        ln -sf "${CERT_DIR}/${CERT_DOMAIN}.key.pem" "${moodle_key}"
+    fi
+
     echo "Reloading nginx..."
     pkill -SIGHUP nginx
     echo "Nginx reloaded."
