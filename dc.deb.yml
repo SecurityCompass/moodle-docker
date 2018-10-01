@@ -21,7 +21,7 @@ services:
       - "${PHP_VERSION}-${MOODLE_VERSION}"
       #
       - "--iteration"
-      - "v0.1.5"
+      - "v0.1.6"
       #
       - "--deb-changelog"
       - "/package/CHANGELOG.md"
