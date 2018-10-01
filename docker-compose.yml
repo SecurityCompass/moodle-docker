@@ -61,6 +61,9 @@ services:
       - type: bind
         source: ./conf/etc/php/7.2/fpm/pool.d/www.conf
         target: /etc/php/7.2/fpm/pool.d/www.conf
+      - type: volume
+        source: moodle
+        target: /opt/moodle/backup
   postfix:
     networks:
       all:
@@ -83,3 +86,4 @@ networks:
 
 volumes:
   db:
+  moodle:
