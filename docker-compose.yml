@@ -6,7 +6,7 @@ services:
   nginx-php-moodle:
     networks:
       all:
-    image: ${DOCKER_REGISTRY_URL}/nginx-php-moodle:${PHP_VERSION}-${MOODLE_VERSION}
+    image: ${DOCKER_REGISTRY_URL}/nginx-php-moodle:${BUILD_VERSION}
     depends_on:
       - postfix
       - postgres

@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v0.1.6] - 2018-09-28
+### Added
+- Track which version of the Moove theme we install
+- Add a build version to container and use it for DEB files
+
+### Changed
+- Update tag CI script to use BUILD_VERSION
+- Clean up and simplify nginx-php-moodle Dockerfile
+
 ## [v0.1.5] - 2018-09-25
 ### Changed
 - Update directory permissions on moodledata directory
