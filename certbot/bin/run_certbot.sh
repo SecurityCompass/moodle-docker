@@ -7,7 +7,7 @@ print_usage() {
 cat << EOF
 usage: ${0} options
 
-This script helps to update content views in Foreman.
+This script wraps certbot to obtain and renew certificates.
 
 OPTIONS:
     Parameters:
