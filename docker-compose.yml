@@ -7,7 +7,7 @@ services:
     networks:
       db:
       mail:
-    image: ${DOCKER_REGISTRY_URL}/nginx-php-moodle:${PHP_VERSION}-${MOODLE_VERSION}
+    image: ${DOCKER_REGISTRY_URL}/nginx-php-moodle:${BUILD_VERSION}
     depends_on:
       - postfix
       - postgres

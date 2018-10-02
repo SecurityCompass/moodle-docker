@@ -9,20 +9,14 @@ ENV DEBIAN_FRONTEND noninteractive
 ARG MOODLE_DOWNLOAD_FILE
 ARG MOODLE_TRACK
 ARG MOODLE_VERSION
+ARG MOOVE_VERSION
 ARG NGINX_VERSION
 ARG ONELOGIN_PLUGIN_VER
 ARG PHP_VERSION
 
-# Print ARGs and install utility packages
-RUN echo "Moodle track:     $MOODLE_TRACK" \
-    && echo "Moodle filename:  ${MOODLE_DOWNLOAD_FILE}" \
-    && echo "Moodle version:   ${MOODLE_VERSION}" \
-    && echo "Nginx version:    ${NGINX_VERSION}" \
-    && echo "OneLogin version: ${ONELOGIN_PLUGIN_VER}" \
-    && echo "PHP version:      ${PHP_VERSION}" \
-    && echo "Starting util packages install..." \
-    && apt-get update\
-    && apt-get install -y vim unzip curl netbase inotify-tools \
+# Install utility packages
+RUN apt-get update\
+    && apt-get install -y vim unzip curl netbase \
     && apt-get --purge -y autoremove \
     && apt-get -y clean \
     && rm -rf /etc/apt/sources.list.d/temp.list /var/lib/apt/lists/*
@@ -69,52 +63,44 @@ RUN echo "Starting PHP install..." \
 
 # Install Moodle App
 RUN echo "Starting Moodle App install..." \
-    && apt-get update \
-    && apt-get install -y wget \
     && mkdir -v /opt/moodle \
-    && wget -q https://download.moodle.org/download.php/direct/${MOODLE_TRACK}/${MOODLE_DOWNLOAD_FILE} -O /opt/moodle/moodle-${MOODLE_VERSION}.tgz \
-    && tar -xzf /opt/moodle/moodle-${MOODLE_VERSION}.tgz -C /opt/moodle \
+    && curl -L -o /tmp/moodle-${MOODLE_VERSION}.tgz https://download.moodle.org/download.php/direct/${MOODLE_TRACK}/${MOODLE_DOWNLOAD_FILE} \
+    && tar -xzf /tmp/moodle-${MOODLE_VERSION}.tgz -C /opt/moodle \
     && mv /opt/moodle/moodle /opt/moodle/moodle-${MOODLE_VERSION} \
-    && rm /opt/moodle/moodle-${MOODLE_VERSION}.tgz \
-    && apt-get --purge -y remove wget \
-    && apt-get --purge -y autoremove \
-    && apt-get -y clean \
-    && rm -rf /etc/apt/sources.list.d/temp.list /var/lib/apt/lists/*
+    && rm -fv /tmp/moodle-${MOODLE_VERSION}.tgz
 
 # Install Moodle theme
 RUN echo "Starting Moodle theme install..." \
-    && apt-get update \
-    && apt-get install -y git \
-    && cd /opt/moodle/moodle-${MOODLE_VERSION}/theme \
-    && git clone https://github.com/SecurityCompass/moodle-theme_moove.git moove \
+    && curl -L -o /tmp/moove.${MOOVE_VERSION}.tar.gz https://github.com/SecurityCompass/moodle-theme_moove/archive/${MOOVE_VERSION}.tar.gz \
+    && mkdir /opt/moodle/moodle-${MOODLE_VERSION}/theme/moove \
+    && tar -xzf /tmp/moove.${MOOVE_VERSION}.tar.gz --strip-components=1 -C /opt/moodle/moodle-${MOODLE_VERSION}/theme/moove \
     && find /opt/moodle/moodle-${MOODLE_VERSION}/theme/moove -type d -exec chmod 755 {} \; \
     && find /opt/moodle/moodle-${MOODLE_VERSION}/theme/moove -type f -exec chmod 644 {} \; \
-    && apt-get --purge -y remove git \
-    && apt-get --purge -y autoremove \
-    && apt-get -y clean \
-    && rm -rf /etc/apt/sources.list.d/temp.list /var/lib/apt/lists/*
+    && rm -fv /tmp/moove.${MOOVE_VERSION}.tar.gz
 
 # Install OneLogin auth plugin
 RUN echo "Starting OneLogin auth plugin install..." \
     && curl -L -o /tmp/onelogin_saml.tar.gz https://github.com/onelogin/moodle-saml/archive/${ONELOGIN_PLUGIN_VER}.tar.gz \
-    && tar -xvzf /tmp/onelogin_saml.tar.gz -C /opt/moodle/moodle-${MOODLE_VERSION}/auth --strip-components=2 \
+    && tar -xzf /tmp/onelogin_saml.tar.gz -C /opt/moodle/moodle-${MOODLE_VERSION}/auth --strip-components=2 \
     && chown -R --reference /opt/moodle/moodle-${MOODLE_VERSION}/auth/index.html /opt/moodle/moodle-${MOODLE_VERSION}/auth/onelogin_saml \
     && find /opt/moodle/moodle-${MOODLE_VERSION}/auth/onelogin_saml -type d -exec chmod 755 {} \; \
-    && find /opt/moodle/moodle-${MOODLE_VERSION}/auth/onelogin_saml -type f -exec chmod 644 {} \;
+    && find /opt/moodle/moodle-${MOODLE_VERSION}/auth/onelogin_saml -type f -exec chmod 644 {} \; \
+    && rm -fv /tmp/onelogin_saml.tar.gz
 
 # Install Opcache admin (PHP cache monitoring)
 RUN echo "Starting Opcache admin install..." \
-    && curl -o /tmp/opcache.zip https://moodle.org/plugins/download.php/16894/tool_opcache_moodle35_2018052400.zip \
-    && unzip /tmp/opcache.zip -d /opt/moodle/moodle-${MOODLE_VERSION}/admin/tool/ \
+    && curl -L -o /tmp/opcache.zip https://moodle.org/plugins/download.php/16894/tool_opcache_moodle35_2018052400.zip \
+    && unzip -q /tmp/opcache.zip -d /opt/moodle/moodle-${MOODLE_VERSION}/admin/tool/ \
     && find /opt/moodle/moodle-${MOODLE_VERSION}/admin/tool/opcache/ -type d -exec chmod 755 {} \; \
     && find /opt/moodle/moodle-${MOODLE_VERSION}/admin/tool/opcache/ -type f -exec chmod 644 {} \; \
     && rm -fv /tmp/opcache.zip
 
 # Setup Moosh
 RUN echo "Starting Moosh install..." \
-    && curl -o /root/moosh_setup.zip https://moodle.org/plugins/download.php/16504/moosh_moodle35_2018042500.zip \
-    && unzip -q /root/moosh_setup.zip -d /opt \
-    && ln -s /opt/moosh/moosh.php /usr/local/bin/moosh
+    && curl -L -o /tmp/moosh_setup.zip https://moodle.org/plugins/download.php/16504/moosh_moodle35_2018042500.zip \
+    && unzip -q /tmp/moosh_setup.zip -d /opt \
+    && ln -s /opt/moosh/moosh.php /usr/local/bin/moosh \
+    && rm -fv /tmp/moosh_setup.zip
 
 # Copy NGINX service script
 COPY bin/start-nginx.sh /etc/services.d/nginx/run
