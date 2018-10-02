@@ -17,7 +17,7 @@
 
 set -eo pipefail
 
-# echo "Installing shtdlib"
+echo "Installing shtdlib"
 shtdlib_local_path="/usr/local/bin/shtdlib.sh"
 sudo curl -s -L -o "${shtdlib_local_path}" https://github.com/sdelements/shtdlib/raw/master/shtdlib.sh
 sudo chmod 775 "${shtdlib_local_path}"
