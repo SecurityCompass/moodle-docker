@@ -5,7 +5,8 @@ version: '3.6'
 services:
   nginx-php-moodle:
     networks:
-      all:
+      db:
+      mail:
     image: ${DOCKER_REGISTRY_URL}/nginx-php-moodle:${BUILD_VERSION}
     depends_on:
       - postfix
@@ -28,6 +29,9 @@ services:
       PGSQL_USER: "${PGSQL_USER}"
       PGSQL_PASSWORD: "${PGSQL_PASSWORD}"
       PHP_VERSION: "${PHP_VERSION}"
+      CHALLENGE_DIR: "${CHALLENGE_DIR}"
+      CERT_DIR: "${CERT_DIR}"
+      CERT_DOMAIN: "${CERT_DOMAIN}"
       SSMTP_REWRITEDOMAIN: "${SSMTP_REWRITEDOMAIN}"
     ports:
       - "${HTTP_PORT}:${HTTP_PORT}"
@@ -61,13 +65,20 @@ services:
       - type: bind
         source: ./conf/etc/php/7.2/fpm/pool.d/www.conf
         target: /etc/php/7.2/fpm/pool.d/www.conf
+      # Directory for serving certbot challenge files
+      - type: volume
+        source: certbot-challenges
+        target: ${CHALLENGE_DIR}
+      - type: volume
+        source: certbot-certs
+        target: ${CERT_DIR}
   postfix:
     networks:
       all:
     image: ${DOCKER_REGISTRY_URL}/postfix
   postgres:
     networks:
-      all:
+      db:
     image: ${DOCKER_REGISTRY_URL}/postgres:9.6
     environment:
       POSTGRES_DB: "${PGSQL_DATABASE}"
@@ -77,9 +88,30 @@ services:
       - type: volume
         source: db
         target: /var/lib/postgresql/data
+  certbot:
+    networks:
+      certbot:
+    image: ${DOCKER_REGISTRY_URL}/sc-certbot:latest
+    depends_on:
+      - nginx-php-moodle
+    environment:
+      ADMIN_EMAIL: "${ADMIN_EMAIL}"
+      CERT_DOMAIN: "${CERT_DOMAIN}"
+    volumes:
+      - type: volume
+        source: certbot-challenges
+        target: /challenges
+      - type: volume
+        source: certbot-certs
+        target: /certs
 
 networks:
   all:
+  db:
+  mail:
+  certbot:
 
 volumes:
   db:
+  certbot-challenges:
+  certbot-certs:
