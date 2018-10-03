@@ -110,6 +110,10 @@ RUN chmod 755 /etc/services.d/nginx/run
 COPY bin/start-fpm.sh /etc/services.d/php_fpm/run
 RUN chmod 755 /etc/services.d/php_fpm/run
 
+# Copy certificate watch script
+COPY bin/watch_certificate_dir.sh /etc/services.d/watch_certificate_dir/run
+RUN chmod 755 /etc/services.d/watch_certificate_dir/run
+
 # Copy Moodle config service script
 COPY bin/configure-moodle.sh /usr/local/bin/configure-moodle.sh
 RUN chmod 500 /usr/local/bin/configure-moodle.sh
