@@ -15,6 +15,8 @@
 # from SD Elements Inc..
 # Version
 
+set -e
+
 echo "Starting PHP-FPM"
 
 # Make unix socket for nginx/php
