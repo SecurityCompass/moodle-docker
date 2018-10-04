@@ -49,7 +49,7 @@ if [ "${latest_tag}" = "${changelog_ver}" ] \
    || [ ! "${changelog_ver}" = "${build_ver}" ] \
    || ! compare_versions "${latest_tag}" "${changelog_ver}" \
    || ! compare_versions "${latest_tag}" "${build_ver}"; then
-    color_echo red "Error: Incorrect version update in 'CHANGELOG.md' and '.env'"
+    color_echo red "Error: Incorrect version update in 'CHANGELOG.md' and '.env', '${changelog_ver}' and '${build_ver}' should be greater than '${latest_tag}'"
     exit 1
 else
     color_echo green "Version bumps PASS!"
