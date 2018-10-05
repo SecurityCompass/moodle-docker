@@ -78,7 +78,7 @@ services:
         target: ${CERT_DIR}
   postfix:
     networks:
-      all:
+      mail:
     image: ${DOCKER_REGISTRY_URL}/postfix
   postgres:
     networks:
@@ -110,7 +110,6 @@ services:
         target: /certs
 
 networks:
-  all:
   db:
   mail:
   certbot:
