@@ -16,7 +16,7 @@ ARG PHP_VERSION
 
 # Install utility packages
 RUN apt-get update\
-    && apt-get install -y vim unzip curl netbase \
+    && apt-get install -y vim unzip curl netbase inotify-tools \
     && apt-get --purge -y autoremove \
     && apt-get -y clean \
     && rm -rf /etc/apt/sources.list.d/temp.list /var/lib/apt/lists/*
