@@ -17,17 +17,18 @@
 
 set -e
 
-echo "Starting Nginx"
+echo "Starting Nginx init script"
 
 # Source shtdlib
 # shellcheck disable=SC1091
 source /usr/local/bin/shtdlib.sh
 
-# Wait for PHP-FPM to start Nginx
+color_echo green "Wait for PHP-FPM to start before starting Nginx"
 if wait_for_success "/etc/init.d/php7.2-fpm status"; then
+    color_echo green "Starting Nginx"
     # shellcheck disable=SC2016
     envsubst '${MOODLE_DATAROOT} ${MOODLE_VERSION} ${HTTP_PORT} ${HTTPS_PORT} ${CHALLENGE_DIR} ' < /etc/nginx/conf.d/moodle.template > /etc/nginx/conf.d/moodle.conf && nginx -g 'daemon off;'
 else
-    echo "PHP-FPM did not start in time. Aborting Nginx start up."
+    color_echo red "PHP-FPM did not start in time. Aborting Nginx start up."
     exit 1
 fi
