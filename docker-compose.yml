@@ -65,6 +65,10 @@ services:
       - type: bind
         source: ./conf/etc/php/7.2/fpm/pool.d/www.conf
         target: /etc/php/7.2/fpm/pool.d/www.conf
+      # Volume to backup Moodle configuration
+      - type: volume
+        source: moodle
+        target: /opt/moodle/backup
       # Directory for serving certbot challenge files
       - type: volume
         source: certbot-challenges
@@ -112,6 +116,7 @@ networks:
   certbot:
 
 volumes:
-  db:
   certbot-challenges:
   certbot-certs:
+  db:
+  moodle:

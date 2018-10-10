@@ -17,9 +17,9 @@
 
 set -e
 
-echo "Starting PHP-FPM"
+echo "Starting PHP-FPM init script"
 
-# Make unix socket for nginx/php
+echo "Make unix socket for nginx/php"
 mkdir -p /var/run/php-fpm
 touch /var/run/php-fpm/www.sock
 chown -R www-data:www-data /var/run/php-fpm
@@ -30,8 +30,12 @@ sed -i -e 's/mailhub=mail/mailhub=postfix/' \
     -e '/hostname=/d' \
     /etc/ssmtp/ssmtp.conf
 
-# Configure Moodle (it will wait for PHP/PostgreSQL in the background)
+echo "Fixing permissions on moodledata directory..."
+chown -R www-data:www-data /opt/moodle/moodledata
+
+# Configure Moodle - this script will wait for PHP and PostgreSQL to come up
+# in the background before attempting to configure or upgrade Moodle.
 (/usr/local/bin/configure-moodle.sh) &
 
-# Start PHP-FPM
+echo "Starting PHP-FPM"
 "/usr/sbin/php-fpm${PHP_VERSION}" -R -F
