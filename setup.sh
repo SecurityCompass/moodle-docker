@@ -10,9 +10,13 @@ set -euo pipefail
 # Default verbosity, common levels are 0,1,5,10
 verbosity="${verbosity:-1}"
 
-# Include stdlib from the lib directory
-# shellcheck disable=SC1091
-source lib/shtdlib/shtdlib.sh
+echo "Installing shtdlib"
+shtdlib_local_path="/usr/local/bin/shtdlib.sh"
+sudo curl -s -L -o "${shtdlib_local_path}" https://github.com/sdelements/shtdlib/raw/master/shtdlib.sh
+sudo chmod 775 "${shtdlib_local_path}"
+# shellcheck disable=SC1091,SC1090
+source "${shtdlib_local_path}"
+color_echo green "shtdlib.sh installed successfully"
 
 # Print some useful information
 color_echo cyan "Detected OS type:          ${os_type}"
@@ -37,6 +41,9 @@ case ${os_family} in
             yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
             yum install -y python2-pip
             pip install docker-compose
+        else
+            color_echo red "Unsupported version, ${major_version}, of CentOS!"
+            exit 1
         fi
     ;;
     "Debian")
@@ -66,6 +73,9 @@ case ${os_family} in
             curl -L "https://github.com/docker/compose/releases/download/1.21.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
             chmod +x /usr/local/bin/docker-compose
             docker-compose --version
+        else
+            color_echo red "Unsupported version, ${major_version}, of Debian!"
+            exit 1
         fi
     ;;
     *)
