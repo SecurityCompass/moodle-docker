@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v0.1.9] - 2018-10-11
+### Changed
+- Fix interpolation bug in `.env`
+- Remove `shtdlib` as a Git submodule
+- Fix the networks in `docker-compose.yaml`
+- Re-add `inotify-tools` in the Moodle `Dockerfile`
+- Download `shtdlib` from GH in `setup.sh`
+
 ## [v0.1.8] - 2018-10-03
 ### Added
 - A volume to store `config.php` once its created
