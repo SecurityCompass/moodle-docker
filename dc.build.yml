@@ -15,6 +15,3 @@ services:
         ONELOGIN_PLUGIN_VER: "${ONELOGIN_PLUGIN_VER}"
         PHP_VERSION: "${PHP_VERSION}"
       context: ./nginx-php-moodle
-  certbot:
-    build:
-      context: ./certbot
