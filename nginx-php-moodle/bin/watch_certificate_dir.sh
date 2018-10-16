@@ -22,7 +22,7 @@ source /usr/local/bin/shtdlib.sh
 moodle_cert='/etc/nginx/ssl/moodle.crt'
 moodle_key='/etc/nginx/ssl/moodle.key'
 
-echo "Watching ${CERT_DIR} for updated certs..."
+echo "Watching '${CERT_DIR}' for updated certs..."
 
 function reload_nginx {
     echo "Detected files modified in certificate directory..."
