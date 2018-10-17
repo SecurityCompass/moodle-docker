@@ -4,12 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v0.1.11] - 2018-10-17
+## [v0.1.12] - 2018-10-17
 ### Changed
 - Fix `.gitignore` pattern
 
 ### Removed
 - Remove `certbot-docker` from this repo
+
+## [v0.1.11] - 2018-10-17
+### Changed
+- Update Nginx to 1.14.0-0+xenial2
 
 ## [v0.1.10] - 2018-10-17
 ### Changed
