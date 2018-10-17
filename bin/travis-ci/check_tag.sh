@@ -30,7 +30,7 @@ latest_tag="$(git fetch -t && git tag -l | sort --version-sort | tail -n1)"
 color_echo green "Latest Git tag: '${latest_tag}'"
 
 # Get the latest tag from the CHANGELOG
-changelog_ver="$(grep -oP '\[v\d+\.\d+\.\d+\]' CHANGELOG.md | tr -d '[]' | sort -nr | head -n1)"
+changelog_ver="$(grep -oP '\[v\d+\.\d+\.\d+\]' CHANGELOG.md | tr -d '[]' | sort --version-sort -r | head -n1)"
 color_echo green "CHANGELOG version: '${changelog_ver}'"
 
 # Get iteration from DEB builder configuration
