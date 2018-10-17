@@ -73,6 +73,7 @@ services:
       - type: volume
         source: certbot-challenges
         target: ${CHALLENGE_DIR}
+      # Directory for serving certificates
       - type: volume
         source: certbot-certs
         target: ${CERT_DIR}
