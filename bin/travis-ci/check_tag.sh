@@ -30,7 +30,7 @@ latest_tag="$(git fetch -t && git tag -l | sort --version-sort | tail -n1)"
 color_echo green "Latest Git tag: '${latest_tag}'"
 
 # Get the latest tag from the CHANGELOG
-changelog_ver="$(grep -oP '\[v\d\.\d\.\d\]' CHANGELOG.md | tr -d '[]' | sort -nr | head -n1)"
+changelog_ver="$(grep -oP '\[v\d+\.\d+\.\d+\]' CHANGELOG.md | tr -d '[]' | sort --version-sort -r | head -n1)"
 color_echo green "CHANGELOG version: '${changelog_ver}'"
 
 # Get iteration from DEB builder configuration
@@ -38,7 +38,7 @@ build_ver="$(grep BUILD_VERSION .env | cut -d'=' -f2)"
 color_echo green "Container/DEB iteration version: '${build_ver}'"
 
 # Validate version strings
-version_pattern='^v\d\.\d\.\d$'
+version_pattern='^v\d+\.\d+\.\d+$'
 echo "${latest_tag}" | grep -qP ${version_pattern} || ( color_echo red "Invalid tag from repo: '${latest_tag}'" && exit 1 )
 echo "${changelog_ver}" | grep -qP ${version_pattern} || ( color_echo red "Invalid tag from CHANGELOG: '${changelog_ver}'" && exit 1 )
 echo "${build_ver}" | grep -qP ${version_pattern} || ( color_echo red "Invalid build version: '${build_ver}'" && exit 1 )
