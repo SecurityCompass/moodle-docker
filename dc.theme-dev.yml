@@ -1,0 +1,19 @@
+# This file contains configuration for theme development
+---
+
+version: '3.6'
+
+services:
+  nginx-php-moodle:
+    volumes:
+      - type: volume
+        source: theme-bind
+        target: /opt/moodle/moodle-3.5.1/theme
+
+volumes:
+  theme-bind:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/moodle/theme/
