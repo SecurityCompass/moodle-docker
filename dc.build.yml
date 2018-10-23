@@ -7,11 +7,6 @@ services:
   nginx-php-moodle:
     build:
       args:
-        MOODLE_DOWNLOAD_FILE: "${MOODLE_DOWNLOAD_FILE}"
-        MOODLE_TRACK: "${MOODLE_TRACK}"
         MOODLE_VERSION: "${MOODLE_VERSION}"
-        MOOVE_VERSION: "${MOOVE_VERSION}"
-        NGINX_VERSION: "${NGINX_VERSION}"
-        ONELOGIN_PLUGIN_VER: "${ONELOGIN_PLUGIN_VER}"
         PHP_VERSION: "${PHP_VERSION}"
       context: ./nginx-php-moodle
