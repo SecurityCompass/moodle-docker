@@ -38,4 +38,4 @@ chown -R www-data:www-data /opt/moodle/moodledata
 (/usr/local/bin/configure-moodle.sh) &
 
 echo "Starting PHP-FPM"
-"/usr/sbin/php-fpm${PHP_VERSION}" -R -F
+"/usr/sbin/php-fpm" -R -F
