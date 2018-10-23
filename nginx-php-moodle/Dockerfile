@@ -6,12 +6,12 @@ LABEL version="latest"
 # Disable frontend dialogs
 ENV DEBIAN_FRONTEND noninteractive
 
-ARG MOODLE_DOWNLOAD_FILE
-ARG MOODLE_TRACK
+ARG MOODLE_DOWNLOAD_FILE=moodle-latest-35.tgz
+ARG MOODLE_TRACK=stable35
 ARG MOODLE_VERSION
-ARG MOOVE_VERSION
-ARG NGINX_VERSION
-ARG ONELOGIN_PLUGIN_VER
+ARG MOOVE_VERSION=v0.1.2
+ARG NGINX_VERSION=1.14.0-0+xenial2
+ARG ONELOGIN_PLUGIN_VER=v2.5.1
 ARG PHP_VERSION
 
 # Install utility packages
@@ -64,7 +64,7 @@ RUN echo "Starting PHP install..." \
 # Install Moodle App
 RUN echo "Starting Moodle App install..." \
     && mkdir -v /opt/moodle \
-    && curl -L -o /tmp/moodle-${MOODLE_VERSION}.tgz https://download.moodle.org/download.php/direct/${MOODLE_TRACK}/${MOODLE_DOWNLOAD_FILE} \
+    && curl -L -o /tmp/moodle-${MOODLE_VERSION}.tgz https://download.moodle.org/${MOODLE_TRACK}/${MOODLE_DOWNLOAD_FILE} \
     && tar -xzf /tmp/moodle-${MOODLE_VERSION}.tgz -C /opt/moodle \
     && mv /opt/moodle/moodle /opt/moodle/moodle-${MOODLE_VERSION} \
     && rm -fv /tmp/moodle-${MOODLE_VERSION}.tgz
@@ -109,6 +109,10 @@ RUN chmod 755 /etc/services.d/nginx/run
 # Copy PHP-FPM service script
 COPY bin/start-fpm.sh /etc/services.d/php_fpm/run
 RUN chmod 755 /etc/services.d/php_fpm/run
+
+# Copy PHP-FPM service script
+COPY defaults.php /opt/moodle/moodle-${MOODLE_VERSION}/local/defaults.php
+RUN chmod 644 /opt/moodle/moodle-${MOODLE_VERSION}/local/defaults.php
 
 # Copy certificate watch script
 COPY bin/watch_certificate_dir.sh /etc/services.d/watch_certificate_dir/run
