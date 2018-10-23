@@ -35,34 +35,10 @@ services:
       - "${HTTP_PORT}:${HTTP_PORT}"
       - "${HTTPS_PORT}:${HTTPS_PORT}"
     volumes:
-      # Nginx configuration
-      - type: bind
-        source: ./conf/etc/nginx/nginx.conf
-        target: /etc/nginx/nginx.conf
-      - type: bind
-        source: ./conf/etc/nginx/conf.d
-        target: /etc/nginx/conf.d
-      - type: bind
-        source: ./conf/etc/nginx/ssl
-        target: /etc/nginx/ssl
       # Moodle data dir
       - type: bind
         source: ${MOODLE_DATAROOT}
         target: /opt/moodle/moodledata
-      # PHP configuration
-      - type: bind
-        source: ./conf/etc/php/7.2/fpm/php.ini
-        target: /etc/php/7.2/fpm/php.ini
-      - type: bind
-        source: ./conf/etc/php/7.2/mods-available/opcache.ini
-        target: /etc/php/7.2/mods-available/opcache.ini
-      # PHP-FPM configuration
-      - type: bind
-        source: ./conf/etc/php/7.2/fpm/php-fpm.conf
-        target: /etc/php/7.2/fpm/php-fpm.conf
-      - type: bind
-        source: ./conf/etc/php/7.2/fpm/pool.d/www.conf
-        target: /etc/php/7.2/fpm/pool.d/www.conf
       # Volume to backup Moodle configuration
       - type: volume
         source: moodle
