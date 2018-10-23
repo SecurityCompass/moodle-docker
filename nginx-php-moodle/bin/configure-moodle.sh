@@ -57,19 +57,12 @@ MDL_CONFIG
 
     color_echo green "Backing up Moodle configuration"
     cp --preserve=all -v "/opt/moodle/moodle-${MOODLE_VERSION}/config.php" /opt/moodle/backup/config.php
-
-    color_echo green "Enabling Moove theme"
-    "/usr/bin/php${PHP_VERSION}" "/opt/moodle/moodle-${MOODLE_VERSION}/admin/cli/cfg.php" --name=theme --set=moove
-
-    color_echo green "Override default password policy to remove non-alphanumeric character requirement"
-    "/usr/bin/php${PHP_VERSION}" "/opt/moodle/moodle-${MOODLE_VERSION}/admin/cli/cfg.php" --name=minpasswordnonalphanum --set=0
-
-    color_echo green "Skipping Moodle registration"
-    "/usr/bin/php${PHP_VERSION}" "/opt/moodle/moodle-${MOODLE_VERSION}/admin/cli/cfg.php" --name=registrationpending --set=0
 }
 
 function moodle_restore_config {
+    # Check if the container already contains a `config.php`
     if [[ -s "/opt/moodle/moodle-${MOODLE_VERSION}/config.php" ]]; then
+        # Check if its different from the backup
         if ! diff -u "/opt/moodle/moodle-${MOODLE_VERSION}/config.php" /opt/moodle/backup/config.php; then
             # This *should* never happen
             color_echo yellow "Warning: 'config.php' does not match backup"
