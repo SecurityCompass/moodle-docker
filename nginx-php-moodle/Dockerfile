@@ -6,7 +6,6 @@ LABEL version="latest"
 # Disable frontend dialogs
 ENV DEBIAN_FRONTEND noninteractive
 
-ARG MOODLE_DOWNLOAD_FILE=moodle-latest-35.tgz
 ARG MOODLE_TRACK=stable35
 ARG MOODLE_VERSION
 ARG MOOVE_VERSION=v0.1.2
@@ -56,6 +55,8 @@ RUN echo "Starting PHP install..." \
     php${PHP_VERSION}-xmlrpc \
     php${PHP_VERSION}-zip \
     ssmtp \
+    && ln -sf /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm \
+    && ln -sf /etc/init.d/php${PHP_VERSION}-fpm /etc/init.d/php-fpm \
     && apt-get purge -y software-properties-common \
     && apt-get --purge -y autoremove \
     && apt-get -y clean \
@@ -64,35 +65,40 @@ RUN echo "Starting PHP install..." \
 # Install Moodle App
 RUN echo "Starting Moodle App install..." \
     && mkdir -v /opt/moodle \
-    && curl -L -o /tmp/moodle-${MOODLE_VERSION}.tgz https://download.moodle.org/${MOODLE_TRACK}/${MOODLE_DOWNLOAD_FILE} \
+    && curl -L -o /tmp/moodle-${MOODLE_VERSION}.tgz https://download.moodle.org/${MOODLE_TRACK}/moodle-${MOODLE_VERSION}.tgz \
     && tar -xzf /tmp/moodle-${MOODLE_VERSION}.tgz -C /opt/moodle \
-    && mv /opt/moodle/moodle /opt/moodle/moodle-${MOODLE_VERSION} \
+    && mv /opt/moodle/moodle /opt/moodle/app \
+    && chown -R www-data:www-data /opt/moodle/app \
+    && find /opt/moodle/app -type d -exec chmod 755 {} \; \
+    && find /opt/moodle/app -type f -exec chmod 644 {} \; \
     && rm -fv /tmp/moodle-${MOODLE_VERSION}.tgz
 
 # Install Moodle theme
 RUN echo "Starting Moodle theme install..." \
     && curl -L -o /tmp/moove.${MOOVE_VERSION}.tar.gz https://github.com/SecurityCompass/moodle-theme_moove/archive/${MOOVE_VERSION}.tar.gz \
-    && mkdir /opt/moodle/moodle-${MOODLE_VERSION}/theme/moove \
-    && tar -xzf /tmp/moove.${MOOVE_VERSION}.tar.gz --strip-components=1 -C /opt/moodle/moodle-${MOODLE_VERSION}/theme/moove \
-    && find /opt/moodle/moodle-${MOODLE_VERSION}/theme/moove -type d -exec chmod 755 {} \; \
-    && find /opt/moodle/moodle-${MOODLE_VERSION}/theme/moove -type f -exec chmod 644 {} \; \
+    && mkdir /opt/moodle/app/theme/moove \
+    && tar -xzf /tmp/moove.${MOOVE_VERSION}.tar.gz --strip-components=1 -C /opt/moodle/app/theme/moove \
+    && chown -R www-data:www-data /opt/moodle/app/theme/moove \
+    && find /opt/moodle/app/theme/moove -type d -exec chmod 755 {} \; \
+    && find /opt/moodle/app/theme/moove -type f -exec chmod 644 {} \; \
     && rm -fv /tmp/moove.${MOOVE_VERSION}.tar.gz
 
 # Install OneLogin auth plugin
 RUN echo "Starting OneLogin auth plugin install..." \
     && curl -L -o /tmp/onelogin_saml.tar.gz https://github.com/onelogin/moodle-saml/archive/${ONELOGIN_PLUGIN_VER}.tar.gz \
-    && tar -xzf /tmp/onelogin_saml.tar.gz -C /opt/moodle/moodle-${MOODLE_VERSION}/auth --strip-components=2 \
-    && chown -R --reference /opt/moodle/moodle-${MOODLE_VERSION}/auth/index.html /opt/moodle/moodle-${MOODLE_VERSION}/auth/onelogin_saml \
-    && find /opt/moodle/moodle-${MOODLE_VERSION}/auth/onelogin_saml -type d -exec chmod 755 {} \; \
-    && find /opt/moodle/moodle-${MOODLE_VERSION}/auth/onelogin_saml -type f -exec chmod 644 {} \; \
+    && tar -xzf /tmp/onelogin_saml.tar.gz -C /opt/moodle/app/auth --strip-components=2 \
+    && chown -R www-data:www-data /opt/moodle/app/auth/onelogin_saml \
+    && find /opt/moodle/app/auth/onelogin_saml -type d -exec chmod 755 {} \; \
+    && find /opt/moodle/app/auth/onelogin_saml -type f -exec chmod 644 {} \; \
     && rm -fv /tmp/onelogin_saml.tar.gz
 
 # Install Opcache admin (PHP cache monitoring)
 RUN echo "Starting Opcache admin install..." \
     && curl -L -o /tmp/opcache.zip https://moodle.org/plugins/download.php/16894/tool_opcache_moodle35_2018052400.zip \
-    && unzip -q /tmp/opcache.zip -d /opt/moodle/moodle-${MOODLE_VERSION}/admin/tool/ \
-    && find /opt/moodle/moodle-${MOODLE_VERSION}/admin/tool/opcache/ -type d -exec chmod 755 {} \; \
-    && find /opt/moodle/moodle-${MOODLE_VERSION}/admin/tool/opcache/ -type f -exec chmod 644 {} \; \
+    && unzip -q /tmp/opcache.zip -d /opt/moodle/app/admin/tool/ \
+    && chown -R www-data:www-data /opt/moodle/app/admin/tool/opcache \
+    && find /opt/moodle/app/admin/tool/opcache/ -type d -exec chmod 755 {} \; \
+    && find /opt/moodle/app/admin/tool/opcache/ -type f -exec chmod 644 {} \; \
     && rm -fv /tmp/opcache.zip
 
 # Setup Moosh
@@ -109,10 +115,6 @@ RUN chmod 755 /etc/services.d/nginx/run
 # Copy PHP-FPM service script
 COPY bin/start-fpm.sh /etc/services.d/php_fpm/run
 RUN chmod 755 /etc/services.d/php_fpm/run
-
-# Copy PHP-FPM service script
-COPY defaults.php /opt/moodle/moodle-${MOODLE_VERSION}/local/defaults.php
-RUN chmod 644 /opt/moodle/moodle-${MOODLE_VERSION}/local/defaults.php
 
 # Copy certificate watch script
 COPY bin/watch_certificate_dir.sh /etc/services.d/watch_certificate_dir/run
