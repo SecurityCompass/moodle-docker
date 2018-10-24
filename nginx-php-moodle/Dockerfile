@@ -112,9 +112,20 @@ RUN echo "Starting Moosh install..." \
 COPY bin/start-nginx.sh /etc/services.d/nginx/run
 RUN chmod 755 /etc/services.d/nginx/run
 
+# Copy NGINX configuration files
+COPY conf/etc/nginx/conf.d /etc/nginx/conf.d
+COPY conf/etc/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY conf/etc/nginx/ssl /etc/nginx/ssl
+
 # Copy PHP-FPM service script
 COPY bin/start-fpm.sh /etc/services.d/php_fpm/run
 RUN chmod 755 /etc/services.d/php_fpm/run
+
+# Copy PHP/PHP-FPM configuration
+COPY conf/etc/php/7.2/fpm/php-fpm.conf /etc/php/7.2/fpm/php-fpm.conf
+COPY conf/etc/php/7.2/fpm/php.ini /etc/php/7.2/fpm/php.ini
+COPY conf/etc/php/7.2/fpm/pool.d/www.conf /etc/php/7.2/fpm/pool.d/www.conf
+COPY conf/etc/php/7.2/mods-available/opcache.ini /etc/php/7.2/mods-available/opcache.ini
 
 # Copy certificate watch script
 COPY bin/watch_certificate_dir.sh /etc/services.d/watch_certificate_dir/run
