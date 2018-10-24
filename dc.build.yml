@@ -7,6 +7,5 @@ services:
   nginx-php-moodle:
     build:
       args:
-        MOODLE_VERSION: "${MOODLE_VERSION}"
         PHP_VERSION: "${PHP_VERSION}"
       context: ./nginx-php-moodle
