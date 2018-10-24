@@ -7,9 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [v0.1.12] - 2018-10-17
 ### Changed
 - Fix `.gitignore` pattern
+- Move build variables to Dockerfile
+- Bake in files from the `conf` directory (vs. bind mount)
+- Rename volume that holds certificates
+- Fix ownership and permission for Moodle artifacts
+- Remove the use of `MOODLE_VERSION` and `PHP_VERSION` inside the container
 
 ### Removed
 - Remove `certbot-docker` from this repo
+- Clean up unused ENV vars from `docker-compose` configuration files
 
 ## [v0.1.11] - 2018-10-17
 ### Changed
