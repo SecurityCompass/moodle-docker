@@ -21,7 +21,7 @@ set -eo pipefail
 # shellcheck disable=SC1091
 source /usr/local/bin/shtdlib.sh
 
-moodle_release=$(grep '$release' /opt/moodle/app/version.php | cut -d"'" -f2)
+moodle_release=$(grep "\$release" /opt/moodle/app/version.php | cut -d"'" -f2)
 
 function moodle_init_config {
     color_echo green "Starting Moodle '${moodle_release}' installation"
