@@ -21,6 +21,7 @@ set -eo pipefail
 # shellcheck disable=SC1091
 source /usr/local/bin/shtdlib.sh
 
+moodle_config_file="/opt/moodle/app/config.php"
 moodle_release=$(grep "\$release" /opt/moodle/app/version.php | cut -d"'" -f2)
 
 function moodle_init_config {
@@ -40,10 +41,14 @@ function moodle_init_config {
         --non-interactive \
         --shortname="${MOODLE_SHORT_NAME}" \
         --upgradekey="${MOODLE_UPGRADE_KEY}" \
-        --wwwroot="${MOODLE_WWWROOT}"
+        --wwwroot="${MOODLE_WWWROOT}" \
+    || color_echo red "Something went wrong with the install, trying to recover..."
 
-    color_echo green "Adding optimization configuration for static files"
-    cat >> "/opt/moodle/app/config.php" <<MDL_CONFIG
+    # Only do the following if `config.php` exists
+    if [[ -e "${moodle_config_file}" ]]; then
+        if ! grep -q "Performance optimization for Nginx" "${moodle_config_file}"; then
+            color_echo green "Adding optimization configuration for static files"
+            cat >> "${moodle_config_file}" <<MDL_CONFIG
 
 // Performance optimization for Nginx static content
 \$CFG->xsendfile = 'X-Accel-Redirect';     // Nginx {@see http://wiki.nginx.org/XSendfile}
@@ -52,13 +57,17 @@ function moodle_init_config {
 );
 
 MDL_CONFIG
+        fi
 
-    color_echo green "Updating 'config.php' ownership and permission"
-    chown --reference="/opt/moodle/app/config-dist.php" "/opt/moodle/app/config.php"
-    chmod --reference="/opt/moodle/app/config-dist.php" "/opt/moodle/app/config.php"
+        color_echo green "Updating 'config.php' ownership and permission"
+        chown --reference="/opt/moodle/app/config-dist.php" "${moodle_config_file}"
+        chmod --reference="/opt/moodle/app/config-dist.php" "${moodle_config_file}"
 
-    color_echo green "Backing up Moodle configuration"
-    cp --preserve=all -v "/opt/moodle/app/config.php" /opt/moodle/backup/config.php
+        color_echo green "Backing up Moodle configuration"
+        cp --preserve=all -v "${moodle_config_file}" /opt/moodle/backup/config.php
+    else
+        color_echo yellow "'${moodle_config_file}' does not exist."
+    fi
 
     # Moodle Configuration
     moodle_cfg_script="/opt/moodle/app/admin/cli/cfg.php"
@@ -74,9 +83,9 @@ MDL_CONFIG
 
 function moodle_restore_config {
     # Check if the container already contains a `config.php`
-    if [[ -s "/opt/moodle/app/config.php" ]]; then
+    if [[ -s "${moodle_config_file}" ]]; then
         # Check if its different from the backup
-        if ! diff -u "/opt/moodle/app/config.php" /opt/moodle/backup/config.php; then
+        if ! diff -u "${moodle_config_file}" /opt/moodle/backup/config.php; then
             # This *should* never happen
             color_echo yellow "Warning: 'config.php' does not match backup"
         else
@@ -89,11 +98,11 @@ function moodle_restore_config {
     fi
 
     color_echo yellow "Restoring Moodle configuration from backup"
-    cp -fv /opt/moodle/backup/config.php "/opt/moodle/app/config.php"
+    cp -fv /opt/moodle/backup/config.php "${moodle_config_file}"
 
     color_echo green "Updating 'config.php' ownership and permission"
-    chown --reference="/opt/moodle/app/config-dist.php" "/opt/moodle/app/config.php"
-    chmod --reference="/opt/moodle/app/config-dist.php" "/opt/moodle/app/config.php"
+    chown --reference="/opt/moodle/app/config-dist.php" "${moodle_config_file}"
+    chmod --reference="/opt/moodle/app/config-dist.php" "${moodle_config_file}"
 }
 
 function moodle_upgrade {
