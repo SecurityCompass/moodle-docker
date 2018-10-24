@@ -6,8 +6,8 @@ LABEL version="latest"
 # Disable frontend dialogs
 ENV DEBIAN_FRONTEND noninteractive
 
+ARG MOODLE_DOWNLOAD_FILE=moodle-latest-35.tgz
 ARG MOODLE_TRACK=stable35
-ARG MOODLE_VERSION
 ARG MOOVE_VERSION=v0.1.2
 ARG NGINX_VERSION=1.14.0-0+xenial2
 ARG ONELOGIN_PLUGIN_VER=v2.5.1
@@ -65,13 +65,13 @@ RUN echo "Starting PHP install..." \
 # Install Moodle App
 RUN echo "Starting Moodle App install..." \
     && mkdir -v /opt/moodle \
-    && curl -L -o /tmp/moodle-${MOODLE_VERSION}.tgz https://download.moodle.org/${MOODLE_TRACK}/moodle-${MOODLE_VERSION}.tgz \
-    && tar -xzf /tmp/moodle-${MOODLE_VERSION}.tgz -C /opt/moodle \
+    && curl -L -o /tmp/moodle-${MOODLE_TRACK}-${MOODLE_DOWNLOAD_FILE}.tgz https://download.moodle.org/${MOODLE_TRACK}/${MOODLE_DOWNLOAD_FILE} \
+    && tar -xzf /tmp/moodle-${MOODLE_TRACK}-${MOODLE_DOWNLOAD_FILE}.tgz -C /opt/moodle \
     && mv /opt/moodle/moodle /opt/moodle/app \
     && chown -R www-data:www-data /opt/moodle/app \
     && find /opt/moodle/app -type d -exec chmod 755 {} \; \
     && find /opt/moodle/app -type f -exec chmod 644 {} \; \
-    && rm -fv /tmp/moodle-${MOODLE_VERSION}.tgz
+    && rm -fv /tmp/moodle-${MOODLE_TRACK}-${MOODLE_DOWNLOAD_FILE}.tgz
 
 # Install Moodle theme
 RUN echo "Starting Moodle theme install..." \
