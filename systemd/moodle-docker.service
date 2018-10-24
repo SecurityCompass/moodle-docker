@@ -15,7 +15,7 @@ ExecStart=/usr/local/bin/docker-compose --file /etc/moodle-docker/docker-compose
 ExecReload=-/usr/local/bin/docker-compose --file /etc/moodle-docker/docker-compose.yml pull --quiet
 ExecReload=/usr/local/bin/docker-compose --file /etc/moodle-docker/docker-compose.yml up --detach
 
-ExecStop=/usr/local/bin/docker-compose --file /etc/moodle-docker/docker-compose.yml stop
+ExecStop=/usr/local/bin/docker-compose --file /etc/moodle-docker/docker-compose.yml down
 
 [Install]
 WantedBy=multi-user.target
