@@ -51,6 +51,8 @@ fi
 echo "Configuring and enabling systemd units"
 systemctl --system daemon-reload >/dev/null || true
 systemctl enable moodle-docker >/dev/null || true
+
+echo "Configuration complete, configure/populate '/etc/moodle-docker/.env' before starting Moodle."
 }
 
 if [ "${1}" = "configure" ] && [ -z "${2}" ] || \
