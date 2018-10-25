@@ -7,11 +7,11 @@ services:
   nginx-php-moodle:
     volumes:
       - type: volume
-        source: theme-bind
+        source: theme
         target: /opt/moodle/moodle-3.5.1/theme
 
 volumes:
-  theme-bind:
+  theme:
     driver: local
     driver_opts:
       type: none
