@@ -101,6 +101,14 @@ RUN echo "Starting Opcache admin install..." \
     && find /opt/moodle/app/admin/tool/opcache/ -type f -exec chmod 644 {} \; \
     && rm -fv /tmp/opcache.zip
 
+RUN echo "Starting Moodle eMailTest install..." \
+    && curl -L -o /tmp/mailtest.zip https://moodle.org/plugins/download.php/16831/local_mailtest_moodle35_2018052100.zip \
+    && unzip -q /tmp/mailtest.zip -d /opt/moodle/app/local/ \
+    && chown -R www-data:www-data /opt/moodle/app/local/mailtest \
+    && find /opt/moodle/app/local/mailtest/ -type d -exec chmod 755 {} \; \
+    && find /opt/moodle/app/local/mailtest/ -type f -exec chmod 644 {} \; \
+    && rm -fv /tmp/mailtest.zip
+
 # Setup Moosh
 RUN echo "Starting Moosh install..." \
     && curl -L -o /tmp/moosh_setup.zip https://moodle.org/plugins/download.php/16504/moosh_moodle35_2018042500.zip \
