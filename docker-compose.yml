@@ -7,7 +7,7 @@ services:
     networks:
       db:
       mail:
-    image: ${DOCKER_REGISTRY_URL}/nginx-php-moodle:${BUILD_VERSION}
+    image: ${DOCKER_REGISTRY_URL}/nginx-php-moodle:latest
     depends_on:
       - postfix
       - postgres
@@ -55,6 +55,11 @@ services:
     networks:
       mail:
     image: ${DOCKER_REGISTRY_URL}/postfix
+    environment:
+      POSTFIX_RELAYHOST:
+      POSTFIX_RELAYHOST_PORT:
+      POSTFIX_SASL_AUTH:
+      POSTFIX_TLS:
   postgres:
     networks:
       db:
