@@ -67,6 +67,19 @@ This project deploys the Moodle (Modular Object-Oriented Dynamic Learning Enviro
     docker-compose --file docker-compose.yml up --force-recreate --no-deps --detach nginx-php-moodle
     ```
 
+
+## E-Mail
+
+### Configuration
+There are 3 ways to configure mail in Moodle (`.../admin/settings.php?section=outgoingmailconfig`):
+* Directly configure SMTP hosts/security/username/password/etc.
+* Use `postfix` container by setting `smtphosts` to `postfix`
+* Use "PHP default method" by leaving `smtphosts` empty and PHP will use `ssmtp` to relay the messages to the `postfix` container
+
+### Testing email
+The [Moodle eMailTest](https://moodle.org/plugins/local_mailtest) plugin is baked into the Moodle container (`.../local/mailtest/`) to allow users to test their outgoing email configuration
+
+
 ## Misc.
 
 * Generate self-signed certificate (TESTING ONLY)

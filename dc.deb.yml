@@ -67,7 +67,6 @@ services:
       - "--verbose"
       # Files to package
       - "/package/.env=/etc/moodle-docker/.env.example"
-      - "/package/conf=/etc/moodle-docker/"
       - "/package/dc.prod-dbonly.yml=/etc/moodle-docker/"
       - "/package/docker-compose.yml=/etc/moodle-docker/"
       - "/package/systemd/moodle-docker.service=/lib/systemd/system/"

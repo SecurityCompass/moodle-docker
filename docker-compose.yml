@@ -7,7 +7,7 @@ services:
     networks:
       db:
       mail:
-    image: ${DOCKER_REGISTRY_URL}/nginx-php-moodle:${BUILD_VERSION}
+    image: ${DOCKER_REGISTRY_URL}/nginx-php-moodle:latest
     depends_on:
       - postfix
       - postgres
@@ -18,7 +18,6 @@ services:
       MOODLE_ADMIN_PASS: "${MOODLE_ADMIN_PASS}"
       MOODLE_DATAROOT: "${MOODLE_DATAROOT}"
       MOODLE_DBTYPE: "${MOODLE_DBTYPE}"
-      MOODLE_VERSION: "${MOODLE_VERSION}"
       MOODLE_WWWROOT: "${MOODLE_WWWROOT}"
       MOODLE_FULL_NAME: "${MOODLE_FULL_NAME}"
       MOODLE_SHORT_NAME: "${MOODLE_SHORT_NAME}"
@@ -28,7 +27,6 @@ services:
       PGSQL_DATABASE: "${PGSQL_DATABASE}"
       PGSQL_USER: "${PGSQL_USER}"
       PGSQL_PASSWORD: "${PGSQL_PASSWORD}"
-      PHP_VERSION: "${PHP_VERSION}"
       CHALLENGE_DIR: "${CHALLENGE_DIR}"
       CERT_DIR: "${CERT_DIR}"
       CERT_DOMAIN: "${CERT_DOMAIN}"
@@ -37,34 +35,10 @@ services:
       - "${HTTP_PORT}:${HTTP_PORT}"
       - "${HTTPS_PORT}:${HTTPS_PORT}"
     volumes:
-      # Nginx configuration
-      - type: bind
-        source: ./conf/etc/nginx/nginx.conf
-        target: /etc/nginx/nginx.conf
-      - type: bind
-        source: ./conf/etc/nginx/conf.d
-        target: /etc/nginx/conf.d
-      - type: bind
-        source: ./conf/etc/nginx/ssl
-        target: /etc/nginx/ssl
       # Moodle data dir
       - type: bind
         source: ${MOODLE_DATAROOT}
         target: /opt/moodle/moodledata
-      # PHP configuration
-      - type: bind
-        source: ./conf/etc/php/7.2/fpm/php.ini
-        target: /etc/php/7.2/fpm/php.ini
-      - type: bind
-        source: ./conf/etc/php/7.2/mods-available/opcache.ini
-        target: /etc/php/7.2/mods-available/opcache.ini
-      # PHP-FPM configuration
-      - type: bind
-        source: ./conf/etc/php/7.2/fpm/php-fpm.conf
-        target: /etc/php/7.2/fpm/php-fpm.conf
-      - type: bind
-        source: ./conf/etc/php/7.2/fpm/pool.d/www.conf
-        target: /etc/php/7.2/fpm/pool.d/www.conf
       # Volume to backup Moodle configuration
       - type: volume
         source: moodle
@@ -73,13 +47,19 @@ services:
       - type: volume
         source: certbot-challenges
         target: ${CHALLENGE_DIR}
+      # Directory for serving certificates
       - type: volume
-        source: certbot-certs
+        source: certs
         target: ${CERT_DIR}
   postfix:
     networks:
       mail:
     image: ${DOCKER_REGISTRY_URL}/postfix
+    environment:
+      POSTFIX_RELAYHOST:
+      POSTFIX_RELAYHOST_PORT:
+      POSTFIX_SASL_AUTH:
+      POSTFIX_TLS:
   postgres:
     networks:
       db:
@@ -106,7 +86,7 @@ services:
         source: certbot-challenges
         target: /challenges
       - type: volume
-        source: certbot-certs
+        source: certs
         target: /certs
 
 networks:
@@ -116,6 +96,6 @@ networks:
 
 volumes:
   certbot-challenges:
-  certbot-certs:
+  certs:
   db:
   moodle:
