@@ -8,7 +8,7 @@ services:
     volumes:
       - type: volume
         source: theme
-        target: /opt/moodle/moodle-3.5.1/theme
+        target: /opt/moodle/app/theme
 
 volumes:
   theme:
