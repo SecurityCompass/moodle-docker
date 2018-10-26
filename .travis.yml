@@ -1,9 +1,8 @@
 # Define build stages
 stages:
-#  - Tests
-#  - SDLC Tasks
-#  - Build and Publish
-  - Deploy
+  - Tests
+  - SDLC Tasks
+  - Build and Publish
 
 # Use minimal image
 language: minimal
@@ -53,7 +52,6 @@ jobs:
       - bash bin/travis-ci/deb_package.sh
       # Publish if we're on or pushing to master
       - if [[ "${TRAVIS_BRANCH}" = "master" ]]; then bash bin/travis-ci/deb_publish.sh; fi
-  - stage: Deploy
     deploy:
       provider: releases
       api_key:
