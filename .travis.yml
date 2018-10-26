@@ -5,6 +5,9 @@ stages:
 #  - Build and Publish
   - Deploy
 
+# Use minimal image
+language: minimal
+
 # Ignore submodules for all stages
 git:
   submodules: false
@@ -15,18 +18,15 @@ jobs:
     name: Shellcheck
     env:
       - SHELLCHECK_OPTS="-e SC1008 -e SC2154"
-    language: bash
     script:
       - shellcheck $(find . -type f -name '*.sh')
   - name: Dockerfile linter
-    language: minimal
     script:
       - docker run --rm -v $PWD:/root/ projectatomic/dockerfile-lint dockerfile_lint -f ./deb-builder/Dockerfile
       - docker run --rm -v $PWD:/root/ projectatomic/dockerfile-lint dockerfile_lint -f ./nginx-php-moodle/Dockerfile
   - stage: "SDLC Tasks"
     name: Tag & iteration update
     sudo: required
-    language: bash
     script:
       - if [[ -z "${TRAVIS_TAG}" ]]; then bash bin/travis-ci/check_tag.sh; fi
   - stage: Build and Publish
@@ -35,7 +35,6 @@ jobs:
       - secure: f2d/XXnpYhkG543Uu/MByFlMDAYyYCI/SckSralR0exI10DLBsZ7pixRjT7D+SKwMFkaIWDq5m5HBW4uFeZCqPKm/gOiLpYZyCOPOohg2Fr3//i1Oy4jWNmpq6fb6hwjbOcgdAjLxRHwYmXl8aD6Gb4SyGQSbxj/WnF7vgG87/15HG+m+7l23ODvESxbNrzE+YWbJ21BXdIjpkwsJFKNWGG8NvN7kQqKHa9z8t+TSr2f56jRLZMEcqql/+YGRqWmqskqbv3qeHNnPlF7aUhtVL0GFs9gmBtzVjP/xvRtwGSG1r9sl888z2EPiwtMBhK7G3fS5m6bKuwu43zPcVl2OGxUmUBQ2zpXKXH3aBHD5GOlSjua7LRmV1X/TrgUY4ciW01ZNpUkH4pTojajPKs5Vph8BxOMe2GsfzwVQyPo/FZdlLCb3mKXP8DwISOYoAIOzL/F1vcejA2SOsgBoglywnYavJYdDaFRCPUvjUtbFTY10qb2pwSJ7Mm1ZnAirY4Jz048N7PH2j0INkHCvZEHP+cyHNMdct7oQfep/S3JlPjjnI773MdaI9wLOvGE9d73JBhMO1ylIT7ZWY+W1ZAurwN3/8dYhFX0swoeLt5Eej5Tr9UprugQjeqYDdUtmZne8SM7wYicbjcFKI6PuHWAmrXhWcGL2VFw82TRzEk9oSI=
       - secure: luAVdoARjWTC/PmF3CmqHe8JCv9P0HjfA6epcdPP3SGC4AJrbS3bDC2aYF0F6c79TS6kAgnQ+zfJ71MOD8nS0393oAmsRPdkJYnO9wIwJdtwZmDBhsjrhQ2sMQgBuiRsndTXGIPVfoFKIIS9Mje4O0nYYm56zSRUOjllrx0ui0GAKljCLAVqxF+iXw9ZjJabXVASixcmG19ch+d35fBWICorgSy+wj8wyFMoEq4d/Nmdk/K/AznqBokkWNCgiKzGvoAXAFm7nm3r7RghEM2WJaZHUTKU5eQkB8XCPM+4YsbWXASbZFVvC7izICbtIUSKQu5cojNc8Rj6Lh38NiHo3xPxgAAo3Z2tj1+moUYq3iGUWQqe9yKeWAUXhJXSQCvysqTIt1fKD6g3hT+uH23n70O674PgbRusHlPtkSq0tBjsL+e6+CY9p7AqGiWzDQupKzzgsZ/qH6P9TdOQi5CsMwCLBdltpkfW4GSOC7CrIjrEuixDjN4DOSccjZRcDdiA5XURsQWJKooHT/+Mr28uwAJQQ99ffx9rUobzndZjv1+am/80pxh2OmGP3LGZg3J9LvrJluQIZxLmHalpWiM5TSjW9zpOyWLdiNLZixf9/aWAqvjUPz5Wo4/hqzHEsEUFcVeuxTY9yVhn9YBGdGmzkGpLAt6zmCPE+fM3UT/zGP4=
       - secure: kSHmkAhMMo6HWl3RwT3Fdw+wawPZaY6ecHL4E1AwAXuZPAUXJ38k2lppxF9ciWpJpkSJAE7+le8A7qJJuLKecQ/y4X7LCE6BYiCi7hyKEq4E/nBD8WnZyCC7lvAn2RoBQtDWP3PbzkNljBC96Zs+1lLKtbQ+5XLHMGyr9BXIAlUo/hUHBc9ZDWiyw/vzUCYZOOM2p24mtLw0dG6+cpT2/u4n1m4C+qpwPPqWfW6/4rEaybcCf+PWahCHDGGmEAGYLaPQFNDdYmPGwgdCHth+ofOnVxoRl/phQFDOk8BuEoxXgblpj0idDh61juX43foZVU7xdJi6sKkMDP3Glvxr4eSKvXpwqEXl8Jf4kfw/qF28huxXdINzOft8Owl4OTX8qyxlBfPWVR+e/mvjHp+HHsjHBTAw3LXIO8oFZkmIqENEL63lq9YGAPavsjcClsLE2vhMe18zl6jdYuE9fYO4uVBXlCCK6rFVApLp7o0ltkuVSCjSv1A0J9VARJmQYZBHXkeIY2eGA24O9lKhQf4l1CJWe9ThpKm5DAGZny9rnST/xobbdX2kbgq0l3olGRQaCxUFsl6RrdTc0K3DMJ6UqumoYyGaf2qQeaNZI4stChpF9D2vloudhga0x1wQjvm4+y7o/5qicrrfN5Lr05kU1Bg6mDXPddy9/9a6yf6/Uno=
-    language: minimal
     sudo: required
     services:
       - docker
@@ -45,7 +44,6 @@ jobs:
       # Publish if we're on or pushing to master
       - if [[ "${TRAVIS_BRANCH}" = "master" ]]; then bash bin/travis-ci/docker_publish.sh; fi
   - name: DEB package
-    language: minimal
     sudo: required
     services:
       - docker
@@ -60,7 +58,8 @@ jobs:
       provider: releases
       api_key:
         secure: Y6M5EPinSiFGUEDMcHu+8hatKRzxo/gwUuQU5HCasJLYb+gXW3sM2jIYPXqXgvPuF20yuOPmuxRzNnYbIbzKXVL6MZPUY6T1k3DtR04CiHBqb2L+3H8C4rWYO87qp0ZJz0/NrEFRjrza+q4m4seG/iSVHa4ukF5jzn9is/CKNrQnwxLNgv+ycV8LGBP48Wd8+MXBMC8h0rTuY0+mgOQsl/oHFA3yM8eKcpAXHi/IKPko08Og1CeQFxasEOz4/fcT6wnXhn1WCUgZI7jU4y1Vsv4Hw/OWzyXNWmnomB24oqT2+q0aLDascfyDImb9x99XuknBAU+OapS6Iy4c5x+C0JYoAMJOJEvm+muNDEEaH3n9j1/3x8MEqtjF5aWuhAzlDPF2i8+vypMJzNU4BMDEXRWRyv0f4ZE5S0OXkwONHpTaMwumbpuo1VuFyLeY+DNtu1MqN9QjbnXuJgdGz3BKv6Ncc5cGAK2PqD82NBvc86yq/C7tDjO2ohcV+8HT9UvesxFGe1ibyWefIoyH4OrajCD3/TlPIDIsG2oHBjY+sCM+54NIw0exCzIpJxb80mYu4XCFIhBag5/6LyPD0M6hredTokcv7NAZA+4hbheiKNaHbMpoqA+qvfTI4nf7TWE2fPbpk4126ThHQbjf3OmG0m0rL8gfwym3bEbaEVSEk1w=
-      file: CHANGELOG.md
+      file:
+        - CHANGELOG.md
       skip_cleanup: true
       on:
         tags: true
