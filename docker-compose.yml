@@ -2,12 +2,19 @@
 
 version: '3.6'
 
+x-linux-logging:
+    &common-logging
+    driver: "${LOG_DRIVER}"
+    options:
+        tag: "{{.ImageName}}/{{.Name}}/{{.ID}}"
+
 services:
   nginx-php-moodle:
     networks:
       db:
       mail:
     image: ${DOCKER_REGISTRY_URL}/nginx-php-moodle:latest
+    logging: *common-logging
     depends_on:
       - postfix
       - postgres
@@ -60,10 +67,12 @@ services:
       POSTFIX_RELAYHOST_PORT:
       POSTFIX_SASL_AUTH:
       POSTFIX_TLS:
+    logging: *common-logging
   postgres:
     networks:
       db:
     image: ${DOCKER_REGISTRY_URL}/postgres:9.6
+    logging: *common-logging
     environment:
       POSTGRES_DB: "${PGSQL_DATABASE}"
       POSTGRES_USER: "${PGSQL_USER}"
@@ -72,10 +81,27 @@ services:
       - type: volume
         source: db
         target: /var/lib/postgresql/data
+  postgres-backup:
+    image: ${DOCKER_REGISTRY_URL}/postgres-backup:latest
+    depends_on:
+      - "postgres"
+    volumes:
+      - ./backup:/backup:Z
+    environment:
+      POSTGRES_PASSWORD: "${PGSQL_PASSWORD}"
+      POSTGRES_USER: "${PGSQL_USER}"
+      POSTGRES_DB: "${PGSQL_DATABASE}"
+      DUMPPREFIX: "backup"
+      POSTGRES_HOST: "db"
+      POSTGRES_PORT: "5432"
+    logging: *common-logging
+    networks:
+      db:
   certbot:
     networks:
       certbot:
     image: ${DOCKER_REGISTRY_URL}/sc-certbot:latest
+    logging: *common-logging
     depends_on:
       - nginx-php-moodle
     environment:
