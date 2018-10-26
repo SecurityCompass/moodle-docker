@@ -3,10 +3,13 @@
 set -e
 
 VERSION='0.1'
+
 DOCKER_COMPOSE=$(which docker-compose)
 BASE_COMPOSE='/etc/moodle-docker/docker-compose.yml'
 THEME_COMPOSE='/etc/moodle-docker/dc.theme-dev.yml'
-BASE_COMMAND="${DOCKER_COMPOSE} --file \"${BASE_COMPOSE}\""
+BASE_COMMAND="${DOCKER_COMPOSE} --file ${BASE_COMPOSE}"
+
+THEME_DIR='/opt/moodle/theme'
 
 # Print usage and argument list
 function print_usage {
@@ -25,14 +28,21 @@ Actions:
     version, -v, --version  Print ${0} version and exit
 
 Parameters:
-    -d      Run Moodle in development mode
+    -d      Detach from running docker-compose containers
     -t      Mount theme directory to host for theme development
 
 Examples:
-"${0} start -d" Start Moodle in development mode
+"${0} start -d -t" Start Moodle in detached mode with theme directory mounted to host.
 
 Version: ${VERSION}
 EOF
+}
+
+function ensure_theme_dir {
+    if [ ! -d "${THEME_DIR}" ] ; then
+        echo "Theme directory not found, creating ${THEME_DIR}"
+        mkdir -p "${THEME_DIR}"
+    fi
 }
 
 function clean_moodle {
@@ -72,6 +82,7 @@ function restart_moodle {
     local compose_command="${BASE_COMMAND}"
 
     if [ "${THEME_DEV}" == 'True' ] ; then
+        ensure_theme_dir
         compose_command="${compose_command} --file ${THEME_COMPOSE}"
     fi
     compose_command="${compose_command} restart"
@@ -83,6 +94,7 @@ function up_moodle {
     local compose_command="${BASE_COMMAND}"
 
     if [ "${THEME_DEV}" == 'True' ] ; then
+        ensure_theme_dir
         compose_command="${compose_command} --file ${THEME_COMPOSE}"
     fi
     compose_command="${compose_command} up"
