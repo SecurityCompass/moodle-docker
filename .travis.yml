@@ -27,7 +27,7 @@ jobs:
     name: Tag & iteration update
     sudo: required
     script:
-      - if [[ -z "${TRAVIS_TAG}" ]]; then bash bin/travis-ci/check_tag.sh; fi
+      - bash bin/travis-ci/check_tag.sh
   - stage: Build and Publish
 #    name: Docker image
 #    env:
@@ -42,7 +42,8 @@ jobs:
 #      - bash bin/travis-ci/docker_build.sh
 #      # Publish if we're on or pushing to master
 #      - if [[ "${TRAVIS_BRANCH}" = "master" ]]; then bash bin/travis-ci/docker_publish.sh; fi
-  - name: DEB package
+#  - name: DEB package
+    name: DEB package
     sudo: required
     services:
       - docker
@@ -50,14 +51,15 @@ jobs:
       - bash bin/travis-ci/docker_upgrade.sh
       - bash bin/travis-ci/deb_build.sh
       - bash bin/travis-ci/deb_package.sh
-      # Publish if we're on or pushing to master
-      - if [[ "${TRAVIS_BRANCH}" = "master" ]]; then bash bin/travis-ci/deb_publish.sh; fi
+    before_deploy:
+      - bash bin/travis-ci/check_tag.sh
     deploy:
       provider: releases
       api_key:
         secure: Y6M5EPinSiFGUEDMcHu+8hatKRzxo/gwUuQU5HCasJLYb+gXW3sM2jIYPXqXgvPuF20yuOPmuxRzNnYbIbzKXVL6MZPUY6T1k3DtR04CiHBqb2L+3H8C4rWYO87qp0ZJz0/NrEFRjrza+q4m4seG/iSVHa4ukF5jzn9is/CKNrQnwxLNgv+ycV8LGBP48Wd8+MXBMC8h0rTuY0+mgOQsl/oHFA3yM8eKcpAXHi/IKPko08Og1CeQFxasEOz4/fcT6wnXhn1WCUgZI7jU4y1Vsv4Hw/OWzyXNWmnomB24oqT2+q0aLDascfyDImb9x99XuknBAU+OapS6Iy4c5x+C0JYoAMJOJEvm+muNDEEaH3n9j1/3x8MEqtjF5aWuhAzlDPF2i8+vypMJzNU4BMDEXRWRyv0f4ZE5S0OXkwONHpTaMwumbpuo1VuFyLeY+DNtu1MqN9QjbnXuJgdGz3BKv6Ncc5cGAK2PqD82NBvc86yq/C7tDjO2ohcV+8HT9UvesxFGe1ibyWefIoyH4OrajCD3/TlPIDIsG2oHBjY+sCM+54NIw0exCzIpJxb80mYu4XCFIhBag5/6LyPD0M6hredTokcv7NAZA+4hbheiKNaHbMpoqA+qvfTI4nf7TWE2fPbpk4126ThHQbjf3OmG0m0rL8gfwym3bEbaEVSEk1w=
+      file_glob: true
       file:
-        - CHANGELOG.md
+        - moodle-docker_*.deb
       skip_cleanup: true
       on:
         tags: true
