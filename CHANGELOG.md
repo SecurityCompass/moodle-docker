@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v0.1.13] - 2018-10-26
+### Changed
+- Clean up Travis CI configuration
+- Add deployment support for DEB packages
+- Update `check_tag.sh` to handle different scenarios
+
+### Removed
+- Unused script, `deb_publish.sh`
+
 ## [v0.1.12] - 2018-10-23
 ### Changed
 - Fix `.gitignore` pattern
