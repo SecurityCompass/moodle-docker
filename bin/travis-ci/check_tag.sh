@@ -51,18 +51,19 @@ if [[ -z "${TRAVIS_TAG}" ]]; then
        || [ ! "${changelog_ver}" = "${build_ver}" ] \
        || ! compare_versions "${latest_tag}" "${changelog_ver}" \
        || ! compare_versions "${latest_tag}" "${build_ver}"; then
-        color_echo red "Error: Incorrect version update in 'CHANGELOG.md' and '.env', '${changelog_ver}' and '${build_ver}' should be greater than '${latest_tag}'"
+        color_echo red "Error: Incorrect version update. CHANGELOG.md (${changelog_ver}) and BUILD_VERSION in '.env' (${build_ver}) should be greater than latest tag (${latest_tag})"
         exit 1
     else
         color_echo green "Version bumps PASS!"
     fi
 else
+    color_echo green "Tag version: '${TRAVIS_TAG}'"
     # Validate version strings
     echo "${TRAVIS_TAG}" | grep -qP ${version_pattern} || ( color_echo red "Invalid tag name created: '${TRAVIS_TAG}'" && exit 1 )
     # Ensure all the tags match up
     if [ ! "${TRAVIS_TAG}" = "${changelog_ver}" ] \
        || [ ! "${TRAVIS_TAG}" = "${build_ver}" ]; then
-        color_echo red "Error: Incorrect tag version (${TRAVIS_TAG}) compared to CHANGELOG (${changelog_ver}) and BUILD_VERSION (${build_ver})"
+        color_echo red "Error: tag version (${TRAVIS_TAG}) should match CHANGELOG.md (${changelog_ver}) and BUILD_VERSION in '.env' (${build_ver})"
         exit 1
     else
         color_echo green "Version bumps PASS!"
