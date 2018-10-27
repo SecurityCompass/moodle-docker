@@ -27,7 +27,7 @@ color_echo green "shtdlib.sh installed successfully"
 
 # Get the latest tag from GitHub
 latest_tag="$(git fetch -t && git tag -l | sort --version-sort | tail -n1)"
-color_echo green "Latest Git tag: '${latest_tag}'"
+color_echo green "Latest Git tag from repo: '${latest_tag}'"
 
 # Get the latest tag from the CHANGELOG
 changelog_ver="$(grep -oP '\[v\d+\.\d+\.\d+\]' CHANGELOG.md | tr -d '[]' | sort --version-sort -r | head -n1)"
@@ -57,7 +57,7 @@ if [[ -z "${TRAVIS_TAG}" ]]; then
         color_echo green "Version bumps PASS!"
     fi
 else
-    color_echo green "Tag version: '${TRAVIS_TAG}'"
+    color_echo green "Newly created tag: '${TRAVIS_TAG}'"
     # Validate version strings
     echo "${TRAVIS_TAG}" | grep -qP ${version_pattern} || ( color_echo red "Invalid tag name created: '${TRAVIS_TAG}'" && exit 1 )
     # Ensure all the tags match up
