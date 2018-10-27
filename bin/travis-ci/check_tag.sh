@@ -43,14 +43,28 @@ echo "${latest_tag}" | grep -qP ${version_pattern} || ( color_echo red "Invalid 
 echo "${changelog_ver}" | grep -qP ${version_pattern} || ( color_echo red "Invalid tag from CHANGELOG: '${changelog_ver}'" && exit 1 )
 echo "${build_ver}" | grep -qP ${version_pattern} || ( color_echo red "Invalid build version: '${build_ver}'" && exit 1 )
 
-# Ensure tags in CHANGELOG and iteration are greater than highest repo tag
-if [ "${latest_tag}" = "${changelog_ver}" ] \
-   || [ "${latest_tag}" = "${build_ver}" ] \
-   || [ ! "${changelog_ver}" = "${build_ver}" ] \
-   || ! compare_versions "${latest_tag}" "${changelog_ver}" \
-   || ! compare_versions "${latest_tag}" "${build_ver}"; then
-    color_echo red "Error: Incorrect version update in 'CHANGELOG.md' and '.env', '${changelog_ver}' and '${build_ver}' should be greater than '${latest_tag}'"
-    exit 1
+# Check if a tag triggered a build
+if [[ -z "${TRAVIS_TAG}" ]]; then
+    # Ensure tags in CHANGELOG and iteration are greater than highest repo tag
+    if [ "${latest_tag}" = "${changelog_ver}" ] \
+       || [ "${latest_tag}" = "${build_ver}" ] \
+       || [ ! "${changelog_ver}" = "${build_ver}" ] \
+       || ! compare_versions "${latest_tag}" "${changelog_ver}" \
+       || ! compare_versions "${latest_tag}" "${build_ver}"; then
+        color_echo red "Error: Incorrect version update in 'CHANGELOG.md' and '.env', '${changelog_ver}' and '${build_ver}' should be greater than '${latest_tag}'"
+        exit 1
+    else
+        color_echo green "Version bumps PASS!"
+    fi
 else
-    color_echo green "Version bumps PASS!"
+    # Validate version strings
+    echo "${TRAVIS_TAG}" | grep -qP ${version_pattern} || ( color_echo red "Invalid tag name created: '${TRAVIS_TAG}'" && exit 1 )
+    # Ensure all the tags match up
+    if [ ! "${TRAVIS_TAG}" = "${changelog_ver}" ] \
+       || [ ! "${TRAVIS_TAG}" = "${build_ver}" ]; then
+        color_echo red "Error: Incorrect tag version (${TRAVIS_TAG}) compared to CHANGELOG (${changelog_ver}) and BUILD_VERSION (${build_ver})"
+        exit 1
+    else
+        color_echo green "Version bumps PASS!"
+    fi
 fi
