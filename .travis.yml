@@ -40,7 +40,12 @@ jobs:
     script:
       - bash bin/travis-ci/docker_upgrade.sh
       - bash bin/travis-ci/docker_build.sh
-      - bash bin/travis-ci/docker_publish.sh
+    deploy:
+      provider: script
+      script: bin/travis-ci/docker_publish.sh
+      skip_cleanup: true
+      on:
+        tags: true
   - name: DEB package
     sudo: required
     services:
