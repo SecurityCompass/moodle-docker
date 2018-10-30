@@ -23,5 +23,11 @@ echo "${TRAVIS_TAG}" | grep -qP ${version_pattern} || ( color_echo red "Invalid 
 # Log into our Docker registry
 echo "${DOCKER_REGISTRY_PASSWORD}" | docker login -u "${DOCKER_REGISTRY_USER}" --password-stdin "${DOCKER_REGISTRY_URL}"
 
-# Push image
-docker-compose --file docker-compose.yml --file dc.build.yml push nginx-php-moodle
+repository=$(docker docker-compose images nginx-php-moodle | grep nginx-php-moodle | awk '{print $2}')
+
+echo "Tagging container"
+docker tag "${repository}:latest" "${repository}:${TRAVIS_TAG}"
+
+# Push images
+docker push "${repository}:latest"
+docker push "${repository}:${TRAVIS_TAG}"
