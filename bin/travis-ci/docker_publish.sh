@@ -17,8 +17,18 @@
 
 set -eo pipefail
 
-# Log into our Docker registry
-echo "${DOCKER_REGISTRY_PASSWORD}" | docker login -u "${DOCKER_REGISTRY_USER}" --password-stdin "${DOCKER_REGISTRY_URL}"
+# Check if a tag triggered a build
+if [[ -n "${TRAVIS_TAG}" ]]; then
+    echo "New tag (${TRAVIS_TAG}) detected. Attempting to push new container"
 
-# Push image
-docker-compose --file docker-compose.yml --file dc.build.yml push nginx-php-moodle
+    version_pattern='^v\d+\.\d+\.\d+$'
+    echo "${TRAVIS_TAG}" | grep -qP ${version_pattern} || ( color_echo red "Invalid tag name created: '${TRAVIS_TAG}'" && exit 1 )
+
+    # Log into our Docker registry
+    echo "${DOCKER_REGISTRY_PASSWORD}" | docker login -u "${DOCKER_REGISTRY_USER}" --password-stdin "${DOCKER_REGISTRY_URL}"
+
+    # Push image
+    docker-compose --file docker-compose.yml --file dc.build.yml push nginx-php-moodle
+else
+    echo "Nothing to do, only tag creation pushes a new container to the registry"
+fi
