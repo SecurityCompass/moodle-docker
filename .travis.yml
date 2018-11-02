@@ -59,24 +59,12 @@ jobs:
     before_deploy:
       - bash bin/travis-ci/check_tag.sh
     deploy:
-      - provider: releases
-        api_key:
-          secure: gjnOaLFJnsrsJhSlM6JDZrm8XXdm9NyRwC+eqWX21eCO2wtneXtPYORYcwP1+xmCwJ89X1BZJ/uFO/8q2eU/uQgqgi6dXvk+wXj4Km69enj7rKFTsbHwi//uEPy8de4rTYLDLtmRHLRV62F6OfAWnj8ttgKBi80g8g9ANqIi3hLE2VCR8j+JbMLtehNlANb9b4dqvUAgsWBN4+LerBCkjhYlAeARCWM8fQqlTQXfA9DxaeEPBiyS/ZYWH52hz9+KM2zXAbChSco0k2cxZJKAF4Ubt8/b1hqxrPhHThky4MyEmK3LijtO+u0rbN+LTCtIRcINY8Qznp9ZcoPWN09tt9gpINJ84Lny1i5BWIwLnhNr4tKlwoVaLn5+UO+tO4l1eo+PQJUXs5kLYKl8kWkhSAxHWdC1PUFqDJdg+frjfQ26F8hYaKOIUpdMxeikP1WlZ/3ZMTMGQ+dbei4LxaaZ+NK4aWUMkmcI8O5ZR59OGElpgBdPiqAR993+qcS2j84NiL1FI0b6gZD6VlhOL6oVbYsRCDfgDMy6BIy+S5/lVePoJh0fSG48JiNPKJN2NJVZyNG0wbew7zS/U8c0czLNsy2ZEPXvLVBNtgmCudGvNrdi6qc29nnhWT0empyWLff3ivXbJ0pBuqvOfUV3AxvmygjgNrt0inK4/y3YB2QLHQU=
-        file_glob: true
-        file:
-          - moodle-docker_*.deb
-        prerelease: true
-        skip_cleanup: true
-        on:
-          tags: true
-          condition: $TRAVIS_TAG =~ 'qa'
-      - provider: releases
-        api_key:
-          secure: gjnOaLFJnsrsJhSlM6JDZrm8XXdm9NyRwC+eqWX21eCO2wtneXtPYORYcwP1+xmCwJ89X1BZJ/uFO/8q2eU/uQgqgi6dXvk+wXj4Km69enj7rKFTsbHwi//uEPy8de4rTYLDLtmRHLRV62F6OfAWnj8ttgKBi80g8g9ANqIi3hLE2VCR8j+JbMLtehNlANb9b4dqvUAgsWBN4+LerBCkjhYlAeARCWM8fQqlTQXfA9DxaeEPBiyS/ZYWH52hz9+KM2zXAbChSco0k2cxZJKAF4Ubt8/b1hqxrPhHThky4MyEmK3LijtO+u0rbN+LTCtIRcINY8Qznp9ZcoPWN09tt9gpINJ84Lny1i5BWIwLnhNr4tKlwoVaLn5+UO+tO4l1eo+PQJUXs5kLYKl8kWkhSAxHWdC1PUFqDJdg+frjfQ26F8hYaKOIUpdMxeikP1WlZ/3ZMTMGQ+dbei4LxaaZ+NK4aWUMkmcI8O5ZR59OGElpgBdPiqAR993+qcS2j84NiL1FI0b6gZD6VlhOL6oVbYsRCDfgDMy6BIy+S5/lVePoJh0fSG48JiNPKJN2NJVZyNG0wbew7zS/U8c0czLNsy2ZEPXvLVBNtgmCudGvNrdi6qc29nnhWT0empyWLff3ivXbJ0pBuqvOfUV3AxvmygjgNrt0inK4/y3YB2QLHQU=
-        file_glob: true
-        file:
-          - moodle-docker_*.deb
-        skip_cleanup: true
-        on:
-          tags: true
-          condition: ! $TRAVIS_TAG =~ 'qa'
+      provider: releases
+      api_key:
+        secure: gjnOaLFJnsrsJhSlM6JDZrm8XXdm9NyRwC+eqWX21eCO2wtneXtPYORYcwP1+xmCwJ89X1BZJ/uFO/8q2eU/uQgqgi6dXvk+wXj4Km69enj7rKFTsbHwi//uEPy8de4rTYLDLtmRHLRV62F6OfAWnj8ttgKBi80g8g9ANqIi3hLE2VCR8j+JbMLtehNlANb9b4dqvUAgsWBN4+LerBCkjhYlAeARCWM8fQqlTQXfA9DxaeEPBiyS/ZYWH52hz9+KM2zXAbChSco0k2cxZJKAF4Ubt8/b1hqxrPhHThky4MyEmK3LijtO+u0rbN+LTCtIRcINY8Qznp9ZcoPWN09tt9gpINJ84Lny1i5BWIwLnhNr4tKlwoVaLn5+UO+tO4l1eo+PQJUXs5kLYKl8kWkhSAxHWdC1PUFqDJdg+frjfQ26F8hYaKOIUpdMxeikP1WlZ/3ZMTMGQ+dbei4LxaaZ+NK4aWUMkmcI8O5ZR59OGElpgBdPiqAR993+qcS2j84NiL1FI0b6gZD6VlhOL6oVbYsRCDfgDMy6BIy+S5/lVePoJh0fSG48JiNPKJN2NJVZyNG0wbew7zS/U8c0czLNsy2ZEPXvLVBNtgmCudGvNrdi6qc29nnhWT0empyWLff3ivXbJ0pBuqvOfUV3AxvmygjgNrt0inK4/y3YB2QLHQU=
+      file_glob: true
+      file:
+        - moodle-docker_*.deb
+      skip_cleanup: true
+      on:
+        tags: true
