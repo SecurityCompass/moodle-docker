@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [v0.1.13] - 2018-10-26
+### Added
+- Bake in Moodle Custom certificate plugin
+- Bake in Moodle Scheduler plugin
+
 ### Changed
 - Clean up Travis CI configuration
 - Add deployment support for DEB packages
