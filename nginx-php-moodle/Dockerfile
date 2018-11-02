@@ -117,7 +117,7 @@ RUN echo "Starting Moodle Custom certificate module install..." \
     && find /opt/moodle/app/mod/customcert/ -type f -exec chmod 644 {} \; \
     && rm -fv /tmp/customcert.zip
 
-RUN echo "Starting Moodle Custom certificate module install..." \
+RUN echo "Starting Moodle Schedular module install..." \
     && curl -L -o /tmp/scheduler.zip https://moodle.org/plugins/download.php/16697/mod_scheduler_moodle35_2017051402.zip \
     && unzip -q /tmp/scheduler.zip -d /opt/moodle/app/mod/ \
     && chown -R www-data:www-data /opt/moodle/app/mod/scheduler \
