@@ -22,7 +22,7 @@ echo "${DOCKER_REGISTRY_PASSWORD}" | docker login -u "${DOCKER_REGISTRY_USER}" -
 
 set -x
 
-repository=$(docker-compose images nginx-php-moodle | grep nginx-php-moodle | awk '{print $2}')
+repository="$(docker images | grep nginx-php-moodle | awk '{print $1}')"
 
 echo "Tagging container"
 docker tag "${repository}:latest" "${repository}:${TRAVIS_TAG}"
