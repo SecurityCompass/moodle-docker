@@ -17,11 +17,10 @@
 
 set -eo pipefail
 
-version_pattern='^v\d+\.\d+\.\d+$'
-echo "${TRAVIS_TAG}" | grep -qP ${version_pattern} || ( color_echo red "Invalid tag name created: '${TRAVIS_TAG}'" && exit 1 )
-
 # Log into our Docker registry
 echo "${DOCKER_REGISTRY_PASSWORD}" | docker login -u "${DOCKER_REGISTRY_USER}" --password-stdin "${DOCKER_REGISTRY_URL}"
+
+set -x
 
 repository=$(docker docker-compose images nginx-php-moodle | grep nginx-php-moodle | awk '{print $2}')
 
