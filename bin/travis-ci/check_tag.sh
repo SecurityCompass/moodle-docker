@@ -25,6 +25,8 @@ sudo chmod 775 "${shtdlib_local_path}"
 source "${shtdlib_local_path}"
 color_echo green "shtdlib.sh installed successfully"
 
+set -x
+
 version_pattern='^v\d+\.\d+\.\d+(?:qa)?$'
 
 # Get the latest tag from GitHub
