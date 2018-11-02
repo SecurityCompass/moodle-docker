@@ -27,14 +27,15 @@ color_echo green "shtdlib.sh installed successfully"
 
 set -x
 
-version_pattern='^v\d+\.\d+\.\d+(?:qa)?$'
+version_pattern='v\d+\.\d+\.\d+(?:qa)?'
+version_pattern_line="^${version_pattern}$"
 
 # Get the latest tag from GitHub
 latest_tag="$(git fetch -t && git tag -l | sort --version-sort | tail -n1)"
 color_echo green "Latest Git tag from repo: '${latest_tag}'"
 
 # Get the latest tag from the CHANGELOG
-changelog_ver="$(grep -oP "[${version_pattern}]" CHANGELOG.md | tr -d '[]' | sort --version-sort -r | head -n1)"
+changelog_ver="$(grep -oP "\[${version_pattern}\]" CHANGELOG.md | tr -d '[]' | sort --version-sort -r | head -n1)"
 color_echo green "CHANGELOG version: '${changelog_ver}'"
 
 # Get iteration from DEB builder configuration
@@ -42,9 +43,9 @@ build_ver="$(grep BUILD_VERSION .env | cut -d'=' -f2)"
 color_echo green "Container/DEB iteration version: '${build_ver}'"
 
 # Validate version strings
-echo "${latest_tag}" | grep -qP "${version_pattern}" || ( color_echo red "Invalid tag from repo: '${latest_tag}'" && exit 1 )
-echo "${changelog_ver}" | grep -qP "${version_pattern}" || ( color_echo red "Invalid tag from CHANGELOG: '${changelog_ver}'" && exit 1 )
-echo "${build_ver}" | grep -qP "${version_pattern}" || ( color_echo red "Invalid build version: '${build_ver}'" && exit 1 )
+echo "${latest_tag}" | grep -qP "${version_pattern_line}" || ( color_echo red "Invalid tag from repo: '${latest_tag}'" && exit 1 )
+echo "${changelog_ver}" | grep -qP "${version_pattern_line}" || ( color_echo red "Invalid tag from CHANGELOG: '${changelog_ver}'" && exit 1 )
+echo "${build_ver}" | grep -qP "${version_pattern_line}" || ( color_echo red "Invalid build version: '${build_ver}'" && exit 1 )
 
 # Check if a tag triggered a build
 if [[ -z "${TRAVIS_TAG}" ]]; then
@@ -62,7 +63,7 @@ if [[ -z "${TRAVIS_TAG}" ]]; then
 else
     color_echo green "Newly created tag: '${TRAVIS_TAG}'"
     # Validate version strings
-    echo "${TRAVIS_TAG}" | grep -qP "${version_pattern}" || ( color_echo red "Invalid tag name created: '${TRAVIS_TAG}'" && exit 1 )
+    echo "${TRAVIS_TAG}" | grep -qP "${version_pattern_line}" || ( color_echo red "Invalid tag name created: '${TRAVIS_TAG}'" && exit 1 )
 
     # Ensure all the tags match up
     if [ ! "${TRAVIS_TAG}" = "${changelog_ver}" ] \
