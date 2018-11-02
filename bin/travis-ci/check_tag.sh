@@ -40,9 +40,9 @@ build_ver="$(grep BUILD_VERSION .env | cut -d'=' -f2)"
 color_echo green "Container/DEB iteration version: '${build_ver}'"
 
 # Validate version strings
-echo "${latest_tag}" | grep -qP ${version_pattern} || ( color_echo red "Invalid tag from repo: '${latest_tag}'" && exit 1 )
-echo "${changelog_ver}" | grep -qP ${version_pattern} || ( color_echo red "Invalid tag from CHANGELOG: '${changelog_ver}'" && exit 1 )
-echo "${build_ver}" | grep -qP ${version_pattern} || ( color_echo red "Invalid build version: '${build_ver}'" && exit 1 )
+echo "${latest_tag}" | grep -qP "${version_pattern}" || ( color_echo red "Invalid tag from repo: '${latest_tag}'" && exit 1 )
+echo "${changelog_ver}" | grep -qP "${version_pattern}" || ( color_echo red "Invalid tag from CHANGELOG: '${changelog_ver}'" && exit 1 )
+echo "${build_ver}" | grep -qP "${version_pattern}" || ( color_echo red "Invalid build version: '${build_ver}'" && exit 1 )
 
 # Check if a tag triggered a build
 if [[ -z "${TRAVIS_TAG}" ]]; then
@@ -60,7 +60,8 @@ if [[ -z "${TRAVIS_TAG}" ]]; then
 else
     color_echo green "Newly created tag: '${TRAVIS_TAG}'"
     # Validate version strings
-    echo "${TRAVIS_TAG}" | grep -qP ${version_pattern} || ( color_echo red "Invalid tag name created: '${TRAVIS_TAG}'" && exit 1 )
+    echo "${TRAVIS_TAG}" | grep -qP "${version_pattern}" || ( color_echo red "Invalid tag name created: '${TRAVIS_TAG}'" && exit 1 )
+
     # Ensure all the tags match up
     if [ ! "${TRAVIS_TAG}" = "${changelog_ver}" ] \
        || [ ! "${TRAVIS_TAG}" = "${build_ver}" ]; then
