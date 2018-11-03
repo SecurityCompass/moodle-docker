@@ -20,8 +20,6 @@ set -eo pipefail
 # Log into our Docker registry
 echo "${DOCKER_REGISTRY_PASSWORD}" | docker login -u "${DOCKER_REGISTRY_USER}" --password-stdin "${DOCKER_REGISTRY_URL}"
 
-set -x
-
 repository="$(docker images | grep nginx-php-moodle | awk '{print $1}')"
 
 echo "Tagging container"
