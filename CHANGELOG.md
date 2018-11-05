@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Bake in Moodle Custom certificate plugin
 - Bake in Moodle Scheduler plugin
+- Add `CONTRIBUTION.md`
 
 ### Changed
 - Clean up Travis CI configuration
