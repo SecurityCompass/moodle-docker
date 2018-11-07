@@ -1,0 +1,1 @@
+0 * * * * root cd /etc/moodle-docker && /usr/local/bin/docker-compose --file /etc/moodle-docker/docker-compose.yml run postgres-backup /bin/backup_db

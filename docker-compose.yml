@@ -93,7 +93,7 @@ services:
     depends_on:
       - "postgres"
     volumes:
-      - ./backup:/backup:Z
+      - ${MOODLE_BACKUP_ROOT}:/backup:Z
     environment:
       POSTGRES_PASSWORD: "${PGSQL_PASSWORD}"
       POSTGRES_USER: "${PGSQL_USER}"

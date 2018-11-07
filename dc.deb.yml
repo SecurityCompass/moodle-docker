@@ -70,6 +70,7 @@ services:
       - "/package/dc.prod-dbonly.yml=/etc/moodle-docker/"
       - "/package/docker-compose.yml=/etc/moodle-docker/"
       - "/package/systemd/moodle-docker.service=/lib/systemd/system/"
+      - "/package/systemd/postgres-backup=/etc/cron.d/"
     environment:
       BUILD_VERSION: "${BUILD_VERSION}"
       MOODLE_VERSION: "${MOODLE_VERSION}"
