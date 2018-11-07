@@ -25,12 +25,15 @@ sudo chmod 775 "${shtdlib_local_path}"
 source "${shtdlib_local_path}"
 color_echo green "shtdlib.sh installed successfully"
 
+version_pattern='v\d+\.\d+\.\d+(?:qa)?'
+version_pattern_line="^${version_pattern}$"
+
 # Get the latest tag from GitHub
 latest_tag="$(git fetch -t && git tag -l | sort --version-sort | tail -n1)"
-color_echo green "Latest Git tag: '${latest_tag}'"
+color_echo green "Latest Git tag from repo: '${latest_tag}'"
 
 # Get the latest tag from the CHANGELOG
-changelog_ver="$(grep -oP '\[v\d+\.\d+\.\d+\]' CHANGELOG.md | tr -d '[]' | sort --version-sort -r | head -n1)"
+changelog_ver="$(grep -oP "\[${version_pattern}\]" CHANGELOG.md | tr -d '[]' | sort --version-sort -r | head -n1)"
 color_echo green "CHANGELOG version: '${changelog_ver}'"
 
 # Get iteration from DEB builder configuration
@@ -38,19 +41,34 @@ build_ver="$(grep BUILD_VERSION .env | cut -d'=' -f2)"
 color_echo green "Container/DEB iteration version: '${build_ver}'"
 
 # Validate version strings
-version_pattern='^v\d+\.\d+\.\d+$'
-echo "${latest_tag}" | grep -qP ${version_pattern} || ( color_echo red "Invalid tag from repo: '${latest_tag}'" && exit 1 )
-echo "${changelog_ver}" | grep -qP ${version_pattern} || ( color_echo red "Invalid tag from CHANGELOG: '${changelog_ver}'" && exit 1 )
-echo "${build_ver}" | grep -qP ${version_pattern} || ( color_echo red "Invalid build version: '${build_ver}'" && exit 1 )
+echo "${latest_tag}" | grep -qP "${version_pattern_line}" || ( color_echo red "Invalid tag from repo: '${latest_tag}'" && exit 1 )
+echo "${changelog_ver}" | grep -qP "${version_pattern_line}" || ( color_echo red "Invalid tag from CHANGELOG: '${changelog_ver}'" && exit 1 )
+echo "${build_ver}" | grep -qP "${version_pattern_line}" || ( color_echo red "Invalid build version: '${build_ver}'" && exit 1 )
 
-# Ensure tags in CHANGELOG and iteration are greater than highest repo tag
-if [ "${latest_tag}" = "${changelog_ver}" ] \
-   || [ "${latest_tag}" = "${build_ver}" ] \
-   || [ ! "${changelog_ver}" = "${build_ver}" ] \
-   || ! compare_versions "${latest_tag}" "${changelog_ver}" \
-   || ! compare_versions "${latest_tag}" "${build_ver}"; then
-    color_echo red "Error: Incorrect version update in 'CHANGELOG.md' and '.env', '${changelog_ver}' and '${build_ver}' should be greater than '${latest_tag}'"
-    exit 1
+# Check if a tag triggered a build
+if [[ -z "${TRAVIS_TAG}" ]]; then
+    # Ensure tags in CHANGELOG and iteration are greater than highest repo tag
+    if [ "${latest_tag}" = "${changelog_ver}" ] \
+       || [ "${latest_tag}" = "${build_ver}" ] \
+       || [ ! "${changelog_ver}" = "${build_ver}" ] \
+       || ! compare_versions "${latest_tag}" "${changelog_ver}" \
+       || ! compare_versions "${latest_tag}" "${build_ver}"; then
+        color_echo red "Error: Incorrect version update. CHANGELOG.md (${changelog_ver}) and BUILD_VERSION in '.env' (${build_ver}) should be greater than latest tag (${latest_tag})"
+        exit 1
+    else
+        color_echo green "Version bumps PASS!"
+    fi
 else
-    color_echo green "Version bumps PASS!"
+    color_echo green "Newly created tag: '${TRAVIS_TAG}'"
+    # Validate version strings
+    echo "${TRAVIS_TAG}" | grep -qP "${version_pattern_line}" || ( color_echo red "Invalid tag name created: '${TRAVIS_TAG}'" && exit 1 )
+
+    # Ensure all the tags match up
+    if [ ! "${TRAVIS_TAG}" = "${changelog_ver}" ] \
+       || [ ! "${TRAVIS_TAG}" = "${build_ver}" ]; then
+        color_echo red "Error: tag version (${TRAVIS_TAG}) should match CHANGELOG.md (${changelog_ver}) and BUILD_VERSION in '.env' (${build_ver})"
+        exit 1
+    else
+        color_echo green "Version bumps PASS!"
+    fi
 fi

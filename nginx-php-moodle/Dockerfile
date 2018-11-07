@@ -109,6 +109,22 @@ RUN echo "Starting Moodle eMailTest install..." \
     && find /opt/moodle/app/local/mailtest/ -type f -exec chmod 644 {} \; \
     && rm -fv /tmp/mailtest.zip
 
+RUN echo "Starting Moodle Custom certificate module install..." \
+    && curl -L -o /tmp/customcert.zip https://moodle.org/plugins/download.php/17375/mod_customcert_moodle35_2018051704.zip \
+    && unzip -q /tmp/customcert.zip -d /opt/moodle/app/mod/ \
+    && chown -R www-data:www-data /opt/moodle/app/mod/customcert \
+    && find /opt/moodle/app/mod/customcert/ -type d -exec chmod 755 {} \; \
+    && find /opt/moodle/app/mod/customcert/ -type f -exec chmod 644 {} \; \
+    && rm -fv /tmp/customcert.zip
+
+RUN echo "Starting Moodle Scheduler module install..." \
+    && curl -L -o /tmp/scheduler.zip https://moodle.org/plugins/download.php/16697/mod_scheduler_moodle35_2017051402.zip \
+    && unzip -q /tmp/scheduler.zip -d /opt/moodle/app/mod/ \
+    && chown -R www-data:www-data /opt/moodle/app/mod/scheduler \
+    && find /opt/moodle/app/mod/scheduler/ -type d -exec chmod 755 {} \; \
+    && find /opt/moodle/app/mod/scheduler/ -type f -exec chmod 644 {} \; \
+    && rm -fv /tmp/scheduler.zip
+
 # Setup Moosh
 RUN echo "Starting Moosh install..." \
     && curl -L -o /tmp/moosh_setup.zip https://moodle.org/plugins/download.php/16504/moosh_moodle35_2018042500.zip \
