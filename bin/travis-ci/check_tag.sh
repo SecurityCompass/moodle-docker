@@ -45,7 +45,7 @@ echo "${latest_tag}" | grep -qP "${version_pattern_line}" || ( color_echo red "I
 echo "${changelog_ver}" | grep -qP "${version_pattern_line}" || ( color_echo red "Invalid tag from CHANGELOG: '${changelog_ver}'" && exit 1 )
 echo "${build_ver}" | grep -qP "${version_pattern_line}" || ( color_echo red "Invalid build version: '${build_ver}'" && exit 1 )
 
-# Check if a tag triggered a build
+# Check if a tag triggered the build
 if [[ -z "${TRAVIS_TAG}" ]]; then
     # Ensure tags in CHANGELOG and iteration are greater than highest repo tag
     if [ "${latest_tag}" = "${changelog_ver}" ] \
