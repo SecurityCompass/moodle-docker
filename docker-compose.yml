@@ -2,11 +2,15 @@
 
 version: '3.6'
 
-x-linux-logging:
+x-logging:
     &common-logging
     driver: "${LOG_DRIVER}"
-    options:
-        tag: "{{.ImageName}}/{{.Name}}/{{.ID}}"
+
+x-secopts:
+    &sec-opts
+    security_opt:
+      - label:disable
+
 
 services:
   nginx-php-moodle:
@@ -15,6 +19,7 @@ services:
       mail:
     image: ${DOCKER_REGISTRY_URL}/nginx-php-moodle:latest
     logging: *common-logging
+    <<: *sec-opts
     depends_on:
       - postfix
       - postgres
@@ -68,11 +73,13 @@ services:
       POSTFIX_SASL_AUTH:
       POSTFIX_TLS:
     logging: *common-logging
+    <<: *sec-opts
   postgres:
     networks:
       db:
     image: ${DOCKER_REGISTRY_URL}/postgres:9.6
     logging: *common-logging
+    <<: *sec-opts
     environment:
       POSTGRES_DB: "${PGSQL_DATABASE}"
       POSTGRES_USER: "${PGSQL_USER}"
@@ -92,9 +99,11 @@ services:
       POSTGRES_USER: "${PGSQL_USER}"
       POSTGRES_DB: "${PGSQL_DATABASE}"
       DUMPPREFIX: "backup"
-      POSTGRES_HOST: "db"
+      POSTGRES_HOST: "postgres"
       POSTGRES_PORT: "5432"
     logging: *common-logging
+    <<: *sec-opts
+    command: /bin/true
     networks:
       db:
   certbot:
@@ -102,6 +111,7 @@ services:
       certbot:
     image: ${DOCKER_REGISTRY_URL}/sc-certbot:latest
     logging: *common-logging
+    <<: *sec-opts
     depends_on:
       - nginx-php-moodle
     environment:
