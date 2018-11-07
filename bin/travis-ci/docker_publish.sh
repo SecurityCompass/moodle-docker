@@ -28,3 +28,4 @@ docker tag "${repository}:latest" "${repository}:${TRAVIS_TAG}"
 # Push images
 docker push "${repository}:latest"
 docker push "${repository}:${TRAVIS_TAG}"
+docker images
