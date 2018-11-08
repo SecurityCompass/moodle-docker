@@ -8,7 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Clean up Travis CI configuration
 - Use new API token in CI
-- Simplify container pubish script
+- Simplify container publish script
+- Update OneLogin plugin
+- Enable logging for PHP
 
 ## [v0.1.13] - 2018-10-26
 ### Added
