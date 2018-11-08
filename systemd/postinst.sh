@@ -32,6 +32,9 @@ else
     echo "Moodle data directory already exists"
 fi
 
+echo "Adjust cron job permissions"
+chmod 644 /etc/cron.d/postgres-backup
+
 echo "Setting up .env file"
 if [ ! -f /etc/moodle-docker/.env ]; then
     echo "Creating .env from example file"
