@@ -20,12 +20,10 @@ set -eo pipefail
 # Log into our Docker registry
 echo "${DOCKER_REGISTRY_PASSWORD}" | docker login -u "${DOCKER_REGISTRY_USER}" --password-stdin "${DOCKER_REGISTRY_URL}"
 
-repository="$(docker images | grep nginx-php-moodle | awk '{print $1}')"
-
 echo "Tagging container"
-docker tag "${repository}:latest" "${repository}:${TRAVIS_TAG}"
+docker tag "${DOCKER_REGISTRY_URL}/nginx-php-moodle:latest" "${DOCKER_REGISTRY_URL}/nginx-php-moodle:${TRAVIS_TAG}"
 
 # Push images
-docker push "${repository}:latest"
-docker push "${repository}:${TRAVIS_TAG}"
+docker push "${DOCKER_REGISTRY_URL}/nginx-php-moodle:latest"
+docker push "${DOCKER_REGISTRY_URL}/nginx-php-moodle:${TRAVIS_TAG}"
 docker images
