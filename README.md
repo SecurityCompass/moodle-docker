@@ -87,3 +87,48 @@ The [Moodle eMailTest](https://moodle.org/plugins/local_mailtest) plugin is bake
     ```bash
     openssl req -x509 -newkey rsa:4096 -keyout moodle.key -out moodle.crt -days 365 -nodes -subj "/C=CA/ST=ON/L=Toronto/O=SC/OU=Org/CN=www.example.com"
     ```
+
+## Restoring a database backup
+
+First, ensure you have a backup and delta to restore from!  On systems installed from .deb package, the files are stored on the docker host under /backups by default.
+
+Pause the backup cron on the docker host by commenting the job:
+
+```
+ # sed -i 's/^\([^#]\)/#\1/g' /etc/cron.d/postgres-backup
+```
+
+Switch to the moodle config folder:
+
+```
+ # cd /etc/moodle-docker
+```
+
+Enable the site maintenance page:
+
+```
+ # docker-compose exec nginx-php-moodle /usr/bin/php /opt/moodle/app/admin/cli/maintenance.php --enable
+```
+
+Drop and re-create the database:
+
+```
+ # docker-compose run postgres-backup /bin/drop_and_create
+```
+
+Restore the DB by running the script and answering the interactive prompts regarding which backup to restore:
+
+```
+ # docker-compose run postgres-backup /bin/restore_db_from_delta
+```
+
+Disable the site maintenance page:
+
+```
+ # docker-compose exec nginx-php-moodle /usr/bin/php /opt/moodle/app/admin/cli/maintenance.php --disable
+```
+Unpause the backup:
+
+```
+ # sed -i 's/^#//g' /etc/cron.d/postgres-backup
+```
