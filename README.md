@@ -88,7 +88,9 @@ The [Moodle eMailTest](https://moodle.org/plugins/local_mailtest) plugin is bake
     openssl req -x509 -newkey rsa:4096 -keyout moodle.key -out moodle.crt -days 365 -nodes -subj "/C=CA/ST=ON/L=Toronto/O=SC/OU=Org/CN=www.example.com"
     ```
 
-## Manual backups
+## Backup and Restore
+
+### Manual backups
 
 On systems installed from .deb package, a cronjob should be automatically setup to perform backups.  On a development system, you can manually run the same process:
 
@@ -96,7 +98,7 @@ On systems installed from .deb package, a cronjob should be automatically setup 
 docker-compose run postgres-backup /bin/backup_db
 ```
 
-## Restoring a database backup
+### Restoring a database backup
 
 First, ensure you have a backup and delta to restore from!  On systems installed from .deb package, the files are stored on the docker host under /backups by default.
 

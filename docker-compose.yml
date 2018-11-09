@@ -11,7 +11,6 @@ x-secopts:
     security_opt:
       - label:disable
 
-
 services:
   nginx-php-moodle:
     networks:
@@ -93,7 +92,9 @@ services:
     depends_on:
       - "postgres"
     volumes:
-      - ${MOODLE_BACKUP_ROOT}:/backup:Z
+      - type: bind
+        source: ${MOODLE_BACKUP_ROOT}
+        target: /backup
     environment:
       POSTGRES_PASSWORD: "${PGSQL_PASSWORD}"
       POSTGRES_USER: "${PGSQL_USER}"

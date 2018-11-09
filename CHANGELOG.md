@@ -6,10 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [v0.1.15] - 2018-11-19
 ### Added
-- Add customizable log driver option
-- Add postgres-backup container
-- Add host cron job for postgres backups
-- Add security label disable for selinux based systems
+- Customizable log driver option
+- Postgres-backup container
+- Host cron job for postgres backups
+- Security label disable for selinux based systems
 
 ## [v0.1.14] - 2018-11-08
 ### Added
