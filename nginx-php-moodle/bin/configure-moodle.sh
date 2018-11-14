@@ -88,7 +88,7 @@ MDL_CONFIG
     /usr/bin/php "${moodle_cfg_script}" --name=smtphosts --set=postfix
 
     color_echo green "Configuring Authentication"
-    /usr/bin/php "${moodle_cfg_script}" --name=auth --set=onelogin_saml
+    /usr/bin/php "${moodle_cfg_script}" --name=auth --set=
 }
 
 function moodle_restore_config {
