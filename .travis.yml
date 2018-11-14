@@ -7,10 +7,6 @@ stages:
 # Use minimal image
 language: minimal
 
-# Ignore submodules for all stages
-git:
-  submodules: false
-
 jobs:
   include:
   - stage: Tests
@@ -40,8 +36,6 @@ jobs:
     script:
       - bash bin/travis-ci/docker_upgrade.sh
       - bash bin/travis-ci/docker_build.sh
-    before_deploy:
-      - bash bin/travis-ci/check_tag.sh
     deploy:
       skip_cleanup: true
       provider: script
@@ -56,13 +50,11 @@ jobs:
       - bash bin/travis-ci/docker_upgrade.sh
       - bash bin/travis-ci/deb_build.sh
       - bash bin/travis-ci/deb_package.sh
-    before_deploy:
-      - bash bin/travis-ci/check_tag.sh
     deploy:
       skip_cleanup: true
       provider: releases
       api_key:
-        secure: gjnOaLFJnsrsJhSlM6JDZrm8XXdm9NyRwC+eqWX21eCO2wtneXtPYORYcwP1+xmCwJ89X1BZJ/uFO/8q2eU/uQgqgi6dXvk+wXj4Km69enj7rKFTsbHwi//uEPy8de4rTYLDLtmRHLRV62F6OfAWnj8ttgKBi80g8g9ANqIi3hLE2VCR8j+JbMLtehNlANb9b4dqvUAgsWBN4+LerBCkjhYlAeARCWM8fQqlTQXfA9DxaeEPBiyS/ZYWH52hz9+KM2zXAbChSco0k2cxZJKAF4Ubt8/b1hqxrPhHThky4MyEmK3LijtO+u0rbN+LTCtIRcINY8Qznp9ZcoPWN09tt9gpINJ84Lny1i5BWIwLnhNr4tKlwoVaLn5+UO+tO4l1eo+PQJUXs5kLYKl8kWkhSAxHWdC1PUFqDJdg+frjfQ26F8hYaKOIUpdMxeikP1WlZ/3ZMTMGQ+dbei4LxaaZ+NK4aWUMkmcI8O5ZR59OGElpgBdPiqAR993+qcS2j84NiL1FI0b6gZD6VlhOL6oVbYsRCDfgDMy6BIy+S5/lVePoJh0fSG48JiNPKJN2NJVZyNG0wbew7zS/U8c0czLNsy2ZEPXvLVBNtgmCudGvNrdi6qc29nnhWT0empyWLff3ivXbJ0pBuqvOfUV3AxvmygjgNrt0inK4/y3YB2QLHQU=
+        secure: EkqOzzm5Al3tAlLsPBZPbtDZw3rrjUCbgYkQIKMBWrsECvTed/y+dNfN1XLgLfcyv4am0rO1iTINXtxuTZJXvA2x48iO4DHHK0OfATUOb1BF81nkic6NNb0/p7qmjZ8brXj6EFAzGVI2vVEtH/Mvh9cqe7b1LuDm+Wf9B+LpZxa2FmUmTumJn/6sKuk8CxFboXG3f+Ul17vADugvu50AtRzSgED2Q3J2eVl/s16xz0Gs/okygQigbKEnfKlfPekZ8TOLV3nQTKcWdxvleEF97KT9hPV4EN4oTjWB3ZTNQK93uCeFr6LJTXVlgXwYmBIKRWD05T9qLRy7iw1loqRgNqdFtOZGOic4+RAVJfQLAEN1htvT2j8cBVTpJBbunB10o1lJPQ4j24nJVf5gNgg3g9oB6458ZAg2H+9wyGLTFdZWbCWtA7S4CMwWUN/PSn7YUw1fgy81XuAOyoH5P4MAeoA4DpBp9sstzqxUpjRqYvs+3guNT4cW/HavbTjO6H/Ix9sXtn0iOaTkiBTcgyJ7VnJ+zWfYAznhdratN9NJWhpySo9T1TX4chqOtQKMGP9VqIqYWdJ3m6UAZuDb4cTJknEjzH+/3fd0I59Dd/MrOryRvGkUi8Q5Fn0HV+a1OwO9XOWm0SF5HcxZ6X/lCKzOo84v4fooDLmFj73YW0dm+sM=
       file_glob: true
       file:
         - moodle-docker_*.deb

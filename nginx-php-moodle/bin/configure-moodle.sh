@@ -79,6 +79,16 @@ MDL_CONFIG
 
     color_echo green "Skipping Moodle registration"
     /usr/bin/php "${moodle_cfg_script}" --name=registrationpending --set=0
+
+    color_echo green "Configuring Logging"
+    /usr/bin/php "${moodle_cfg_script}" --name=debug --set=15
+    /usr/bin/php "${moodle_cfg_script}" --name=debugdisplay --set=0
+
+    color_echo green "Configuring Email settings"
+    /usr/bin/php "${moodle_cfg_script}" --name=smtphosts --set=postfix
+
+    color_echo green "Configuring Authentication"
+    /usr/bin/php "${moodle_cfg_script}" --name=auth --set=
 }
 
 function moodle_restore_config {
