@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Use new API token in CI
 - Simplify container publish script
 - Update OneLogin plugin
+- Update Nginx version
 - Enable logging for PHP
 
 ## [v0.1.13] - 2018-10-26
