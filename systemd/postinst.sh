@@ -32,6 +32,9 @@ else
     echo "Moodle data directory already exists"
 fi
 
+echo "Adjust cron job permissions"
+chmod 644 /etc/cron.d/postgres-backup
+
 echo "Setting up .env file"
 if [ ! -f /etc/moodle-docker/.env ]; then
     echo "Creating .env from example file"
@@ -44,6 +47,7 @@ if [ ! -f /etc/moodle-docker/.env ]; then
     sed -i "s/MOODLE_ADMIN_PASS=.*/MOODLE_ADMIN_PASS=${moodle_admin_pass}/g" /etc/moodle-docker/.env
     sed -i "s/MOODLE_UPGRADE_KEY=.*/MOODLE_UPGRADE_KEY=${moodle_upgrade_key}/g" /etc/moodle-docker/.env
     sed -i "s/PGSQL_PASSWORD=.*/PGSQL_PASSWORD=${pgsql_password}/g" /etc/moodle-docker/.env
+    sed -i "s#MOODLE_BACKUP_ROOT=.*#MOODLE_BACKUP_ROOT=/backups#g" /etc/moodle-docker/.env
 else
     echo "Nothing to do, .env already exists"
 fi
