@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v0.1.15] - 2019-01-07
+### Added
+- Bake in auto enrol Moodle plugin
+
+### Changed
+- Nginx/PHP Dockerfile refactor
+- Remove write permissions from the Moodle `app` directory
+
 ## [v0.1.14] - 2018-11-08
 ### Added
 - Bake in 'postfix' as default `smtphost`
