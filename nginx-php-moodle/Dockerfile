@@ -6,13 +6,6 @@ LABEL version="latest"
 # Disable frontend dialogs
 ENV DEBIAN_FRONTEND noninteractive
 
-ARG MOODLE_DOWNLOAD_FILE=moodle-latest-35.tgz
-ARG MOODLE_TRACK=stable35
-ARG MOOVE_VERSION=v0.1.2
-ARG NGINX_VERSION=1.14.1-0+xenial0
-ARG ONELOGIN_PLUGIN_VER=v2.6.0
-ARG PHP_VERSION
-
 # Install utility packages
 RUN apt-get update\
     && apt-get install -y vim unzip curl netbase inotify-tools \
@@ -21,6 +14,7 @@ RUN apt-get update\
     && rm -rf /etc/apt/sources.list.d/temp.list /var/lib/apt/lists/*
 
 # Install Nginx
+ARG NGINX_VERSION=1.14.1-0+xenial0
 RUN echo "Starting Nginx install..." \
     && apt-get update \
     && apt-get install -y software-properties-common \
@@ -33,6 +27,7 @@ RUN echo "Starting Nginx install..." \
     && rm -rf /etc/apt/sources.list.d/temp.list /var/lib/apt/lists/*
 
 # Install PHP
+ARG PHP_VERSION
 RUN echo "Starting PHP install..." \
     && apt-get update \
     && apt-get install -y software-properties-common \
@@ -63,33 +58,37 @@ RUN echo "Starting PHP install..." \
     && rm -rf /etc/apt/sources.list.d/temp.list /var/lib/apt/lists/*
 
 # Install Moodle App
+ARG MOODLE_DOWNLOAD_FILE=moodle-latest-35.tgz
+ARG MOODLE_TRACK=stable35
 RUN echo "Starting Moodle App install..." \
     && mkdir -v /opt/moodle \
     && curl -L -o /tmp/moodle-${MOODLE_TRACK}-${MOODLE_DOWNLOAD_FILE}.tgz https://download.moodle.org/${MOODLE_TRACK}/${MOODLE_DOWNLOAD_FILE} \
     && tar -xzf /tmp/moodle-${MOODLE_TRACK}-${MOODLE_DOWNLOAD_FILE}.tgz -C /opt/moodle \
     && mv /opt/moodle/moodle /opt/moodle/app \
     && chown -R www-data:www-data /opt/moodle/app \
-    && find /opt/moodle/app -type d -exec chmod 755 {} \; \
-    && find /opt/moodle/app -type f -exec chmod 644 {} \; \
+    && find /opt/moodle/app -type d -exec chmod 555 {} \; \
+    && find /opt/moodle/app -type f -exec chmod 440 {} \; \
     && rm -fv /tmp/moodle-${MOODLE_TRACK}-${MOODLE_DOWNLOAD_FILE}.tgz
 
 # Install Moodle theme
+ARG MOOVE_VERSION=v0.1.3
 RUN echo "Starting Moodle theme install..." \
     && curl -L -o /tmp/moove.${MOOVE_VERSION}.tar.gz https://github.com/SecurityCompass/moodle-theme_moove/archive/${MOOVE_VERSION}.tar.gz \
     && mkdir /opt/moodle/app/theme/moove \
     && tar -xzf /tmp/moove.${MOOVE_VERSION}.tar.gz --strip-components=1 -C /opt/moodle/app/theme/moove \
     && chown -R www-data:www-data /opt/moodle/app/theme/moove \
-    && find /opt/moodle/app/theme/moove -type d -exec chmod 755 {} \; \
-    && find /opt/moodle/app/theme/moove -type f -exec chmod 644 {} \; \
+    && find /opt/moodle/app/theme/moove -type d -exec chmod 555 {} \; \
+    && find /opt/moodle/app/theme/moove -type f -exec chmod 440 {} \; \
     && rm -fv /tmp/moove.${MOOVE_VERSION}.tar.gz
 
 # Install OneLogin auth plugin
+ARG ONELOGIN_PLUGIN_VER=v2.6.0
 RUN echo "Starting OneLogin auth plugin install..." \
     && curl -L -o /tmp/onelogin_saml.tar.gz https://github.com/onelogin/moodle-saml/archive/${ONELOGIN_PLUGIN_VER}.tar.gz \
     && tar -xzf /tmp/onelogin_saml.tar.gz -C /opt/moodle/app/auth --strip-components=2 \
     && chown -R www-data:www-data /opt/moodle/app/auth/onelogin_saml \
-    && find /opt/moodle/app/auth/onelogin_saml -type d -exec chmod 755 {} \; \
-    && find /opt/moodle/app/auth/onelogin_saml -type f -exec chmod 644 {} \; \
+    && find /opt/moodle/app/auth/onelogin_saml -type d -exec chmod 555 {} \; \
+    && find /opt/moodle/app/auth/onelogin_saml -type f -exec chmod 440 {} \; \
     && rm -fv /tmp/onelogin_saml.tar.gz
 
 # Install Opcache admin (PHP cache monitoring)
@@ -97,33 +96,41 @@ RUN echo "Starting Opcache admin install..." \
     && curl -L -o /tmp/opcache.zip https://moodle.org/plugins/download.php/16894/tool_opcache_moodle35_2018052400.zip \
     && unzip -q /tmp/opcache.zip -d /opt/moodle/app/admin/tool/ \
     && chown -R www-data:www-data /opt/moodle/app/admin/tool/opcache \
-    && find /opt/moodle/app/admin/tool/opcache/ -type d -exec chmod 755 {} \; \
-    && find /opt/moodle/app/admin/tool/opcache/ -type f -exec chmod 644 {} \; \
+    && find /opt/moodle/app/admin/tool/opcache/ -type d -exec chmod 555 {} \; \
+    && find /opt/moodle/app/admin/tool/opcache/ -type f -exec chmod 440 {} \; \
     && rm -fv /tmp/opcache.zip
 
 RUN echo "Starting Moodle eMailTest install..." \
     && curl -L -o /tmp/mailtest.zip https://moodle.org/plugins/download.php/16831/local_mailtest_moodle35_2018052100.zip \
     && unzip -q /tmp/mailtest.zip -d /opt/moodle/app/local/ \
     && chown -R www-data:www-data /opt/moodle/app/local/mailtest \
-    && find /opt/moodle/app/local/mailtest/ -type d -exec chmod 755 {} \; \
-    && find /opt/moodle/app/local/mailtest/ -type f -exec chmod 644 {} \; \
+    && find /opt/moodle/app/local/mailtest/ -type d -exec chmod 555 {} \; \
+    && find /opt/moodle/app/local/mailtest/ -type f -exec chmod 440 {} \; \
     && rm -fv /tmp/mailtest.zip
 
 RUN echo "Starting Moodle Custom certificate module install..." \
     && curl -L -o /tmp/customcert.zip https://moodle.org/plugins/download.php/17375/mod_customcert_moodle35_2018051704.zip \
     && unzip -q /tmp/customcert.zip -d /opt/moodle/app/mod/ \
     && chown -R www-data:www-data /opt/moodle/app/mod/customcert \
-    && find /opt/moodle/app/mod/customcert/ -type d -exec chmod 755 {} \; \
-    && find /opt/moodle/app/mod/customcert/ -type f -exec chmod 644 {} \; \
+    && find /opt/moodle/app/mod/customcert/ -type d -exec chmod 555 {} \; \
+    && find /opt/moodle/app/mod/customcert/ -type f -exec chmod 440 {} \; \
     && rm -fv /tmp/customcert.zip
 
 RUN echo "Starting Moodle Scheduler module install..." \
     && curl -L -o /tmp/scheduler.zip https://moodle.org/plugins/download.php/16697/mod_scheduler_moodle35_2017051402.zip \
     && unzip -q /tmp/scheduler.zip -d /opt/moodle/app/mod/ \
     && chown -R www-data:www-data /opt/moodle/app/mod/scheduler \
-    && find /opt/moodle/app/mod/scheduler/ -type d -exec chmod 755 {} \; \
-    && find /opt/moodle/app/mod/scheduler/ -type f -exec chmod 644 {} \; \
+    && find /opt/moodle/app/mod/scheduler/ -type d -exec chmod 555 {} \; \
+    && find /opt/moodle/app/mod/scheduler/ -type f -exec chmod 440 {} \; \
     && rm -fv /tmp/scheduler.zip
+
+RUN echo "Starting Moodle auto enroll module install..." \
+    && curl -L -o /tmp/enrol_auto.zip https://moodle.org/plugins/download.php/17705/enrol_auto_moodle35_2018032501.zip \
+    && unzip -q /tmp/enrol_auto.zip -d /opt/moodle/app/enrol/ \
+    && chown -R www-data:www-data /opt/moodle/app/enrol/auto/ \
+    && find /opt/moodle/app/enrol/auto/ -type d -exec chmod 555 {} \; \
+    && find /opt/moodle/app/enrol/auto/ -type f -exec chmod 440 {} \; \
+    && rm -fv /tmp/enrol_auto.zip
 
 # Setup Moosh
 RUN echo "Starting Moosh install..." \
